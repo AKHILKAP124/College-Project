@@ -3,7 +3,7 @@
     "devCommand": "npm dev",
     "buildCommand": "npm build",
     "outputDirectory": "out",
-    "version": 3,
+    "version": 2,
     "builds": [
       {
         "src": "index.html",

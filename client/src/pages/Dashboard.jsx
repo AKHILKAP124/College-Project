@@ -30,7 +30,7 @@ const Dashboard = () => {
     window.location.reload();
   }, 900000);
 
-  if (user.name === "") {
+  if (user?.name === "") {
     axios
       .get(`http://localhost:3000/api/user/getUser`, {
         withCredentials: true,

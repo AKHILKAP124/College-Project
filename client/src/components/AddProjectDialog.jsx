@@ -41,7 +41,7 @@ export default function AddProjectDialog({ onClose, isOpen }) {
     };
 
     axios
-      .post("http://localhost:3000/api/project/add", projectData, {
+      .post(`${import.meta.env.BACKEND_URL}/api/project/add`, projectData, {
         withCredentials: true,
       })
       .then((res) => {

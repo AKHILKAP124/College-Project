@@ -14,8 +14,6 @@ import SideDialog from "../components/TaskDialog";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
-
-
 const Dashboard = () => {
   const dispatch = useDispatch();
   const nagivate = useNavigate();
@@ -31,11 +29,10 @@ const Dashboard = () => {
   setTimeout(() => {
     window.location.reload();
   }, 900000);
-  
 
   if (user.name === "") {
     axios
-      .get("http://localhost:3000/api/user/getUser", {
+      .get(`${import.meta.env.BACKEND_URL}/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -61,7 +58,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .post(
-        "http://localhost:3000/api/task/get",
+        `${import.meta.env.BACKEND_URL}/api/task/get`,
         { owner: user?._id },
         {
           withCredentials: true,
@@ -82,10 +79,9 @@ const Dashboard = () => {
         console.log(err);
       });
   }, [user?._id]);
-  
 
   useEffect(() => {
-    const socket = io("http://localhost:3000", {
+    const socket = io(`${import.meta.env.BACKEND_URL}`, {
       withCredentials: true,
       auth: {
         token: localStorage.getItem("token"),
@@ -101,7 +97,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await axios
-      .get("http://localhost:3000/api/user/logout", {
+      .get(`${import.meta.env.BACKEND_URL}/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -123,9 +119,13 @@ const Dashboard = () => {
 
   const handleDelete = async (taskId) => {
     await axios
-      .post("http://localhost:3000/api/task/delete", { taskId }, {
-        withCredentials: true,
-      })
+      .post(
+        `${import.meta.env.BACKEND_URL}/api/task/delete`,
+        { taskId },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
@@ -153,12 +153,15 @@ const Dashboard = () => {
     setHidden((prev) => (prev === "hidden" ? "" : "hidden"));
   };
 
-
   const handleTaskgetbyId = async (taskId) => {
     await axios
-      .post("http://localhost:3000/api/task/getbyid", { taskId }, {
-        withCredentials: true,
-      })
+      .post(
+        `${import.meta.env.BACKEND_URL}/api/task/getbyid`,
+        { taskId },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.task);
@@ -169,7 +172,7 @@ const Dashboard = () => {
       .catch((err) => {
         console.log(err);
       });
-  } 
+  };
 
   return (
     <>
@@ -283,7 +286,9 @@ const Dashboard = () => {
                   key={task._id}
                   className="flex items-center justify-around w-full border-b border-b-slate-200 bg-white"
                 >
-                  <div data-id={task._id} className=" w-64 h-12 text-sm  flex items-center text-wrap hover:text-blue-500 hover:underline hover:font-medium transition-all duration-200 cursor-pointer"
+                  <div
+                    data-id={task._id}
+                    className=" w-64 h-12 text-sm  flex items-center text-wrap hover:text-blue-500 hover:underline hover:font-medium transition-all duration-200 cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleTaskgetbyId(e.target.dataset.id);
@@ -298,7 +303,12 @@ const Dashboard = () => {
                   <div className="text-sm  h-12 w-22 flex items-center justify-center">
                     {task.updatedAt.slice(0, 10)}
                   </div>
-                  <div className=" h-12 w-6 flex items-center justify-center"><RiDeleteBin6Line className="text-red-500 cursor-pointer" onClick={() => handleDelete(task._id)} /></div>
+                  <div className=" h-12 w-6 flex items-center justify-center">
+                    <RiDeleteBin6Line
+                      className="text-red-500 cursor-pointer"
+                      onClick={() => handleDelete(task._id)}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
@@ -310,7 +320,11 @@ const Dashboard = () => {
         onClose={handleClose}
         owner={user._id}
       />
-      <SideDialog isOpen={isTaskDataOpen} onClose={handleCloseTask} taskId={taskId} />
+      <SideDialog
+        isOpen={isTaskDataOpen}
+        onClose={handleCloseTask}
+        taskId={taskId}
+      />
     </>
   );
 };

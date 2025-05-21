@@ -34,7 +34,7 @@ const SignUp = () => {
     setLoading(true);
     e.preventDefault();
     axios
-      .post("http://localhost:3000/api/user/signup", data, {
+      .post(`${import.meta.env.BACKEND_URL}/api/user/signup`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -137,20 +137,21 @@ const SignUp = () => {
                 type="submit"
                 className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] cursor-pointer text-white font-semibold py-2 px-4 mb-4 mt-2 rounded w-full"
               >
-                {loading ? <span className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin h-5 w-5 text-white"
-                    viewBox="3 3 18 18"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 3v2a9 9 0 1 0 9 9h2a11 11 0 1 1-11-11z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                  <span className="ml-2">Loading...</span>
-                </span>
-                : (
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      viewBox="3 3 18 18"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 3v2a9 9 0 1 0 9 9h2a11 11 0 1 1-11-11z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    <span className="ml-2">Loading...</span>
+                  </span>
+                ) : (
                   "Register"
                 )}
               </button>

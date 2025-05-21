@@ -3,8 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const ProjectSideDialog = ({ isOpen, onClose, taskId }) => {
-
-
   const [messages, setMessages] = useState([
     { id: 1, sender: "A", text: "Hi there!" },
     { id: 2, sender: "B", text: "Hello! How are you?" },
@@ -35,10 +33,6 @@ const ProjectSideDialog = ({ isOpen, onClose, taskId }) => {
     }
   };
 
-
-
-
-
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState({
     id: "",
@@ -58,7 +52,7 @@ const ProjectSideDialog = ({ isOpen, onClose, taskId }) => {
     // You can add your save logic here
     console.log("Task saved:", data);
     await axios
-      .post("http://localhost:3000/api/task/update", data, {
+      .post(`${import.meta.env.BACKEND_URL}/api/task/update`, data, {
         withCredentials: true,
       })
       .then((res) => {

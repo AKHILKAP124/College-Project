@@ -9,10 +9,10 @@ import { useDispatch } from "react-redux";
 import { setToken, setUser } from "../redux/userSlice";
 
 const SignIn = () => {
-  const[loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
-    email: "akhilkapur0@gmail.com",
-    password: "Akhil",
+    email: "demo@gmail.com",
+    password: "Demo",
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,11 +27,9 @@ const SignIn = () => {
     setLoading(true);
     console.log(data);
     axios
-      .post("http://localhost:3000/api/user/signin", data
-        , {
-          withCredentials: true,
-        }
-      )
+      .post(`${import.meta.env.BACKEND_URL}/api/user/signin`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
@@ -52,8 +50,7 @@ const SignIn = () => {
       })
       .finally(() => {
         setLoading(false);
-    })
-    
+      });
   };
 
   return (

@@ -21,7 +21,7 @@ const MemberProfile = () => {
     setUserloading(true);
     axios
       .post(
-        `http://localhost:3000/api/user/getUserById`,
+        `${import.meta.env.BACKEND_URL}/api/user/getUserById`,
         { id },
         {
           withCredentials: true,
@@ -51,21 +51,23 @@ const MemberProfile = () => {
 
     console.log(data);
 
-    axios.post("http://localhost:3000/api/member/delete", data, {
-        withCredentials: true
-    }).then(res => {
+    axios
+      .post(`${import.meta.env.BACKEND_URL}/api/member/delete`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
         if (res.status === 200) {
           toast.success(res?.data?.message);
-            setTimeout(() => {
-              navigate("/dashboard/tasks-All-Activities&");
-              window.location.reload();
-              setLoading(false)
-              
-            }, 2000)
+          setTimeout(() => {
+            navigate("/dashboard/tasks-All-Activities&");
+            window.location.reload();
+            setLoading(false);
+          }, 2000);
         }
-    }).catch(err => {
-        console.log(err)
-    })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

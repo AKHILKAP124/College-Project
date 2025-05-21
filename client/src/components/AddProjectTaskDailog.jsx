@@ -3,7 +3,12 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 
-export default function AddProjectTaskDialog({ onClose, isOpen, owner, project }) {
+export default function AddProjectTaskDialog({
+  onClose,
+  isOpen,
+  owner,
+  project,
+}) {
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -16,7 +21,7 @@ export default function AddProjectTaskDialog({ onClose, isOpen, owner, project }
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-  
+
   const handleCancel = () => {
     setData({ name: "", description: "" });
     onClose();
@@ -32,25 +37,27 @@ export default function AddProjectTaskDialog({ onClose, isOpen, owner, project }
       status: "New task",
     };
     // You can add your save logic here
-    console.log("Task saved:",  taskData);
-    await axios.post("http://localhost:3000/api/projecttask/add", taskData, {
-      withCredentials: true,  
-    }).then((res) => {
-      if (res.status === 200) {
-        setData({ name: "", description: "" });
-        toast.success(res.data.message);
-        setTimeout(() => {
-          window.location.reload();
-          onClose();
-          setLoading(false);
-        }, 2000);
-      }
-
-    }).catch((err) => {
-      setLoading(false);
-      console.log(err);
-      toast.error(err.response.data.message);
-    });
+    console.log("Task saved:", taskData);
+    await axios
+      .post(`${import.meta.env.BACKEND_URL}/api/projecttask/add`, taskData, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setData({ name: "", description: "" });
+          toast.success(res.data.message);
+          setTimeout(() => {
+            window.location.reload();
+            onClose();
+            setLoading(false);
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+        toast.error(err.response.data.message);
+      });
   };
 
   return (

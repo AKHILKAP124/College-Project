@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-
 const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
@@ -11,7 +10,7 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
 
   const handleGetAllUsers = async () => {
     await axios
-      .get("http://localhost:3000/api/user/getallusers", {
+      .get(`${import.meta.env.BACKEND_URL}/api/user/getallusers`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -29,7 +28,6 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
     handleGetAllUsers();
   }, []);
 
-
   useEffect(() => {
     if (searchTerm.trim() === "") {
       setFilteredResults([]);
@@ -42,33 +40,32 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
     }
   }, [searchTerm, allUsers]);
 
-
   const handleInviteMember = (item) => {
-
     const data = {
-       userId : user?._id,
-    memberId : item?._id
-    }
+      userId: user?._id,
+      memberId: item?._id,
+    };
 
-    console.log(data, "add member")
+    console.log(data, "add member");
 
-    axios.post("http://localhost:3000/api/member/add",
-      data,
-    {withCredentials: true}
-    ).then((res) => {
-      if (res.status === 201) {
-        toast.success(res?.data?.message);
-        setTimeout(() => {
-          onClose();
-          window.location.reload();
-          
-        }, 2000)
-      }
-    }).catch((err) => {
-      console.log(err);
-      toast.error(err.response.data.message);
-    })
-  }
+    axios
+      .post(`${import.meta.env.BACKEND_URL}/api/member/add`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.status === 201) {
+          toast.success(res?.data?.message);
+          setTimeout(() => {
+            onClose();
+            window.location.reload();
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      });
+  };
 
   if (!isOpen) return null;
 
@@ -144,10 +141,12 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
                       <p>{item.name}</p>
                     </div>
 
-                    <div className="  hover:text-white rounded-sm px-2 py-1  gap-1 transition-all duration-200 hover:bg-blue-400"
+                    <div
+                      className="  hover:text-white rounded-sm px-2 py-1  gap-1 transition-all duration-200 hover:bg-blue-400"
                       onClick={() => {
                         handleInviteMember(item);
-                      }}>
+                      }}
+                    >
                       Invite
                     </div>
                   </li>

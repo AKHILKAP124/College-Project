@@ -1,34 +1,31 @@
-import { Avatar } from '@mui/material'
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux';
+import { Avatar } from "@mui/material";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FaPen } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
-import uploadImage from '../utils/cloudinaryUpload';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import uploadImage from "../utils/cloudinaryUpload";
 
 const Profile = () => {
-
-  const [profilePic, setProfilePic] = React.useState("")
+  const [profilePic, setProfilePic] = React.useState("");
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    setProfilePic(user.avatar)
-    
-  }, [ ])
-  
+    setProfilePic(user?.avatar);
+  }, []);
+
   const navigate = useNavigate();
 
   const [data, setData] = React.useState({
     owner: "",
     name: "",
     email: "",
-    avatar: ""
-
+    avatar: "",
   });
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState(false);
 
-  console.log(data)
+  console.log(data);
   const handleOnchange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -36,26 +33,26 @@ const Profile = () => {
 
   const handleImageChange = async (e) => {
     setLoading(true);
-    console.log(data)
-      const file = e.target.files[0];
-      const res = await uploadImage(file);
+    console.log(data);
+    const file = e.target.files[0];
+    const res = await uploadImage(file);
     if (res.success) {
-        setProfilePic(res.data)
-        toast.success(res.message);
-        setLoading(false);
-      }
-      setData({ ...data, avatar: res.data });
-    };
+      setProfilePic(res.data);
+      toast.success(res.message);
+      setLoading(false);
+    }
+    setData({ ...data, avatar: res.data });
+  };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setLoading(true)
+    setLoading(true);
 
-    data.owner = user._id
+    data.owner = user._id;
 
     axios
-      .put("http://localhost:3000/api/user/update", data, {
+      .put(`${import.meta.env.BACKEND_URL}/api/user/update`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -63,9 +60,9 @@ const Profile = () => {
           toast.success(res.data.message);
           setTimeout(() => {
             navigate("/dashboard/tasks-All-Activities&");
-            data.name = ""
-            data.email = ""
-            setLoading(false)
+            data.name = "";
+            data.email = "";
+            setLoading(false);
             window.location.reload();
           }, 2000);
         }
@@ -74,9 +71,7 @@ const Profile = () => {
         console.log(err);
         toast.error(err.res.data.message);
       });
-
   };
-
 
   return (
     <>
@@ -171,6 +166,6 @@ const Profile = () => {
       </div>
     </>
   );
-}
+};
 
-export default Profile
+export default Profile;

@@ -1,0 +1,24 @@
+{
+    "installCommand": "npm install",
+    "devCommand": "npm dev",
+    "buildCommand": "npm build",
+    "outputDirectory": "out",
+    "version": 3,
+    "builds": [
+      {
+        "src": "index.html",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "src/**/*.{js,jsx,ts,tsx}",
+        "use": "@vercel/static"
+      }
+    ],
+    
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/"
+      }
+    ]
+}

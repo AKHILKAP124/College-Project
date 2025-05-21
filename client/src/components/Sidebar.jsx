@@ -20,7 +20,6 @@ import { use } from "react";
 import { PiDotsThreeOutlineVerticalThin } from "react-icons/pi";
 import UpdateProjectDialog from "./UpdateProjectDialog";
 
-
 const Sidebar = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("My Workspace");
@@ -29,8 +28,9 @@ const Sidebar = () => {
   const [teamDialogOpen, setTeamDialogOpen] = useState(false);
   const [isProjectOpen, setIsProjectOpen] = useState(false);
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
-  const [isProjectSideDialogOpen, setIsProjectSideDialogOpen] = useState(false)
-  const [isUpdateProjectDialogOpen, setIsUpdateProjectDialogOpen] = useState(false)
+  const [isProjectSideDialogOpen, setIsProjectSideDialogOpen] = useState(false);
+  const [isUpdateProjectDialogOpen, setIsUpdateProjectDialogOpen] =
+    useState(false);
   const [sendProject, setSendProject] = useState({});
   const [projectData, setProjectData] = useState([]);
   const [members, setMembers] = useState([]);
@@ -41,9 +41,13 @@ const Sidebar = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3000/api/member/get", { userId: user._id }, {
-        withCredentials: true,
-      })
+      .post(
+        `${import.meta.env.BACKEND_URL}/api/member/get`,
+        { userId: user._id },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           setMembers(res?.data?.members);
@@ -57,7 +61,7 @@ const Sidebar = () => {
 
     axios
       .post(
-        "http://localhost:3000/api/project/getuserallprojects",
+        `${import.meta.env.BACKEND_URL}/api/project/getuserallprojects`,
         { id: user?._id },
         {
           withCredentials: true,
@@ -73,10 +77,9 @@ const Sidebar = () => {
       .catch((err) => {
         console.log(err);
       });
-      
   }, [user]);
 
-use
+  use;
   return (
     <>
       <div className="h-screen w-64 dark:bg-[var(--sidebar-bg)] bg-[#0f1d40]  flex flex-col justify-start">
@@ -175,11 +178,9 @@ use
                   sx={{ width: 24, height: 24 }}
                 />
                 <p className=" text-sm font-[400] text-white ">
-                  {
-                    member?.memberId._id === user?._id
-                      ? member?.userId.name
-                      : member?.memberId.name
-                  }
+                  {member?.memberId._id === user?._id
+                    ? member?.userId.name
+                    : member?.memberId.name}
                 </p>
               </NavLink>
             ))}
@@ -230,7 +231,8 @@ use
                 to={`/dashboard/Projects-&/${item?._id}`}
               >
                 <p className=" text-sm font-[400] text-white ">{item.name}</p>
-                <PiDotsThreeOutlineVerticalThin className="text-white text-lg"
+                <PiDotsThreeOutlineVerticalThin
+                  className="text-white text-lg"
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -296,7 +298,7 @@ use
         isOpen={isProjectSideDialogOpen}
         onClose={() => setIsProjectSideDialogOpen(false)}
       />
-      <UpdateProjectDialog 
+      <UpdateProjectDialog
         isOpen={isUpdateProjectDialogOpen}
         onClose={() => setIsUpdateProjectDialogOpen(false)}
         project={sendProject}

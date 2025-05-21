@@ -3,39 +3,41 @@ import React from "react";
 import toast from "react-hot-toast";
 
 const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
+  const [loading, setLoading] = React.useState(false);
+  const [data, setData] = React.useState({
+    id: "",
+    name: "",
+    status: "",
+    description: "",
+  });
 
-    const [loading, setLoading] = React.useState(false);
-    const [data, setData] = React.useState({
-        id: "",
-        name: "",
-        status: "",
-        description: "",
-    });
-
-    const handleOnChange = (e) => {
-        const { name, value } = e.target;
-        setData({ ...data, [name]: value });
-    }
-    const handleSave = async () => {
-        setLoading(true);
-        console.log(taskId);
-        data.id = taskId?._id;
-        // You can add your save logic here
-        await axios.post("http://localhost:3000/api/projecttask/update", data, {
-            withCredentials: true,
-        }).then((res) => {
-            if (res.status === 200) {
-                toast.success(res.data.message);
-                onClose();
-                window.location.reload();
-                setData({ name: "", description: "", status: "" });
-                setLoading(false);
-            }
-        }).catch((err) => {
-            setLoading(false);
-            console.log(err);
-        });
-    }
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
+  const handleSave = async () => {
+    setLoading(true);
+    console.log(taskId);
+    data.id = taskId?._id;
+    // You can add your save logic here
+    await axios
+      .post(`${import.meta.env.BACKEND_URL}/api/projecttask/update`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(res.data.message);
+          onClose();
+          window.location.reload();
+          setData({ name: "", description: "", status: "" });
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -87,8 +89,8 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
           <input
             type="text"
             name="name"
-                      id="name"
-                      onChange={handleOnChange}
+            id="name"
+            onChange={handleOnChange}
             defaultValue={taskId.name}
             className=" text-2xl font-medium px-3 py-2 focus:outline-none"
           />
@@ -97,8 +99,8 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
             <select
               className=" rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-200 focus:bg-gray-100 cursor-pointer appearance-none"
               name="status"
-                          id="status"
-                          onChange={handleOnChange}
+              id="status"
+              onChange={handleOnChange}
               defaultValue={taskId.status}
             >
               <option value="New task">New task</option>
@@ -113,10 +115,10 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
           <div className="mt-3 pt-2  border-t border-gray-200">
             <p className="text-sm text-gray-500">Description</p>
             <textarea
-                          type="text"
-                          name="description"
-                          id="description"
-                          onChange={handleOnChange}
+              type="text"
+              name="description"
+              id="description"
+              onChange={handleOnChange}
               placeholder="Enter description here..."
               defaultValue={taskId.description}
               className="w-120 h-40 border border-gray-400 rounded-md text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-200 focus:bg-gray-100"
@@ -125,9 +127,9 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
         </div>
         {/* Footer */}
         <footer className="flex justify-end p-4 border-t border-gray-200">
-                  <button
-                      onClick={handleSave}
-                      disabled={!data.name && !data.description && !data.status}
+          <button
+            onClick={handleSave}
+            disabled={!data.name && !data.description && !data.status}
             className={`px-4 py-2 rounded-md text-white transition ${
               !data.name && !data.description && !data.status
                 ? "bg-blue-300 cursor-not-allowed"

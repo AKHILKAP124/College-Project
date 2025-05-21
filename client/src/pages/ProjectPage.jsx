@@ -19,7 +19,7 @@ const ProjectPage = () => {
   const dispatch = useDispatch();
   const nagivate = useNavigate();
   const user = useSelector((state) => state.user);
-  const [task, setTask] = useState([ ]);
+  const [task, setTask] = useState([]);
   const [taskId, setTaskId] = useState("");
   const [projectName, setProjectName] = useState("");
 
@@ -33,38 +33,36 @@ const ProjectPage = () => {
   }, 900000);
 
   if (user.name === "") {
-      axios
-        .get("http://localhost:3000/api/user/getUser", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          console.log(res?.data?.user);
-          if (res.status === 200) {
-            dispatch(setUser(res.data.user));
-            localStorage.setItem("user", JSON.stringify(res.data.user));
-          }
-        })
-        .catch((err) => {
-          if (err.response.status === 401) {
-            toast.error("Session expired, please login again");
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            setTimeout(() => {
-              window.location.href = "/signin";
-            }, 2000);
-          }
-          console.log(err);
-        });
-    }
-
+    axios
+      .get(`${import.meta.env.BACKEND_URL}/api/user/getUser`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res?.data?.user);
+        if (res.status === 200) {
+          dispatch(setUser(res.data.user));
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          toast.error("Session expired, please login again");
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setTimeout(() => {
+            window.location.href = "/signin";
+          }, 2000);
+        }
+        console.log(err);
+      });
+  }
 
   useEffect(() => {
-
     setTask([]);
 
     axios
       .post(
-        "http://localhost:3000/api/projecttask/get",
+        `${import.meta.env.BACKEND_URL}/api/projecttask/get`,
         { projectId: id },
         {
           withCredentials: true,
@@ -84,31 +82,29 @@ const ProjectPage = () => {
         }
         console.log(err);
       });
-    
-      axios
-        .post(
-          "http://localhost:3000/api/project/getbyid",
-         { projectId: id },
-          {
-            withCredentials: true,
-          }
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            setProjectName(res?.data?.project?.name);
-            return;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-  }, [id]);
 
- 
+    axios
+      .post(
+        `${import.meta.env.BACKEND_URL}/api/project/getbyid`,
+        { projectId: id },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setProjectName(res?.data?.project?.name);
+          return;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   const handleLogout = async () => {
     await axios
-      .get("http://localhost:3000/api/user/logout", {
+      .get(`${import.meta.env.BACKEND_URL}/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -131,7 +127,7 @@ const ProjectPage = () => {
   const handleDelete = async (taskId) => {
     await axios
       .post(
-        "http://localhost:3000/api/projecttask/delete",
+        `${import.meta.env.BACKEND_URL}/api/projecttask/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -167,7 +163,7 @@ const ProjectPage = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        "http://localhost:3000/api/projecttask/getbyid",
+        `${import.meta.env.BACKEND_URL}/api/projecttask/getbyid`,
         { taskId },
         {
           withCredentials: true,
@@ -210,7 +206,10 @@ const ProjectPage = () => {
         </div>
 
         <div className="w-full h-screen bg-white">
-            <p className="text-xl font-medium text-slate-800 ml-2 mt-4">Project's Name : <span className="text-blue-500 font-semibold">{projectName}</span></p>
+          <p className="text-xl font-medium text-slate-800 ml-2 mt-4">
+            Project's Name :{" "}
+            <span className="text-blue-500 font-semibold">{projectName}</span>
+          </p>
           <div className="w-full  h-18 flex items-center justify-center border-b border-b-slate-200">
             <div className="w-full h-10 flex items-center justify-between px-4">
               <button

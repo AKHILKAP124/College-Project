@@ -22,11 +22,11 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
     setLoading(true);
     const projectData = {
       id: project?._id,
-      name: inputValue
+      name: inputValue,
     };
 
     axios
-      .put("http://localhost:3000/api/project/update", projectData, {
+      .put(`${import.meta.env.BACKEND_URL}/api/project/update`, projectData, {
         withCredentials: true,
       })
       .then((res) => {
@@ -65,9 +65,13 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
           >
             Project Name
           </label>
-          {
-            user?._id === project?.owner?._id ? "" : <span className=" text-xs text-red-400">Only Admin can Change Project Name</span>
-          }
+          {user?._id === project?.owner?._id ? (
+            ""
+          ) : (
+            <span className=" text-xs text-red-400">
+              Only Admin can Change Project Name
+            </span>
+          )}
           <input
             id="inputField"
             type="text"
@@ -100,16 +104,18 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
         <div className="mb-6">
           <ul className=" text-gray-700 font-medium mb-1 flex flex-col gap-1">
             Project Member's
-            {
-              projectMembers?.map((member, index) => (
-                <li key={index}>
-                  <div className="flex items-center space-x-2 px-3 py-1 hover:bg-sky-200 hover:border border-sky-300 rounded-md">
-                    <Avatar sx={{ width: 32, height: 32 }} alt={member?.name} src={member?.avatar} />
-                    <span>{member?.name}</span>
-                  </div>
-                </li>
-              ))
-            }
+            {projectMembers?.map((member, index) => (
+              <li key={index}>
+                <div className="flex items-center space-x-2 px-3 py-1 hover:bg-sky-200 hover:border border-sky-300 rounded-md">
+                  <Avatar
+                    sx={{ width: 32, height: 32 }}
+                    alt={member?.name}
+                    src={member?.avatar}
+                  />
+                  <span>{member?.name}</span>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="flex justify-end space-x-3">
@@ -128,37 +134,33 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {
-              loading ? (
-                <div className="flex items-center space-x-2">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  <span>Saving...</span>
-                </div>
-              ) : (
-                (
-                  <span>Save</span>
-              )
-              )
-            }
+            {loading ? (
+              <div className="flex items-center space-x-2">
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <span>Saving...</span>
+              </div>
+            ) : (
+              <span>Save</span>
+            )}
           </button>
         </div>
       </div>

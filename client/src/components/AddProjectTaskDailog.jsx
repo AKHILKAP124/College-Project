@@ -39,7 +39,7 @@ export default function AddProjectTaskDialog({
     // You can add your save logic here
     console.log("Task saved:", taskData);
     await axios
-      .post(`${import.meta.env.BACKEND_URL}/api/projecttask/add`, taskData, {
+      .post(`http://localhost:3000/api/projecttask/add`, taskData, {
         withCredentials: true,
       })
       .then((res) => {

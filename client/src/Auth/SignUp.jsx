@@ -34,7 +34,7 @@ const SignUp = () => {
     setLoading(true);
     e.preventDefault();
     axios
-      .post(`${import.meta.env.BACKEND_URL}/api/user/signup`, data, {
+      .post(`http://localhost:3000/api/user/signup`, data, {
         withCredentials: true,
       })
       .then((res) => {

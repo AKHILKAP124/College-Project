@@ -32,7 +32,7 @@ const Dashboard = () => {
 
   if (user.name === "") {
     axios
-      .get(`${import.meta.env.BACKEND_URL}/api/user/getUser`, {
+      .get(`http://localhost:3000/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -58,7 +58,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/task/get`,
+        `http://localhost:3000/api/task/get`,
         { owner: user?._id },
         {
           withCredentials: true,
@@ -81,7 +81,7 @@ const Dashboard = () => {
   }, [user?._id]);
 
   useEffect(() => {
-    const socket = io(`${import.meta.env.BACKEND_URL}`, {
+    const socket = io(`http://localhost:3000`, {
       withCredentials: true,
       auth: {
         token: localStorage.getItem("token"),
@@ -97,7 +97,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`${import.meta.env.BACKEND_URL}/api/user/logout`, {
+      .get(`http://localhost:3000/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -120,7 +120,7 @@ const Dashboard = () => {
   const handleDelete = async (taskId) => {
     await axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/task/delete`,
+        `http://localhost:3000/api/task/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -156,7 +156,7 @@ const Dashboard = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/task/getbyid`,
+        `http://localhost:3000/api/task/getbyid`,
         { taskId },
         {
           withCredentials: true,

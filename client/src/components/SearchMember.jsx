@@ -10,7 +10,7 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
 
   const handleGetAllUsers = async () => {
     await axios
-      .get(`${import.meta.env.BACKEND_URL}/api/user/getallusers`, {
+      .get(`http://localhost:3000/api/user/getallusers`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -49,7 +49,7 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
     console.log(data, "add member");
 
     axios
-      .post(`${import.meta.env.BACKEND_URL}/api/member/add`, data, {
+      .post(`http://localhost:3000/api/member/add`, data, {
         withCredentials: true,
       })
       .then((res) => {

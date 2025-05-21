@@ -21,7 +21,7 @@ const MemberProfile = () => {
     setUserloading(true);
     axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/user/getUserById`,
+        `http://localhost:3000/api/user/getUserById`,
         { id },
         {
           withCredentials: true,
@@ -52,7 +52,7 @@ const MemberProfile = () => {
     console.log(data);
 
     axios
-      .post(`${import.meta.env.BACKEND_URL}/api/member/delete`, data, {
+      .post(`http://localhost:3000/api/member/delete`, data, {
         withCredentials: true,
       })
       .then((res) => {

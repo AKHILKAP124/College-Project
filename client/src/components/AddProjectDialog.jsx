@@ -3,21 +3,19 @@ import React, { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import {toast } from "react-hot-toast"
+import { toast } from "react-hot-toast";
 
 export default function AddProjectDialog({ onClose, isOpen }) {
-
   const user = useSelector((state) => state.user);
   const userMembers = useSelector((state) => state.userMember?.members);
-  
 
   var selectedMembers;
-  
+
   const [inputValue, setInputValue] = useState("");
   const [members, setMembers] = useState([]);
 
   if (!isOpen) return null;
-  
+
   const handleCancel = () => {
     setInputValue("");
     setMembers("");
@@ -26,14 +24,13 @@ export default function AddProjectDialog({ onClose, isOpen }) {
   const handleMultipleSelect = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    selectedMembers  = Array.from(
+    selectedMembers = Array.from(
       event.target.selectedOptions,
       (option) => option.value
     );
   };
 
   const handleSave = () => {
-    
     const projectData = {
       name: inputValue,
       owner: user?._id,
@@ -41,7 +38,7 @@ export default function AddProjectDialog({ onClose, isOpen }) {
     };
 
     axios
-      .post(`${import.meta.env.BACKEND_URL}/api/project/add`, projectData, {
+      .post(`http://localhost:3000/api/project/add`, projectData, {
         withCredentials: true,
       })
       .then((res) => {
@@ -50,15 +47,14 @@ export default function AddProjectDialog({ onClose, isOpen }) {
           console.log(res.data, "project");
           setTimeout(() => {
             onClose();
-            window.location.reload()
-          }, 2000)
+            window.location.reload();
+          }, 2000);
         }
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err.response.data.message)
+        toast.error(err.response.data.message);
       });
-
   };
 
   return (
@@ -89,7 +85,7 @@ export default function AddProjectDialog({ onClose, isOpen }) {
             onChange={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              setInputValue(e.target.value)
+              setInputValue(e.target.value);
             }}
             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter text here"
@@ -127,9 +123,18 @@ export default function AddProjectDialog({ onClose, isOpen }) {
             className="w-full border border-gray-300 rounded-md px-3 py-2 "
           >
             {userMembers?.map((member, index) => (
-              <option key={index} value={member.memberId?._id===user?._id ? member.userId?._id :member.memberId?._id}
-              className="px-4 py-1 rounded-md mb-1 text-teal-500 font-medium hover:bg-gray-200">
-                {member.memberId?._id===user?._id ? member.userId?.name :member.memberId?.name}
+              <option
+                key={index}
+                value={
+                  member.memberId?._id === user?._id
+                    ? member.userId?._id
+                    : member.memberId?._id
+                }
+                className="px-4 py-1 rounded-md mb-1 text-teal-500 font-medium hover:bg-gray-200"
+              >
+                {member.memberId?._id === user?._id
+                  ? member.userId?.name
+                  : member.memberId?.name}
               </option>
             ))}
           </select>

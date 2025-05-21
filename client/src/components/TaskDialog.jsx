@@ -22,7 +22,7 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
     // You can add your save logic here
     console.log("Task saved:", data);
     await axios
-      .post(`${import.meta.env.BACKEND_URL}/api/task/update`, data, {
+      .post(`http://localhost:3000/api/task/update`, data, {
         withCredentials: true,
       })
       .then((res) => {

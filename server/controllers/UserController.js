@@ -1,6 +1,5 @@
 import User from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
-import uploadImage from "../utils/cloudinary.js";
 import bcrypt from "bcryptjs";
 
 const generateAccessToken = (user) => {

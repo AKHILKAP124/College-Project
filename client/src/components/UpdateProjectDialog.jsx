@@ -26,7 +26,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
     };
 
     axios
-      .put(`${import.meta.env.BACKEND_URL}/api/project/update`, projectData, {
+      .put(`http://localhost:3000/api/project/update`, projectData, {
         withCredentials: true,
       })
       .then((res) => {

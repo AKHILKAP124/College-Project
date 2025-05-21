@@ -52,7 +52,7 @@ const Profile = () => {
     data.owner = user._id;
 
     axios
-      .put(`${import.meta.env.BACKEND_URL}/api/user/update`, data, {
+      .put(`http://localhost:3000/api/user/update`, data, {
         withCredentials: true,
       })
       .then((res) => {

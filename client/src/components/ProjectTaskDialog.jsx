@@ -21,7 +21,7 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
     data.id = taskId?._id;
     // You can add your save logic here
     await axios
-      .post(`${import.meta.env.BACKEND_URL}/api/projecttask/update`, data, {
+      .post(`http://localhost:3000/api/projecttask/update`, data, {
         withCredentials: true,
       })
       .then((res) => {

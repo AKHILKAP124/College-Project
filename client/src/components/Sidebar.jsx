@@ -42,7 +42,7 @@ const Sidebar = () => {
   useEffect(() => {
     axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/member/get`,
+        `http://localhost:3000/api/member/get`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -61,7 +61,7 @@ const Sidebar = () => {
 
     axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/project/getuserallprojects`,
+        `http://localhost:3000/api/project/getuserallprojects`,
         { id: user?._id },
         {
           withCredentials: true,

@@ -33,7 +33,7 @@ export default function AddTaskDialog({ onClose, isOpen, owner }) {
     // You can add your save logic here
     console.log("Task saved:", taskData);
     await axios
-      .post(`${import.meta.env.BACKEND_URL}/api/task/create`, taskData, {
+      .post(`http://localhost:3000/api/task/create`, taskData, {
         withCredentials: true,
       })
       .then((res) => {

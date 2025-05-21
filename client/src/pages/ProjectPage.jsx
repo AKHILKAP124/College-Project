@@ -34,7 +34,7 @@ const ProjectPage = () => {
 
   if (user.name === "") {
     axios
-      .get(`${import.meta.env.BACKEND_URL}/api/user/getUser`, {
+      .get(`http://localhost:3000/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -62,7 +62,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/projecttask/get`,
+        `http://localhost:3000/api/projecttask/get`,
         { projectId: id },
         {
           withCredentials: true,
@@ -85,7 +85,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/project/getbyid`,
+        `http://localhost:3000/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -104,7 +104,7 @@ const ProjectPage = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`${import.meta.env.BACKEND_URL}/api/user/logout`, {
+      .get(`http://localhost:3000/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -127,7 +127,7 @@ const ProjectPage = () => {
   const handleDelete = async (taskId) => {
     await axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/projecttask/delete`,
+        `http://localhost:3000/api/projecttask/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -163,7 +163,7 @@ const ProjectPage = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `${import.meta.env.BACKEND_URL}/api/projecttask/getbyid`,
+        `http://localhost:3000/api/projecttask/getbyid`,
         { taskId },
         {
           withCredentials: true,

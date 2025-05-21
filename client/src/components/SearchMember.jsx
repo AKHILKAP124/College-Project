@@ -10,9 +10,12 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
 
   const handleGetAllUsers = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/getallusers`, {
-        withCredentials: true,
-      })
+      .get(
+        `https://college-project-backend-six.vercel.app/api/user/getallusers`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           setAllUsers(res?.data?.users);
@@ -49,9 +52,13 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
     console.log(data, "add member");
 
     axios
-      .post(`http://localhost:3000/api/member/add`, data, {
-        withCredentials: true,
-      })
+      .post(
+        `https://college-project-backend-six.vercel.app/api/member/add`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 201) {
           toast.success(res?.data?.message);

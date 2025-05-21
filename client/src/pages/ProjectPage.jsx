@@ -34,7 +34,7 @@ const ProjectPage = () => {
 
   if (user.name === "") {
     axios
-      .get(`http://localhost:3000/api/user/getUser`, {
+      .get(`https://college-project-backend-six.vercel.app/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -62,7 +62,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `http://localhost:3000/api/projecttask/get`,
+        `https://college-project-backend-six.vercel.app/api/projecttask/get`,
         { projectId: id },
         {
           withCredentials: true,
@@ -85,7 +85,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `http://localhost:3000/api/project/getbyid`,
+        `https://college-project-backend-six.vercel.app/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -104,7 +104,7 @@ const ProjectPage = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/logout`, {
+      .get(`https://college-project-backend-six.vercel.app/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -127,7 +127,7 @@ const ProjectPage = () => {
   const handleDelete = async (taskId) => {
     await axios
       .post(
-        `http://localhost:3000/api/projecttask/delete`,
+        `https://college-project-backend-six.vercel.app/api/projecttask/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -163,7 +163,7 @@ const ProjectPage = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `http://localhost:3000/api/projecttask/getbyid`,
+        `https://college-project-backend-six.vercel.app/api/projecttask/getbyid`,
         { taskId },
         {
           withCredentials: true,

@@ -21,7 +21,7 @@ const MemberProfile = () => {
     setUserloading(true);
     axios
       .post(
-        `http://localhost:3000/api/user/getUserById`,
+        `https://college-project-backend-six.vercel.app/api/user/getUserById`,
         { id },
         {
           withCredentials: true,
@@ -52,9 +52,13 @@ const MemberProfile = () => {
     console.log(data);
 
     axios
-      .post(`http://localhost:3000/api/member/delete`, data, {
-        withCredentials: true,
-      })
+      .post(
+        `https://college-project-backend-six.vercel.app/api/member/delete`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res?.data?.message);

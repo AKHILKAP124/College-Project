@@ -22,9 +22,13 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
     // You can add your save logic here
     console.log("Task saved:", data);
     await axios
-      .post(`http://localhost:3000/api/task/update`, data, {
-        withCredentials: true,
-      })
+      .post(
+        `https://college-project-backend-six.vercel.app/api/task/update`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);

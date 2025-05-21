@@ -26,9 +26,13 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
     };
 
     axios
-      .put(`http://localhost:3000/api/project/update`, projectData, {
-        withCredentials: true,
-      })
+      .put(
+        `https://college-project-backend-six.vercel.app/api/project/update`,
+        projectData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res?.data?.message);

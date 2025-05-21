@@ -42,7 +42,7 @@ const Sidebar = () => {
   useEffect(() => {
     axios
       .post(
-        `http://localhost:3000/api/member/get`,
+        `https://college-project-backend-six.vercel.app/api/member/get`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -61,7 +61,7 @@ const Sidebar = () => {
 
     axios
       .post(
-        `http://localhost:3000/api/project/getuserallprojects`,
+        `https://college-project-backend-six.vercel.app/api/project/getuserallprojects`,
         { id: user?._id },
         {
           withCredentials: true,

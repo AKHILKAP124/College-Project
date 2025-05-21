@@ -52,9 +52,13 @@ const Profile = () => {
     data.owner = user._id;
 
     axios
-      .put(`http://localhost:3000/api/user/update`, data, {
-        withCredentials: true,
-      })
+      .put(
+        `https://college-project-backend-six.vercel.app/api/user/update`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);

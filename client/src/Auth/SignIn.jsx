@@ -27,9 +27,13 @@ const SignIn = () => {
     setLoading(true);
     console.log(data);
     axios
-      .post(`http://localhost:3000/api/user/signin`, data, {
-        withCredentials: true,
-      })
+      .post(
+        `http://localhost:3000/api/user/signin`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);

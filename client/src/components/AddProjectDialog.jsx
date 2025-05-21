@@ -38,9 +38,13 @@ export default function AddProjectDialog({ onClose, isOpen }) {
     };
 
     axios
-      .post(`http://localhost:3000/api/project/add`, projectData, {
-        withCredentials: true,
-      })
+      .post(
+        `https://college-project-backend-six.vercel.app/api/project/add`,
+        projectData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res?.data?.message);

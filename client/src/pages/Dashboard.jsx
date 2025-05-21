@@ -32,7 +32,7 @@ const Dashboard = () => {
 
   if (user?.name === "") {
     axios
-      .get(`http://localhost:3000/api/user/getUser`, {
+      .get(`https://college-project-backend-six.vercel.app/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -58,7 +58,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .post(
-        `http://localhost:3000/api/task/get`,
+        `https://college-project-backend-six.vercel.app/api/task/get`,
         { owner: user?._id },
         {
           withCredentials: true,
@@ -81,7 +81,7 @@ const Dashboard = () => {
   }, [user?._id]);
 
   useEffect(() => {
-    const socket = io(`http://localhost:3000`, {
+    const socket = io(`https://college-project-backend-six.vercel.app`, {
       withCredentials: true,
       auth: {
         token: localStorage.getItem("token"),
@@ -97,7 +97,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/logout`, {
+      .get(`https://college-project-backend-six.vercel.app/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -120,7 +120,7 @@ const Dashboard = () => {
   const handleDelete = async (taskId) => {
     await axios
       .post(
-        `http://localhost:3000/api/task/delete`,
+        `https://college-project-backend-six.vercel.app/api/task/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -156,7 +156,7 @@ const Dashboard = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `http://localhost:3000/api/task/getbyid`,
+        `https://college-project-backend-six.vercel.app/api/task/getbyid`,
         { taskId },
         {
           withCredentials: true,

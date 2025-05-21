@@ -39,9 +39,13 @@ export default function AddProjectTaskDialog({
     // You can add your save logic here
     console.log("Task saved:", taskData);
     await axios
-      .post(`http://localhost:3000/api/projecttask/add`, taskData, {
-        withCredentials: true,
-      })
+      .post(
+        `https://college-project-backend-six.vercel.app/api/projecttask/add`,
+        taskData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           setData({ name: "", description: "" });

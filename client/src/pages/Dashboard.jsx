@@ -32,6 +32,8 @@ const Dashboard = () => {
   if (user?.name === "") {
     axios
       .get(`https://infra-backend-one.vercel.app/api/user/getUser`, {
+        token: localStorage.getItem("token"),
+      }, {
         withCredentials: true,
       })
       .then((res) => {

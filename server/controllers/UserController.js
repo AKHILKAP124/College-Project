@@ -167,7 +167,7 @@ const logoutUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const token = req.body;
+  const {token} = req.body;
 
   try {
     // Verify token

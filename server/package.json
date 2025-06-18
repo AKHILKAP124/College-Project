@@ -9,7 +9,7 @@
     "run": "node index.js",
     "start": "nodemon index.js",
     "dev": "nodemon index.js",
-    "build": "echo 'Running build process...' && mkdir -p dist && cp src/* dist/",
+    "build": "echo 'Running build process...' && mkdir -p dist && cp /* dist/",
     "lint": "echo \"No lint step defined\""
   },
   "author": "Akhil Thakur",

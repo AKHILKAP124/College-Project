@@ -48,6 +48,7 @@ const RegisterUser = async (req, res) => {
 };
 
 const LoginUser = async (req, res) => {
+  console.log("LoginUser called");
   const { email, password } = req.body;
   try {
     // Validate input

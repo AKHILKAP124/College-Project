@@ -8,7 +8,7 @@ import { app, server} from './socket/index.js'
 
 dotenv.config();
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "https://college-project-neon.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };

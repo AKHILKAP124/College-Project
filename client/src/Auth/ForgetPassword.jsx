@@ -24,7 +24,7 @@ const ResetPassword = () => {
     setLoading(true);
     axios
       .post(
-        `http://localhost:3000/api/user/reset-password`,
+        `https://infra-backend-smoky.vercel.app/api/user/reset-password`,
         data,
         {
           withCredentials: true,

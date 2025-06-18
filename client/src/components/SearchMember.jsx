@@ -11,7 +11,7 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
 
   const handleGetAllUsers = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/getallusers`, {
+      .get(`https://infra-backend-smoky.vercel.app/api/user/getallusers`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -50,7 +50,7 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
     console.log(data, "add member");
 
     axios
-      .post(`http://localhost:3000/api/member/add`, data, {
+      .post(`https://infra-backend-smoky.vercel.app/api/member/add`, data, {
         withCredentials: true,
       })
       .then((res) => {

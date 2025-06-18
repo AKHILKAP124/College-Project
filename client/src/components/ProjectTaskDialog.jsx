@@ -21,9 +21,13 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
     data.id = taskId?._id;
     // You can add your save logic here
     await axios
-      .post(`http://localhost:3000/api/projecttask/update`, data, {
-        withCredentials: true,
-      })
+      .post(
+        `https://infra-backend-smoky.vercel.app/api/projecttask/update`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);

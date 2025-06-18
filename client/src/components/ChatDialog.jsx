@@ -8,11 +8,8 @@ import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import { TbMessages } from "react-icons/tb";
 
-
-
-
 const ChatDialog = ({ isOpen, onClose }) => {
-    const { id } = useParams();
+  const { id } = useParams();
   var [project, setProject] = useState([]);
   const [messages, setMessages] = useState([]);
   // const [messageReceived, setMessageReceived] = useState("");
@@ -29,7 +26,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
   const socket = useRef(null);
   useEffect(() => {
     // Initialize socket connection
-    socket.current = io("http://localhost:3000", {
+    socket.current = io("https://infra-backend-smoky.vercel.app", {
       withCredentials: true,
       transports: ["websocket"],
     });
@@ -39,24 +36,24 @@ const ChatDialog = ({ isOpen, onClose }) => {
   const fetchProjectDetails = () => {
     // Fetch project details by ID
     axios
-          .post(
-            `http://localhost:3000/api/project/getbyid`,
-            { projectId: id },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            if (res.status === 200) {
-              setProject(res?.data?.project);
-              console.log("setproject", project);
-              setMessageLoading(false);
-              return;
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+      .post(
+        `https://infra-backend-smoky.vercel.app/api/project/getbyid`,
+        { projectId: id },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setProject(res?.data?.project);
+          console.log("setproject", project);
+          setMessageLoading(false);
+          return;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -65,14 +62,10 @@ const ChatDialog = ({ isOpen, onClose }) => {
     fetchProjectDetails();
   }, [isOpen, id]);
 
-
-  
-
   // Scroll to the bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
 
   // Function to receive a message
   useEffect(() => {
@@ -80,13 +73,14 @@ const ChatDialog = ({ isOpen, onClose }) => {
     if (socket.current) {
       socket.current.on("received message", ({ sender, message }) => {
         console.log("Received message:", sender, message);
-        axios.post(
-          "http://localhost:3000/api/user/getbyid",
-          { userId: sender },
-          {
-            withCredentials: true,
-          }
-        )
+        axios
+          .post(
+            "https://infra-backend-smoky.vercel.app/api/user/getbyid",
+            { userId: sender },
+            {
+              withCredentials: true,
+            }
+          )
           .then((res) => {
             if (res.status === 200) {
               console.log("Sender Data:", sender);
@@ -99,17 +93,15 @@ const ChatDialog = ({ isOpen, onClose }) => {
           })
           .catch((err) => {
             console.log(err);
-          })
+          });
       });
     }
     return () => {
       socket.current.disconnect();
     };
-  }, [ ]);
-  
+  }, []);
 
   const sendMessage = () => {
-
     if (!input.trim()) return; // Prevent sending empty messages
     setSending(true);
     const chatData = {
@@ -118,32 +110,32 @@ const ChatDialog = ({ isOpen, onClose }) => {
       receiver: project?._id,
     };
 
-    axios.post(
-      "http://localhost:3000/api/message/new",
-      chatData,
-      {
-        withCredentials: true,
-      }
-    ).then((res) => {
-      if (res.status === 200) {
-        socket.current.emit("new message", {
-          projectId: project?._id,
-          sender: user?._id,
-          message: input,
-        });
-        setInput("");
-        setSending(false);
-      }
-    });
-
-    
+    axios
+      .post(
+        "https://infra-backend-smoky.vercel.app/api/message/new",
+        chatData,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          socket.current.emit("new message", {
+            projectId: project?._id,
+            sender: user?._id,
+            message: input,
+          });
+          setInput("");
+          setSending(false);
+        }
+      });
   };
 
   useEffect(() => {
     setMessageLoading(true);
     axios
       .post(
-        "http://localhost:3000/api/message/get",
+        "https://infra-backend-smoky.vercel.app/api/message/get",
         { projectId: project?._id },
         { withCredentials: true }
       )
@@ -307,12 +299,12 @@ const ChatDialog = ({ isOpen, onClose }) => {
                 <div className="flex items-center justify-center h-full">
                   <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-200"></div>
                 </div>
-              ) : ( messages.length === 0 ? (
-                  <div className=" text-gray-500 text-center mt-4">
-                    <TbMessages className="inline-block mb-2 text-4xl" />
-                    <p className="text-sm">Start chatting with your team!</p>
+              ) : messages.length === 0 ? (
+                <div className=" text-gray-500 text-center mt-4">
+                  <TbMessages className="inline-block mb-2 text-4xl" />
+                  <p className="text-sm">Start chatting with your team!</p>
                 </div>
-              ) :
+              ) : (
                 messages.map((message, index) => (
                   <div
                     key={index}
@@ -356,11 +348,15 @@ const ChatDialog = ({ isOpen, onClose }) => {
                     </div>
                     {/* <div className="animate-pulse bg-gray-300 h-1 w-1 rounded-full mt-1" /> */}
 
-                    {
-                      sending && (
-                      <div className={`text-white text-[9px] ${message?.sender?._id === user?._id ? "mr-4" : "hidden"}`}>sending...</div> 
-                      )
-                    }
+                    {sending && (
+                      <div
+                        className={`text-white text-[9px] ${
+                          message?.sender?._id === user?._id ? "mr-4" : "hidden"
+                        }`}
+                      >
+                        sending...
+                      </div>
+                    )}
                   </div>
                 ))
               )}

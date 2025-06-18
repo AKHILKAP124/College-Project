@@ -25,7 +25,6 @@ const Profile = () => {
     avatar: "",
   });
   const [loading, setLoading] = React.useState(false);
-  
 
   console.log(data);
   const handleOnchange = (e) => {
@@ -54,7 +53,7 @@ const Profile = () => {
     data.owner = user._id;
 
     axios
-      .put(`http://localhost:3000/api/user/update`, data, {
+      .put(`https://infra-backend-smoky.vercel.app/api/user/update`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -89,7 +88,7 @@ const Profile = () => {
       }
       return;
     }
-  }
+  };
 
   return (
     <>

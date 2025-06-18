@@ -34,7 +34,7 @@ const SignUp = () => {
     setLoading(true);
     e.preventDefault();
     axios
-      .post(`http://localhost:3000/api/user/signup`, data, {
+      .post(`https://infra-backend-smoky.vercel.app/api/user/signup`, data, {
         withCredentials: true,
       })
       .then((res) => {

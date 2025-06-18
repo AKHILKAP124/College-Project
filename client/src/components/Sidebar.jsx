@@ -41,7 +41,7 @@ const Sidebar = () => {
   useEffect(() => {
     axios
       .post(
-        `http://localhost:3000/api/member/get`,
+        `https://infra-backend-smoky.vercel.app/api/member/get`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -59,7 +59,7 @@ const Sidebar = () => {
 
     axios
       .post(
-        `http://localhost:3000/api/project/getuserallprojects`,
+        `https://infra-backend-smoky.vercel.app/api/project/getuserallprojects`,
         { id: user?._id },
         {
           withCredentials: true,
@@ -253,7 +253,6 @@ const Sidebar = () => {
           </div>
         </div>
 
-
         {/* Shared Projects Section */}
         {sharedProject.length > 0 && (
           <div
@@ -272,7 +271,6 @@ const Sidebar = () => {
                 />
                 <p className="text-sm font-[400] ">Shares Projects</p>
               </div>
-              
             </div>
             <div
               className={`flex flex-col items-start justify-center w-full gap-1.5 mt-2 ${
@@ -305,8 +303,6 @@ const Sidebar = () => {
             </div>
           </div>
         )}
-
-
       </div>
 
       {/* Dialog Section */}

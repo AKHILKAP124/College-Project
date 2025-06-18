@@ -26,13 +26,9 @@ const SignIn = () => {
     e.preventDefault();
     setLoading(true);
     axios
-      .post(
-        `http://localhost:3000/api/user/signin`,
-        data,
-        {
-          withCredentials: true,
-        }
-      )
+      .post(`https://infra-backend-smoky.vercel.app/api/user/signin`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);

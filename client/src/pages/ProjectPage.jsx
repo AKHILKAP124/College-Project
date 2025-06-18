@@ -24,13 +24,10 @@ const ProjectPage = () => {
   const [taskId, setTaskId] = useState("");
   const [projectName, setProjectName] = useState("");
   const [project, setProject] = useState([]);
-  
+
   // const [messages, setMessages] = useState([]);
 
   const [isTaskDataOpen, setIsTaskDataOpen] = useState(false);
-
-
-  
 
   const handleCloseTask = () => {
     setIsTaskDataOpen(false);
@@ -42,7 +39,7 @@ const ProjectPage = () => {
 
   if (user.name === "") {
     axios
-      .get(`http://localhost:3000/api/user/getUser`, {
+      .get(`https://infra-backend-smoky.vercel.app/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -70,7 +67,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `http://localhost:3000/api/projecttask/get`,
+        `https://infra-backend-smoky.vercel.app/api/projecttask/get`,
         { projectId: id },
         {
           withCredentials: true,
@@ -91,7 +88,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `http://localhost:3000/api/project/getbyid`,
+        `https://infra-backend-smoky.vercel.app/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -109,7 +106,7 @@ const ProjectPage = () => {
       });
     // axios
     //   .post(
-    //     "http://localhost:3000/api/message/get",
+    //     "https://infra-backend-smoky.vercel.app/api/message/get",
     //     { projectId: project?._id },
     //     { withCredentials: true }
     //   )
@@ -126,7 +123,7 @@ const ProjectPage = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/logout`, {
+      .get(`https://infra-backend-smoky.vercel.app/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -147,18 +144,18 @@ const ProjectPage = () => {
   };
 
   const handleDelete = async (taskId) => {
-    if(project?.owner !== user?._id) {
+    if (project?.owner !== user?._id) {
       return;
     }
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this task? This action cannot be undone."
-    )
+    );
     if (!confirmDelete) {
       return;
     }
     await axios
       .post(
-        `http://localhost:3000/api/projecttask/delete`,
+        `https://infra-backend-smoky.vercel.app/api/projecttask/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -204,7 +201,7 @@ const ProjectPage = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `http://localhost:3000/api/projecttask/getbyid`,
+        `https://infra-backend-smoky.vercel.app/api/projecttask/getbyid`,
         { taskId },
         {
           withCredentials: true,

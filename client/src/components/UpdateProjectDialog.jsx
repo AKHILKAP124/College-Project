@@ -35,9 +35,13 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
 
     if (projectData.name) {
       axios
-        .put(`http://localhost:3000/api/project/update`, projectData, {
-          withCredentials: true,
-        })
+        .put(
+          `https://infra-backend-smoky.vercel.app/api/project/update`,
+          projectData,
+          {
+            withCredentials: true,
+          }
+        )
         .then((res) => {
           if (res.status === 200) {
             toast.success(res?.data?.message);
@@ -58,7 +62,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
     } else {
       axios
         .post(
-          `http://localhost:3000/api/project/addmember`,
+          `https://infra-backend-smoky.vercel.app/api/project/addmember`,
           {
             projectId: project?._id,
             members: selectedMembers,
@@ -90,7 +94,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
 
     axios
       .post(
-        `http://localhost:3000/api/project/removemember`,
+        `https://infra-backend-smoky.vercel.app/api/project/removemember`,
         { projectId: project?._id, memberId },
         { withCredentials: true }
       )
@@ -119,7 +123,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
     if (result === "DELETE") {
       axios
         .post(
-          `http://localhost:3000/api/project/delete`,
+          `https://infra-backend-smoky.vercel.app/api/project/delete`,
           { projectId: project?._id },
           {
             withCredentials: true,
@@ -165,7 +169,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
 
   //   axios
   //     .post(
-  //       `http://localhost:3000/api/project/addmember`,
+  //       `https://infra-backend-smoky.vercel.app/api/project/addmember`,
   //       { projectId: project?._id, memberId },
   //       { withCredentials: true }
   //     )
@@ -256,73 +260,73 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
                   </div>
                   {user?._id === project?.owner?._id && (
                     <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleRemoveMember(member);
-                    }}
-                    className="text-red-400 hover:text-red-600 text-sm cursor-pointer"
-                  >
-                    remove
-                  </button>
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleRemoveMember(member);
+                      }}
+                      className="text-red-400 hover:text-red-600 text-sm cursor-pointer"
+                    >
+                      remove
+                    </button>
                   )}
                 </li>
               ))}
               {user?._id === project?.owner?._id && (
-              <li
-                className={`flex flex-col mt-2  rounded-sm border-slate-300 px-2 ${
-                  openMembers ? "border" : ""
-                }`}
-              >
-                <button
-                  onClick={() => {
-                    user?._id === project?.owner?._id
-                      ? setOpenMembers(!openMembers)
-                      : setAdmin(false);
-                  }}
-                  className={`px-4 py-1.5 text-sm text-sky-500 hover:text-sky-600 cursor-pointer ${
-                    openMembers ? "hidden" : ""
+                <li
+                  className={`flex flex-col mt-2  rounded-sm border-slate-300 px-2 ${
+                    openMembers ? "border" : ""
                   }`}
                 >
-                  {admin ? (
-                    "+add Member's"
-                  ) : (
-                    <span className=" text-xs text-red-400">
-                      Only Admin can Add Members
-                    </span>
-                  )}
-                </button>
-                {/* results */}
-                {openMembers && (
-                  <ul className="divide-y divide-gray-200 max-h-60 overflow-y-scroll w-full">
-                    {userMembers.map((member, index) => (
-                      <li
-                        key={index}
-                        className="py-2 flex items-center justify-between cursor-pointer hover:bg-gray-100 "
-                      >
-                        <div className="flex items-center gap-2">
-                          <img
-                            src={
-                              member.memberId?._id === user?._id
-                                ? member?.userId?.avatar
-                                : member?.memberId?.avatar
-                            }
-                            alt={
-                              member.memberId?._id === user?._id
+                  <button
+                    onClick={() => {
+                      user?._id === project?.owner?._id
+                        ? setOpenMembers(!openMembers)
+                        : setAdmin(false);
+                    }}
+                    className={`px-4 py-1.5 text-sm text-sky-500 hover:text-sky-600 cursor-pointer ${
+                      openMembers ? "hidden" : ""
+                    }`}
+                  >
+                    {admin ? (
+                      "+add Member's"
+                    ) : (
+                      <span className=" text-xs text-red-400">
+                        Only Admin can Add Members
+                      </span>
+                    )}
+                  </button>
+                  {/* results */}
+                  {openMembers && (
+                    <ul className="divide-y divide-gray-200 max-h-60 overflow-y-scroll w-full">
+                      {userMembers.map((member, index) => (
+                        <li
+                          key={index}
+                          className="py-2 flex items-center justify-between cursor-pointer hover:bg-gray-100 "
+                        >
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={
+                                member.memberId?._id === user?._id
+                                  ? member?.userId?.avatar
+                                  : member?.memberId?.avatar
+                              }
+                              alt={
+                                member.memberId?._id === user?._id
+                                  ? member?.userId?.name
+                                  : member?.memberId?.name
+                              }
+                              className="w-8 h-8 rounded-full"
+                            />
+                            <p>
+                              {member.memberId?._id === user?._id
                                 ? member?.userId?.name
-                                : member?.memberId?.name
-                            }
-                            className="w-8 h-8 rounded-full"
-                          />
-                          <p>
-                            {member.memberId?._id === user?._id
-                              ? member?.userId?.name
-                              : member?.memberId?.name}
-                          </p>
-                        </div>
+                                : member?.memberId?.name}
+                            </p>
+                          </div>
 
-                        <button
-                          className={`" text-sm px-2 py-1  gap-1 transition-all duration-200 
+                          <button
+                            className={`" text-sm px-2 py-1  gap-1 transition-all duration-200 
                           ${
                             projectMembers
                               .map((member) => member?._id)
@@ -339,8 +343,60 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
                               ? " text-gray-500  cursor-not-allowed"
                               : "hover:bg-blue-500 text-blue-400 rounded-sm hover:text-white"
                           }`}
-                          disabled={
-                            projectMembers
+                            disabled={
+                              projectMembers
+                                .map((member) => member?._id)
+                                .includes(
+                                  member?.memberId?._id === user?._id
+                                    ? member?.userId?._id
+                                    : member?.memberId?._id
+                                ) ||
+                              selectedMembers.includes(
+                                member?.memberId?._id === user?._id
+                                  ? member?.userId?._id
+                                  : member?.memberId?._id
+                              )
+                                ? true
+                                : false
+                            }
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+
+                              if (
+                                projectMembers.length === 1 &&
+                                selectedMembers.length === 2
+                              ) {
+                                toast.error(
+                                  "You can only add 3 members in a project"
+                                );
+                                return;
+                              }
+
+                              if (
+                                projectMembers.length === 2 &&
+                                selectedMembers.length === 1
+                              ) {
+                                toast.error(
+                                  "You can only add 3 members in a project"
+                                );
+                                return;
+                              }
+
+                              if (selectedMembers.length === 3) {
+                                toast.error("You have already added 3 members");
+                                return;
+                              }
+
+                              setSelectedMembers((prev) => [
+                                ...prev,
+                                member?.memberId?._id === user?._id
+                                  ? member?.userId?._id
+                                  : member?.memberId?._id,
+                              ]);
+                            }}
+                          >
+                            {projectMembers
                               .map((member) => member?._id)
                               .includes(
                                 member?.memberId?._id === user?._id
@@ -352,122 +408,69 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
                                 ? member?.userId?._id
                                 : member?.memberId?._id
                             )
-                              ? true
-                              : false
-                          }
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-
-                            if (
-                              projectMembers.length === 1 &&
-                              selectedMembers.length === 2
-                            ) {
-                              toast.error(
-                                "You can only add 3 members in a project"
-                              );
-                              return;
-                            }
-
-                            if (
-                              projectMembers.length === 2 &&
-                              selectedMembers.length === 1
-                            ) {
-                              toast.error(
-                                "You can only add 3 members in a project"
-                              );
-                              return;
-                            }
-
-                            if (selectedMembers.length === 3) {
-                              toast.error("You have already added 3 members");
-                              return;
-                            }
-
-                            setSelectedMembers((prev) => [
-                              ...prev,
-                              member?.memberId?._id === user?._id
-                                ? member?.userId?._id
-                                : member?.memberId?._id,
-                            ]);
-                          }}
-                        >
-                          {projectMembers
-                            .map((member) => member?._id)
-                            .includes(
-                              member?.memberId?._id === user?._id
-                                ? member?.userId?._id
-                                : member?.memberId?._id
-                            ) ||
-                          selectedMembers.includes(
-                            member?.memberId?._id === user?._id
-                              ? member?.userId?._id
-                              : member?.memberId?._id
-                          )
-                            ? "Added"
-                            : "Add"}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                              ? "Added"
+                              : "Add"}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               )}
             </ul>
           </div>
           {user?._id === project?.owner?._id && (
-          <div className="flex justify-end space-x-3">
-            
+            <div className="flex justify-end space-x-3">
               <button
                 className="px-4 rounded-md bg-red-300 hover:bg-red-500 text-white cursor-pointer text-sm mr-27"
                 onClick={handleDelete}
               >
                 Delete Project
               </button>
-            
-            <button
-              onClick={handleReset}
-              className="px-4 rounded-md text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 cursor-pointer  transition"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={!inputValue && selectedMembers.length === 0}
-              className={`px-4 py-2 text-sm rounded-md text-white transition ${
-                !inputValue && selectedMembers.length === 0
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600"
-              }`}
-            >
-              {loading ? (
-                <div className="flex items-center space-x-2">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  <span>Saving...</span>
-                </div>
-              ) : (
-                <span>Save</span>
-              )}
-            </button>
+
+              <button
+                onClick={handleReset}
+                className="px-4 rounded-md text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 cursor-pointer  transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={!inputValue && selectedMembers.length === 0}
+                className={`px-4 py-2 text-sm rounded-md text-white transition ${
+                  !inputValue && selectedMembers.length === 0
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 hover:bg-blue-600"
+                }`}
+              >
+                {loading ? (
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    <span>Saving...</span>
+                  </div>
+                ) : (
+                  <span>Save</span>
+                )}
+              </button>
             </div>
           )}
         </div>

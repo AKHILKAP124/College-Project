@@ -4,7 +4,7 @@ import Task from "../models/TaskModel.js";
 const createTask = async (req, res) => {
     try {
         const { owner, name, description, status } = req.body;
-        console.log("Received data:", req.body);
+        
         if (!owner || !name ) {
             return res.status(400).json({ message: "name is required" });
         }
@@ -26,7 +26,6 @@ const createTask = async (req, res) => {
 const getTasks = async (req, res) => {
     try {
         const { owner } = req.body;
-        console.log("Received data:", req.body);
         if (!owner) {
             return res.status(400).json({ message: "Owner ID is required" });
         }
@@ -44,7 +43,6 @@ const getTasks = async (req, res) => {
 const getTaskById = async (req, res) => {
     try {
         const { taskId } = req.body;
-        console.log("Received data:", taskId);
         if (!taskId) {
             return res.status(400).json({ message: "Task ID is required" });
         }
@@ -58,6 +56,7 @@ const getTaskById = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
 
 const updateTask = async (req, res) => {
     try {

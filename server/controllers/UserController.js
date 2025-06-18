@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 const generateAccessToken = (user) => {
   return jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "30m",
   });
 };
 const generateRefreshToken = (user) => {
@@ -89,6 +89,42 @@ const LoginUser = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  const { email, oldPassword, newPassword } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const isMatch = await user.comparePassword(oldPassword);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+    user.password = newPassword;
+    await user.save();
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.password = newPassword;
+    await user.save();
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const updateProfile = async (req, res) => {
   try {
     var { owner, name, email, avatar } = req.body;
@@ -130,7 +166,7 @@ const logoutUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const token = req.cookies.accessToken;
+  const token = req?.cookies?.accessToken;
 
   try {
     // Verify token
@@ -159,11 +195,11 @@ const getUser = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const userId = req.body;
+    const {userId }= req.body;
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
-    const user = await User.findById(userId.id).select("-password");
+    const user = await User.findById(userId).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -190,6 +226,8 @@ const getAllUsers = async (req, res) => {
 export {
   RegisterUser,
   LoginUser,
+  changePassword,
+  resetPassword,
   updateProfile,
   logoutUser,
   getUser,

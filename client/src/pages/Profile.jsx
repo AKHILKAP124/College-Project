@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import uploadImage from "../utils/cloudinaryUpload";
+import ChangePasswordDialog from "../components/ChangePasswordDialog";
 
 const Profile = () => {
   const [profilePic, setProfilePic] = React.useState("");
@@ -24,6 +25,7 @@ const Profile = () => {
     avatar: "",
   });
   const [loading, setLoading] = React.useState(false);
+  
 
   console.log(data);
   const handleOnchange = (e) => {
@@ -52,13 +54,9 @@ const Profile = () => {
     data.owner = user._id;
 
     axios
-      .put(
-        `https://college-project-backend-six.vercel.app/api/user/update`,
-        data,
-        {
-          withCredentials: true,
-        }
-      )
+      .put(`http://localhost:3000/api/user/update`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
@@ -76,6 +74,22 @@ const Profile = () => {
         toast.error(err.res.data.message);
       });
   };
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (data.name || data.email || data.avatar) {
+      const confirmCancel = window.confirm(
+        "You have unsaved changes. Are you sure you want to cancel?"
+      );
+      if (confirmCancel) {
+        setData({ name: "", email: "", avatar: "" });
+        navigate("/dashboard/tasks-All-Activities&");
+      }
+      return;
+    }
+  }
 
   return (
     <>
@@ -108,7 +122,7 @@ const Profile = () => {
                   name="name"
                   id="name"
                   onChange={handleOnchange}
-                  className="appearance-none  py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
+                  className="appearance-none border border-gray-300 rounded-md py-2 px-3 ml-8 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
                   defaultValue={user.name}
                 />
               </label>
@@ -121,8 +135,22 @@ const Profile = () => {
                   name="email"
                   id="email"
                   onChange={handleOnchange}
-                  className="appearance-none w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
+                  className="appearance-none border border-gray-300 rounded-md w-ful py-2 px-3 ml-9 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
                   defaultValue={user.email}
+                />
+              </label>
+            </div>
+            <div>
+              <label htmlFor="avatar" className="flex  items-center gap-8">
+                <p className="text-gray-600 text-[18px] font-medium">
+                  Password:
+                </p>
+                <input
+                  type="password"
+                  name="password"
+                  disabled
+                  className="appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
+                  value="********"
                 />
               </label>
             </div>
@@ -130,11 +158,7 @@ const Profile = () => {
           <div className="w-full h-20 flex items-center gap-6  ">
             <button
               className="px-3 py-2 bg-red-400 font-medium rounded-md cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                navigate("/dashboard/tasks-All-Activities&");
-              }}
+              onClick={handleCancel}
             >
               Cancel
             </button>

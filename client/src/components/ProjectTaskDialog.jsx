@@ -21,13 +21,9 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
     data.id = taskId?._id;
     // You can add your save logic here
     await axios
-      .post(
-        `https://college-project-backend-six.vercel.app/api/projecttask/update`,
-        data,
-        {
-          withCredentials: true,
-        }
-      )
+      .post(`http://localhost:3000/api/projecttask/update`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);

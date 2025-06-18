@@ -39,13 +39,9 @@ export default function AddProjectTaskDialog({
     // You can add your save logic here
     console.log("Task saved:", taskData);
     await axios
-      .post(
-        `https://college-project-backend-six.vercel.app/api/projecttask/add`,
-        taskData,
-        {
-          withCredentials: true,
-        }
-      )
+      .post(`http://localhost:3000/api/projecttask/add`, taskData, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           setData({ name: "", description: "" });
@@ -65,8 +61,13 @@ export default function AddProjectTaskDialog({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur bg-opacity-50 p-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <>
+      <div
+        className=" fixed inset-0 bg-[#0000005e] bg-opacity-50 z-40"
+        onClick={handleCancel}
+      ></div>
+      <div className=" flex items-center justify-center ">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
         <div className="text-xl font-semibold mb-4 text-gray-800 flex justify-between items-center">
           <p>Create Task</p>
           <RxCross2
@@ -131,10 +132,11 @@ export default function AddProjectTaskDialog({
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {loading ? "Saving..." : "Save"}
+            {loading ? "Creating..." : "Create"}
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

@@ -72,11 +72,10 @@ const deleteProjectTask = async (req, res) => {
 const getProjectTasks = async (req, res) => {
     try {
         const { projectId } = req.body;
-        console.log("project id:", projectId);
         if (!projectId) {
             return res.status(400).json({ message: "Project ID is required" });
         }
-        const tasks = await ProjectTask.find({  projectId });
+        const tasks = await ProjectTask.find({  projectId }).populate('ownerId', 'name');
         if (!tasks || tasks.length === 0) {
             return res.status(404).json({ message: "No tasks found" });
         }

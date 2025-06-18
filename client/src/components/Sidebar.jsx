@@ -8,11 +8,9 @@ import {
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import { HiOutlinePlusSmall } from "react-icons/hi2";
-import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import AddProjectDialog from "./AddProjectDialog";
 import { useDispatch, useSelector } from "react-redux";
 import SearchMember from "./SearchMember";
-import ProjectSideDialog from "./ProjectSideDialog";
 import { useEffect } from "react";
 import axios from "axios";
 import { setUserMember } from "../redux/memberSlice";
@@ -27,22 +25,23 @@ const Sidebar = () => {
   const [isTeamOpen, setIsTeamOpen] = useState(false);
   const [teamDialogOpen, setTeamDialogOpen] = useState(false);
   const [isProjectOpen, setIsProjectOpen] = useState(false);
+  const [isSharedProjectOpen, setIsSharedProjectOpen] = useState(false);
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
-  const [isProjectSideDialogOpen, setIsProjectSideDialogOpen] = useState(false);
   const [isUpdateProjectDialogOpen, setIsUpdateProjectDialogOpen] =
     useState(false);
   const [sendProject, setSendProject] = useState({});
   const [projectData, setProjectData] = useState([]);
+  const [sharedProject, setSharedProject] = useState([]);
   const [members, setMembers] = useState([]);
 
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state?.user);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     axios
       .post(
-        `https://college-project-backend-six.vercel.app/api/member/get`,
+        `http://localhost:3000/api/member/get`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -52,7 +51,6 @@ const Sidebar = () => {
         if (res.status === 200) {
           setMembers(res?.data?.members);
           dispatch(setUserMember(res?.data?.members));
-          console.log(members, "members");
         }
       })
       .catch((err) => {
@@ -61,7 +59,7 @@ const Sidebar = () => {
 
     axios
       .post(
-        `https://college-project-backend-six.vercel.app/api/project/getuserallprojects`,
+        `http://localhost:3000/api/project/getuserallprojects`,
         { id: user?._id },
         {
           withCredentials: true,
@@ -69,9 +67,17 @@ const Sidebar = () => {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res?.data?.projects);
-          setProjectData(res?.data?.projects);
-          console.log(members, "members");
+          const response = res?.data?.projects;
+          setProjectData([]);
+          setSharedProject([]);
+          response.map((item) => {
+            if (item?.owner?._id === user?._id) {
+              setProjectData((prev) => [...prev, item]);
+              console.log(item);
+            } else {
+              setSharedProject((prev) => [...prev, item]);
+            }
+          });
         }
       })
       .catch((err) => {
@@ -177,7 +183,7 @@ const Sidebar = () => {
                   }
                   sx={{ width: 24, height: 24 }}
                 />
-                <p className=" text-sm font-[400] text-white ">
+                <p className=" text-sm font-[400] text-white text-nowrap h-5">
                   {member?.memberId._id === user?._id
                     ? member?.userId.name
                     : member?.memberId.name}
@@ -191,7 +197,7 @@ const Sidebar = () => {
         <div
           className="w-full px-2"
           onClick={() => {
-            setIsProjectOpen((prev) => !prev);
+            setIsProjectOpen(!isProjectOpen);
           }}
         >
           <div className="flex items-center justify-start text-xl text-[#89909d] w-full gap-1 hover:bg-[#2a426a5d] transition-all duration-200 cursor-pointer px-2 py-1.5 rounded-md">
@@ -236,6 +242,8 @@ const Sidebar = () => {
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
+                    console.log(item);
+                    // Open the update project dialog and send the project data
                     setSendProject(item);
                     setIsUpdateProjectDialogOpen(true);
                   }}
@@ -244,6 +252,61 @@ const Sidebar = () => {
             ))}
           </div>
         </div>
+
+
+        {/* Shared Projects Section */}
+        {sharedProject.length > 0 && (
+          <div
+            className="w-full px-2 mt-4"
+            onClick={() => {
+              setIsSharedProjectOpen(!isSharedProjectOpen);
+            }}
+          >
+            <div className="flex items-center justify-start text-xl text-[#89909d] w-full gap-1 hover:bg-[#2a426a5d] transition-all duration-200 cursor-pointer px-2 py-2 rounded-md">
+              <div className="flex items-center justify-start text-xl text-[#89909d] w-full gap-1">
+                <MdOutlineKeyboardArrowDown
+                  className={isSharedProjectOpen ? "hidden" : ""}
+                />
+                <MdOutlineKeyboardArrowUp
+                  className={isSharedProjectOpen ? "" : "hidden"}
+                />
+                <p className="text-sm font-[400] ">Shares Projects</p>
+              </div>
+              
+            </div>
+            <div
+              className={`flex flex-col items-start justify-center w-full gap-1.5 mt-2 ${
+                isSharedProjectOpen ? "" : "hidden"
+              }`}
+            >
+              {sharedProject?.map((item, index) => (
+                <NavLink
+                  key={index}
+                  className={({ isActive }) =>
+                    `${
+                      isActive ? "bg-[#2d4071]" : ""
+                    } flex items-center justify-between w-full gap-1 cursor-pointer grouphover:border px-4 py-1.5 rounded-md border-slate-700 hover:bg-[#2d4071] transition-all duration-200`
+                  }
+                  to={`/dashboard/Projects-&/${item?._id}`}
+                >
+                  <p className=" text-sm font-[400] text-white ">{item.name}</p>
+                  <PiDotsThreeOutlineVerticalThin
+                    className="text-white text-lg"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      // Open the update project dialog and send the project data
+                      setSendProject(item);
+                      setIsUpdateProjectDialogOpen(true);
+                    }}
+                  />
+                </NavLink>
+              ))}
+            </div>
+          </div>
+        )}
+
+
       </div>
 
       {/* Dialog Section */}
@@ -293,11 +356,7 @@ const Sidebar = () => {
         isOpen={teamDialogOpen}
         onClose={() => setTeamDialogOpen(false)}
       />
-      {/* Projects Dialog */}
-      <ProjectSideDialog
-        isOpen={isProjectSideDialogOpen}
-        onClose={() => setIsProjectSideDialogOpen(false)}
-      />
+      {/* UpdateProjectDialog */}
       <UpdateProjectDialog
         isOpen={isUpdateProjectDialogOpen}
         onClose={() => setIsUpdateProjectDialogOpen(false)}

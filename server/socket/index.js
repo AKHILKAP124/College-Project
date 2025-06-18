@@ -5,9 +5,10 @@ import http from "http";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, 
-    {
+  {
+      
         cors: {
-            origin: "http://localhost:5173",
+            origin: "*",
             credentials: true
         }
     }
@@ -18,11 +19,30 @@ const io = new Server(server,
 // });
 
 io.on("connection", (socket) => {
-    
-  console.log("a user connected", socket.id);
+  console.log("A user connected:", socket.id);
+
+  socket.on("join project", (projectId) => {
+    if (!projectId) return console.error("Invalid projectId");
+    socket.join(projectId);
+    console.log(`User ${socket.id} joined project: ${projectId}`);
+  });
+
+  socket.on("new message", ({ projectId, sender, message }) => {
+    if (!projectId || !sender || !message)
+      return console.error("Missing data for new message", projectId, sender, message);
+
+    console.log("New message:", projectId, sender, message);
+
+    io.in(projectId).emit("received message", {
+      sender: sender,
+      message: message,
+    });
+  });
+
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("User disconnected:", socket.id);
   });
 });
+
 
 export {app, server, io}

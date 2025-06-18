@@ -34,13 +34,9 @@ const SignUp = () => {
     setLoading(true);
     e.preventDefault();
     axios
-      .post(
-        `https://college-project-backend-six.vercel.app/api/user/signup`,
-        data,
-        {
-          withCredentials: true,
-        }
-      )
+      .post(`http://localhost:3000/api/user/signup`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 201) {
           toast.success(res.data.message);

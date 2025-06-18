@@ -1,10 +1,16 @@
 import { Router } from "express";
 
-import { addProject, deleteProject, getAllUserProjects, getProjectById, updateProject } from "../controllers/ProjectController.js";
+import { addMemberToProject, addProject, deleteMemberFromProjectOfspecificUser, deleteProject, getAllUserProjects, getProjectById, removeMemberFromProject, updateProject } from "../controllers/ProjectController.js";
 
 const projectRouter = Router();
 
 projectRouter.post("/add", addProject);
+projectRouter.post("/addmember", addMemberToProject);
+projectRouter.post("/removemember", removeMemberFromProject);
+projectRouter.post(
+  "/deletememberfromallprojectsofspecificuser",
+  deleteMemberFromProjectOfspecificUser
+);
 projectRouter.put("/update", updateProject);
 projectRouter.post("/delete", deleteProject);
 projectRouter.post("/getbyid", getProjectById);

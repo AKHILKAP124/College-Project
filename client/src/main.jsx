@@ -14,6 +14,7 @@ import { Provider } from 'react-redux'
 import store from './redux/store'
 import Layout from '../Layout'
 import MemberProfile from './pages/MemberProfile'
+import ResetPassword from './Auth/ForgetPassword'
 
 
 
@@ -51,6 +52,10 @@ const AppRoutes = createBrowserRouter([
   {
     path: "/signin/verify-user",
     element: <VerifyUser />,
+  },
+  {
+    path: "/forget/reset-password",
+    element: <ResetPassword />,
   },
   {
     path: "/signup",

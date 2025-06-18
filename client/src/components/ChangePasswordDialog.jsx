@@ -1,9 +1,8 @@
-import axios from "axios";
+// import axios from "axios";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 
-export default function AddTaskDialog({ onClose, isOpen, owner }) {
+export default function ChangePasswordDialog({ onClose, isOpen}) {
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -12,7 +11,7 @@ export default function AddTaskDialog({ onClose, isOpen, owner }) {
 
   if (!isOpen) return null;
 
-  const handleOnChange = (e) => {
+    const handleOnChange = (e) => {
     e.preventDefault();
     e.stopPropagation();
     const { name, value } = e.target;
@@ -26,46 +25,18 @@ export default function AddTaskDialog({ onClose, isOpen, owner }) {
 
   const handleSave = async () => {
     setLoading(true);
-    const taskData = {
-      owner: owner,
-      name: data.name,
-      description: data.description,
-      status: "New task",
-    };
-    // You can add your save logic here
-    console.log("Task saved:", taskData);
-    await axios
-      .post(`http://localhost:3000/api/task/create`, taskData, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        if (res.status === 201) {
-          setData({ name: "", description: "" });
-          toast.success(res.data.message);
-          setTimeout(() => {
-            window.location.reload();
-            onClose();
-            setLoading(false);
-          }, 2000);
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-        toast.error(err.response.data.message);
-      });
+    
   };
 
   return (
-    <>
-      <div
-        className=" fixed inset-0 bg-[#0000005e] bg-opacity-50 z-40"
+
+    <div
+        className=" flex items-center justify-center fixed inset-0 backdrop-blur-[2px] bg-opacity-50 z-40 "
         onClick={onClose}
-      ></div>
-      <div className=" flex items-center justify-center ">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+      >
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
         <div className="text-xl font-semibold mb-4 text-gray-800 flex justify-between items-center">
-          <p>Create Task</p>
+          <p>Change Password</p>
           <RxCross2
             className="text-2xl hover:text-red-600 text-gray-600 "
             onClick={() => {
@@ -128,11 +99,10 @@ export default function AddTaskDialog({ onClose, isOpen, owner }) {
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {loading ? "Creating..." : "Create"}
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
-        </div>
       </div>
-    </>
+    </div>
   );
 }

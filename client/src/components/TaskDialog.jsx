@@ -22,13 +22,9 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
     // You can add your save logic here
     console.log("Task saved:", data);
     await axios
-      .post(
-        `https://college-project-backend-six.vercel.app/api/task/update`,
-        data,
-        {
-          withCredentials: true,
-        }
-      )
+      .post(`http://localhost:3000/api/task/update`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
@@ -48,7 +44,7 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0  transition-opacity ${
+        className={`fixed inset-0  bg-[#0000005e] bg-opacity-50 ${
           isOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"

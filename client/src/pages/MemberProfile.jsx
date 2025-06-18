@@ -11,7 +11,7 @@ const MemberProfile = () => {
 
   const navigate = useNavigate();
 
-  const userdetail = useSelector((state) => state.user._id);
+  const userdetail = useSelector((state) => state?.user?._id);
 
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(false);
@@ -21,7 +21,7 @@ const MemberProfile = () => {
     setUserloading(true);
     axios
       .post(
-        `https://college-project-backend-six.vercel.app/api/user/getUserById`,
+        `http://localhost:3000/api/user/getUserById`,
         { id },
         {
           withCredentials: true,
@@ -49,28 +49,39 @@ const MemberProfile = () => {
       memberId: id,
     };
 
-    console.log(data);
-
     axios
-      .post(
-        `https://college-project-backend-six.vercel.app/api/member/delete`,
-        data,
-        {
-          withCredentials: true,
-        }
-      )
+      .post(`http://localhost:3000/api/member/delete`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
-        if (res.status === 200) {
-          toast.success(res?.data?.message);
-          setTimeout(() => {
-            navigate("/dashboard/tasks-All-Activities&");
-            window.location.reload();
-            setLoading(false);
-          }, 2000);
+        if (res.status === 200) { 
+          axios
+            .post(
+              `http://localhost:3000/api/project/deletememberfromallprojectsofspecificuser`,
+              {userId: userdetail, memberId: id },
+              {
+                withCredentials: true,
+              }
+            )
+            .then((res) => {
+              if (res.status === 200) {
+                toast.success(res?.data?.message);
+                setTimeout(() => {
+                  navigate("/dashboard/tasks-All-Activities&");
+                  window.location.reload();
+                  setLoading(false);
+                }, 2000);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
+        toast.error("Something went wrong");
       });
   };
 

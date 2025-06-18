@@ -5,17 +5,14 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setToken, setUser } from "../redux/userSlice";
 
-const SignIn = () => {
+const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
-    email: "demo@gmail.com",
-    password: "Demo123",
+    email: "",
+    newPassword: "",
   });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleOnchange = (e) => {
     const { name, value } = e.target;
@@ -27,7 +24,7 @@ const SignIn = () => {
     setLoading(true);
     axios
       .post(
-        `http://localhost:3000/api/user/signin`,
+        `http://localhost:3000/api/user/reset-password`,
         data,
         {
           withCredentials: true,
@@ -36,11 +33,8 @@ const SignIn = () => {
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
-          dispatch(setToken(res.data.Token));
-          localStorage.setItem("token", res.data.Token);
-          dispatch(setUser(res?.data?.user));
           setTimeout(() => {
-            navigate("/signin/verify-user");
+            navigate("/signin");
           }, 2000);
           setTimeout(() => {
             setLoading(false);
@@ -65,9 +59,9 @@ const SignIn = () => {
             <h1 className="text-3xl font-semibold text-gray-700 ml-2">INFRA</h1>
           </div>
           <h1 className="text-2xl text-slate-800 font-semibold mb-2">
-            Sign In
+            Reset Password
           </h1>
-          <p className="text-gray-600 mb-6">Sign in to continue to INFRA.</p>
+          {/* <p className="text-gray-600 mb-6">Sign in to continue to INFRA.</p> */}
           <div className="flex justify-center bg-white shadow-md border-2 border-slate-100 rounded-lg p-16 max-w-xl w-full text-center mb-10">
             <form action="submit" onSubmit={handleOnSubmit} className="w-full">
               <div className="mb-4 flex flex-col items-start">
@@ -75,7 +69,7 @@ const SignIn = () => {
                   htmlFor="email"
                   className="mb-2 text-slate-600 font-semibold"
                 >
-                  Username / Email
+                  Email
                 </label>
                 <input
                   type="email"
@@ -88,34 +82,24 @@ const SignIn = () => {
               </div>
               <div className="w-full mb-4 flex flex-col items-start">
                 <label
-                  htmlFor="password"
+                  htmlFor="newPassword"
                   className="mb-2 text-slate-600 font-semibold"
                 >
-                  Password
+                  New Password
                 </label>
                 <input
                   type="password"
-                  name="password"
-                  defaultValue={data.password}
+                  name="newPassword"
+                  defaultValue={data.newPassword}
                   onChange={handleOnchange}
-                  placeholder="Password"
+                  placeholder="New Password"
                   className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:ring-blue-400"
                 />
               </div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <input type="checkbox" id="remember" className="mr-2" />
-                  <label htmlFor="remember" className="text-gray-600">
-                    Remember me
-                  </label>
-                </div>
-                <a href="#" className=" text-slate-500 hover:text-slate-700">
-                  Forgot password?
-                </a>
-              </div>
+
               <button
                 type="submit"
-                className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] cursor-pointer text-white font-semibold py-2 px-4 rounded w-full"
+                className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] cursor-pointer text-white font-semibold py-2 px-4 rounded w-full mt-4"
               >
                 {loading ? (
                   <span className="flex items-center justify-center">
@@ -132,18 +116,18 @@ const SignIn = () => {
                     <span className="ml-2">Loading...</span>
                   </span>
                 ) : (
-                  "Sign In"
+                  "Reset"
                 )}
               </button>
             </form>
           </div>
           <p className="text-gray-600 mb-6">
-            Don't have an account ?
+            Remebered your password?{" "}
             <a
-              href="/signup"
+              href="/signin"
               className="text-[var(--primary)] hover:text-[var(--primary-dark)] ml-2"
             >
-              SignUp now
+              SignIn Now
             </a>
           </p>
           <p>© 2025 INFRA. Created by ❤️Akhil Thakur</p>
@@ -153,4 +137,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ResetPassword;

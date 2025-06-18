@@ -17,4 +17,12 @@
   user-select: none;
 }
 
+textarea{
+  resize: none;
+  overflow: hidden;
+}
+
+.noscrollbar::-webkit-scrollbar {
+  display: none;
+}
 

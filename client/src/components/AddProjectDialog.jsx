@@ -9,61 +9,68 @@ export default function AddProjectDialog({ onClose, isOpen }) {
   const user = useSelector((state) => state.user);
   const userMembers = useSelector((state) => state.userMember?.members);
 
-  var selectedMembers;
-
   const [inputValue, setInputValue] = useState("");
-  const [members, setMembers] = useState([]);
+  var [members, setMembers] = useState([]);
 
   if (!isOpen) return null;
 
   const handleCancel = () => {
     setInputValue("");
     setMembers("");
+    onClose();
+  };
+
+  const handleReset = () => {
+    setInputValue("");
+    setMembers([]);
+    
   };
 
   const handleMultipleSelect = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    selectedMembers = Array.from(
-      event.target.selectedOptions,
+    const selectedOptions = Array.from(event.target.selectedOptions).map(
       (option) => option.value
     );
+    setMembers(selectedOptions);
   };
 
-  const handleSave = () => {
-    const projectData = {
-      name: inputValue,
-      owner: user?._id,
-      members: selectedMembers,
+  const handleSave =
+    () => {
+      const projectData = {
+        name: inputValue,
+        owner: user?._id,
+        members,
+      };
+
+      axios
+        .post(`http://localhost:3000/api/project/add`, projectData, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            toast.success(res?.data?.message);
+            setTimeout(() => {
+              handleCancel();
+              window.location.href = "/dashboard/tasks-All-Activities&";
+              window.location.reload();
+            }, 2000);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(err.response.data.message);
+        });
     };
 
-    axios
-      .post(
-        `https://college-project-backend-six.vercel.app/api/project/add`,
-        projectData,
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          toast.success(res?.data?.message);
-          console.log(res.data, "project");
-          setTimeout(() => {
-            onClose();
-            window.location.reload();
-          }, 2000);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.response.data.message);
-      });
-  };
-
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur bg-opacity-50 p-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <>
+      <div
+        className=" fixed inset-0 bg-[#0000005e] bg-opacity-50 z-40"
+        onClick={handleCancel}
+      ></div>
+      <div className=" flex items-center justify-center ">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
         <div className="text-xl font-semibold mb-4 text-gray-800 flex justify-between items-center">
           <p>Add Project</p>
           <RxCross2
@@ -102,13 +109,16 @@ export default function AddProjectDialog({ onClose, isOpen }) {
           >
             Project Admin
           </label>
-          <input
-            id="inputField"
-            type="text"
-            value={user?.name}
-            className="w-full px-3 py-2 text-sky-400 "
-            readOnly
-          />
+          <div className="flex items-center  px-3 py-2">
+            ⭐
+            <input
+              id="inputField"
+              type="text"
+              value={user?.name}
+              className="w-full px-3 py-2 text-sky-400 "
+              readOnly
+            />
+          </div>
         </div>
         <div className="mb-6">
           <label
@@ -134,7 +144,7 @@ export default function AddProjectDialog({ onClose, isOpen }) {
                     ? member.userId?._id
                     : member.memberId?._id
                 }
-                className="px-4 py-1 rounded-md mb-1 text-teal-500 font-medium hover:bg-gray-200"
+                className="px-4 py-1 rounded-md mb-1  font-medium hover:bg-gray-200"
               >
                 {member.memberId?._id === user?._id
                   ? member.userId?.name
@@ -145,15 +155,15 @@ export default function AddProjectDialog({ onClose, isOpen }) {
         </div>
         <div className="flex justify-end space-x-3">
           <button
-            onClick={handleCancel}
+            onClick={handleReset}
             className="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400 text-gray-700 transition"
           >
-            Cancel
+            Reset
           </button>
           <button
             onClick={handleSave}
             disabled={!inputValue || !members}
-            className={`px-4 py-2 rounded-md text-white transition ${
+            className={`px-4 py-2 rounded-md text-white transition cursor-pointer ${
               !inputValue || !members
                 ? "bg-blue-300 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700"
@@ -163,6 +173,7 @@ export default function AddProjectDialog({ onClose, isOpen }) {
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

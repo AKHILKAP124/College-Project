@@ -44,7 +44,6 @@ const addMember = async (req, res) => {
     }
     
 }
-
 const getMembers = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -99,5 +98,7 @@ const deleteMember = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 }
+
+
 
 export { addMember, deleteMember, getMembers };

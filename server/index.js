@@ -8,7 +8,7 @@ import { app, server} from './socket/index.js'
 
 dotenv.config();
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://college-project-neon.vercel.app"],
+  origin: "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
@@ -43,11 +43,13 @@ import taskRoutes from './routes/TaskRoutes.js';
 import memberRoutes from './routes/MemberRoute.js';
 import projectRouter from './routes/ProjectRoutes.js';
 import projectTaskRouter from './routes/ProjectTaskRoutes.js';
+import messageRouter from './routes/MessageRoute.js';
 
 app.use('/api/user', userRoutes);
 app.use('/api/task', taskRoutes);
 app.use('/api/member', memberRoutes);
 app.use('/api/project', projectRouter);
 app.use('/api/projecttask', projectTaskRouter);
+app.use('/api/message', messageRouter);
 
 

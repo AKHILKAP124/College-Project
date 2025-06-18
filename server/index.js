@@ -14,11 +14,11 @@ const corsOptions = {
 };
 
 
+connectDB();
 const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
-    connectDB();
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
 
 app.get("/", (req, res) => {

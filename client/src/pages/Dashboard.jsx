@@ -40,6 +40,8 @@ const Dashboard = () => {
         if (res.status === 200) {
           dispatch(setUser(res.data.user));
           localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem("token", res.data.Token);
+          return;
         }
       })
       .catch((err) => {

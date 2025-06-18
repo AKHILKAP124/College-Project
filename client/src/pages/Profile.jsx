@@ -53,7 +53,7 @@ const Profile = () => {
     data.owner = user._id;
 
     axios
-      .put(`https://infra-backend-smoky.vercel.app/api/user/update`, data, {
+      .put(`https://infra-backend-one.vercel.app/api/user/update`, data, {
         withCredentials: true,
       })
       .then((res) => {

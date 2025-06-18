@@ -39,7 +39,7 @@ const ProjectPage = () => {
 
   if (user.name === "") {
     axios
-      .get(`https://infra-backend-smoky.vercel.app/api/user/getUser`, {
+      .get(`https://infra-backend-one.vercel.app/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -67,7 +67,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/projecttask/get`,
+        `https://infra-backend-one.vercel.app/api/projecttask/get`,
         { projectId: id },
         {
           withCredentials: true,
@@ -88,7 +88,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/project/getbyid`,
+        `https://infra-backend-one.vercel.app/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -106,7 +106,7 @@ const ProjectPage = () => {
       });
     // axios
     //   .post(
-    //     "https://infra-backend-smoky.vercel.app/api/message/get",
+    //     "https://infra-backend-one.vercel.app/api/message/get",
     //     { projectId: project?._id },
     //     { withCredentials: true }
     //   )
@@ -123,7 +123,7 @@ const ProjectPage = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`https://infra-backend-smoky.vercel.app/api/user/logout`, {
+      .get(`https://infra-backend-one.vercel.app/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -155,7 +155,7 @@ const ProjectPage = () => {
     }
     await axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/projecttask/delete`,
+        `https://infra-backend-one.vercel.app/api/projecttask/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -201,7 +201,7 @@ const ProjectPage = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/projecttask/getbyid`,
+        `https://infra-backend-one.vercel.app/api/projecttask/getbyid`,
         { taskId },
         {
           withCredentials: true,

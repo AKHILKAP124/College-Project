@@ -22,7 +22,7 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
     // You can add your save logic here
     console.log("Task saved:", data);
     await axios
-      .post(`https://infra-backend-smoky.vercel.app/api/task/update`, data, {
+      .post(`https://infra-backend-one.vercel.app/api/task/update`, data, {
         withCredentials: true,
       })
       .then((res) => {

@@ -36,7 +36,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
     if (projectData.name) {
       axios
         .put(
-          `https://infra-backend-smoky.vercel.app/api/project/update`,
+          `https://infra-backend-one.vercel.app/api/project/update`,
           projectData,
           {
             withCredentials: true,
@@ -62,7 +62,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
     } else {
       axios
         .post(
-          `https://infra-backend-smoky.vercel.app/api/project/addmember`,
+          `https://infra-backend-one.vercel.app/api/project/addmember`,
           {
             projectId: project?._id,
             members: selectedMembers,
@@ -94,7 +94,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
 
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/project/removemember`,
+        `https://infra-backend-one.vercel.app/api/project/removemember`,
         { projectId: project?._id, memberId },
         { withCredentials: true }
       )
@@ -123,7 +123,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
     if (result === "DELETE") {
       axios
         .post(
-          `https://infra-backend-smoky.vercel.app/api/project/delete`,
+          `https://infra-backend-one.vercel.app/api/project/delete`,
           { projectId: project?._id },
           {
             withCredentials: true,
@@ -169,7 +169,7 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
 
   //   axios
   //     .post(
-  //       `https://infra-backend-smoky.vercel.app/api/project/addmember`,
+  //       `https://infra-backend-one.vercel.app/api/project/addmember`,
   //       { projectId: project?._id, memberId },
   //       { withCredentials: true }
   //     )

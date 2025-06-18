@@ -21,7 +21,7 @@ const MemberProfile = () => {
     setUserloading(true);
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/user/getUserById`,
+        `https://infra-backend-one.vercel.app/api/user/getUserById`,
         { id },
         {
           withCredentials: true,
@@ -50,14 +50,14 @@ const MemberProfile = () => {
     };
 
     axios
-      .post(`https://infra-backend-smoky.vercel.app/api/member/delete`, data, {
+      .post(`https://infra-backend-one.vercel.app/api/member/delete`, data, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.status === 200) {
           axios
             .post(
-              `https://infra-backend-smoky.vercel.app/api/project/deletememberfromallprojectsofspecificuser`,
+              `https://infra-backend-one.vercel.app/api/project/deletememberfromallprojectsofspecificuser`,
               { userId: userdetail, memberId: id },
               {
                 withCredentials: true,

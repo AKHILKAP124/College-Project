@@ -43,7 +43,7 @@ export default function AddProjectDialog({ onClose, isOpen }) {
 
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/project/add`,
+        `https://infra-backend-one.vercel.app/api/project/add`,
         projectData,
         {
           withCredentials: true,

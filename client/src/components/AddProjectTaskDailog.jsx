@@ -40,7 +40,7 @@ export default function AddProjectTaskDialog({
     console.log("Task saved:", taskData);
     await axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/projecttask/add`,
+        `https://infra-backend-one.vercel.app/api/projecttask/add`,
         taskData,
         {
           withCredentials: true,

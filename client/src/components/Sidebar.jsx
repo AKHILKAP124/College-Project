@@ -41,7 +41,7 @@ const Sidebar = () => {
   useEffect(() => {
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/member/get`,
+        `https://infra-backend-one.vercel.app/api/member/get`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -59,7 +59,7 @@ const Sidebar = () => {
 
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/project/getuserallprojects`,
+        `https://infra-backend-one.vercel.app/api/project/getuserallprojects`,
         { id: user?._id },
         {
           withCredentials: true,

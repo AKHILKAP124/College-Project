@@ -26,7 +26,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
   const socket = useRef(null);
   useEffect(() => {
     // Initialize socket connection
-    socket.current = io("https://infra-backend-smoky.vercel.app", {
+    socket.current = io("https://infra-backend-one.vercel.app", {
       withCredentials: true,
       transports: ["websocket"],
     });
@@ -37,7 +37,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
     // Fetch project details by ID
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/project/getbyid`,
+        `https://infra-backend-one.vercel.app/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -75,7 +75,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
         console.log("Received message:", sender, message);
         axios
           .post(
-            "https://infra-backend-smoky.vercel.app/api/user/getbyid",
+            "https://infra-backend-one.vercel.app/api/user/getbyid",
             { userId: sender },
             {
               withCredentials: true,
@@ -111,13 +111,9 @@ const ChatDialog = ({ isOpen, onClose }) => {
     };
 
     axios
-      .post(
-        "https://infra-backend-smoky.vercel.app/api/message/new",
-        chatData,
-        {
-          withCredentials: true,
-        }
-      )
+      .post("https://infra-backend-one.vercel.app/api/message/new", chatData, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           socket.current.emit("new message", {
@@ -135,7 +131,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
     setMessageLoading(true);
     axios
       .post(
-        "https://infra-backend-smoky.vercel.app/api/message/get",
+        "https://infra-backend-one.vercel.app/api/message/get",
         { projectId: project?._id },
         { withCredentials: true }
       )

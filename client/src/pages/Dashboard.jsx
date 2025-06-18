@@ -31,7 +31,7 @@ const Dashboard = () => {
 
   if (user?.name === "") {
     axios
-      .get(`https://infra-backend-smoky.vercel.app/api/user/getUser`, {
+      .get(`https://infra-backend-one.vercel.app/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -56,7 +56,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/task/get`,
+        `https://infra-backend-one.vercel.app/api/task/get`,
         { owner: user?._id },
         {
           withCredentials: true,
@@ -80,7 +80,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`https://infra-backend-smoky.vercel.app/api/user/logout`, {
+      .get(`https://infra-backend-one.vercel.app/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -109,7 +109,7 @@ const Dashboard = () => {
     }
     await axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/task/delete`,
+        `https://infra-backend-one.vercel.app/api/task/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -145,7 +145,7 @@ const Dashboard = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `https://infra-backend-smoky.vercel.app/api/task/getbyid`,
+        `https://infra-backend-one.vercel.app/api/task/getbyid`,
         { taskId },
         {
           withCredentials: true,

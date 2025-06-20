@@ -8,6 +8,7 @@ export default function AddProjectTaskDialog({
   isOpen,
   owner,
   project,
+  getProjectTasks,
 }) {
   const [data, setData] = useState({
     name: "",
@@ -51,10 +52,10 @@ export default function AddProjectTaskDialog({
           setData({ name: "", description: "" });
           toast.success(res.data.message);
           setTimeout(() => {
-            window.location.reload();
+            getProjectTasks();
             onClose();
             setLoading(false);
-          }, 2000);
+          }, 1000);
         }
       })
       .catch((err) => {

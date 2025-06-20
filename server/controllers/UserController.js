@@ -167,8 +167,7 @@ const logoutUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const {token} = req.body;
-
+  const { token } = req.body;
   try {
     // Verify token
     if (!token) {
@@ -196,7 +195,8 @@ const getUser = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const {userId }= req.body;
+    const { userId } = req.body;
+    console.log(userId);
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }

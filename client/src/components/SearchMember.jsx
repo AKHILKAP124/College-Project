@@ -3,7 +3,12 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 
-const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
+const SearchMember = ({
+  isOpen,
+  onClose,
+  title = "Search User's",
+  getMembers,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
@@ -58,8 +63,8 @@ const SearchMember = ({ isOpen, onClose, title = "Search User's" }) => {
           toast.success(res?.data?.message);
           setTimeout(() => {
             onClose();
-            window.location.reload();
-          }, 2000);
+            getMembers();
+          }, 1000);
         }
       })
       .catch((err) => {

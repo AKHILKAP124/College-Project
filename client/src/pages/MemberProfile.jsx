@@ -3,40 +3,77 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { setUser } from "../redux/userSlice";
 
 const MemberProfile = () => {
   const id = useParams().id;
 
   const navigate = useNavigate();
 
-  const userdetail = useSelector((state) => state?.user?._id);
+  const user = useSelector((state) => state?.user?._id);
 
-  const [user, setUser] = React.useState({});
+  const [member, setMember] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [userloading, setUserloading] = React.useState(false);
 
-  useEffect(() => {
-    setUserloading(true);
+  const dispatch = useDispatch();
+
+  if (user === "") {
+    const token = localStorage.getItem("token");
+    console.log(token);
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/user/getUserById`,
-        { id },
+        `https://infra-backend-one.vercel.app/api/user/getUser`,
+        {
+          token: token,
+        },
         {
           withCredentials: true,
         }
       )
       .then((res) => {
         if (res.status === 200) {
-          setUser(res?.data?.user);
-          console.log(res?.data?.user, "member");
-          setUserloading(false);
-
+          dispatch(setUser(res.data.user));
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem("token", res.data.user.accessToken);
           return;
         }
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          toast.error("Session expired, please login again");
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setTimeout(() => {
+            window.location.href = "/signin";
+          }, 2000);
+        }
+        console.log(err);
+      });
+  }
+
+  useEffect(() => {
+    setUserloading(true);
+    axios
+      .post(
+        `https://infra-backend-one.vercel.app/api/user/getbyid`,
+        { userId: id },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setMember(res?.data?.user);
+          console.log(res?.data?.user, "member");
+          setUserloading(false);
+          return;
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   }, [id]);
@@ -45,7 +82,7 @@ const MemberProfile = () => {
     setLoading(true);
 
     const data = {
-      userId: userdetail,
+      userId: user,
       memberId: id,
     };
 
@@ -58,7 +95,7 @@ const MemberProfile = () => {
           axios
             .post(
               `https://infra-backend-one.vercel.app/api/project/deletememberfromallprojectsofspecificuser`,
-              { userId: userdetail, memberId: id },
+              { userId: user, memberId: id },
               {
                 withCredentials: true,
               }
@@ -92,7 +129,7 @@ const MemberProfile = () => {
           Member Profile
         </h1>
         {userloading ? (
-          <div className="flex items-center justify-center h-screen">
+          <div className="flex items-center justify-center h-20">
             Loading...
           </div>
         ) : (
@@ -100,23 +137,23 @@ const MemberProfile = () => {
             <div className="flex items-center">
               <Avatar
                 sx={{ width: 200, height: 200 }}
-                alt={user.name}
-                src={user.avatar}
+                alt={member.name}
+                src={member.avatar}
               />
             </div>
             <div className="flex flex-col gap-3  p-4  mt-6">
               <div className="flex items-center gap-8">
                 <p className="text-gray-500 text-[18px] font-medium">Name:</p>
-                <p>{user?.name}</p>
+                <p>{member?.name}</p>
               </div>
 
               <div className="flex items-center gap-9">
                 <p className="text-gray-500 text-[18px] font-medium">Email:</p>
-                <p>{user?.email}</p>
+                <p>{member?.email}</p>
               </div>
               <div className="flex items-center gap-6">
                 <p className="text-gray-500 text-[18px] font-medium">Joined:</p>
-                <p>{user?.createdAt?.slice(0, 10)}</p>
+                <p>{member?.createdAt?.slice(0, 10)}</p>
               </div>
             </div>
             <div className="w-full h-20 flex items-center gap-6  ">

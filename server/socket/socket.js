@@ -4,18 +4,15 @@ import http from "http";
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, 
-  {
-      
-        cors: {
-            origin: "*",
-            credentials: true
-        }
-    }
-);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    credentials: true,
+  },
+});
 
 // server.listen(3001, () => {
-//   console.log("Socket server is running on port 3001");
+//   console.log("Socket server is running on port 3001"); http://localhost:5173
 // });
 
 io.on("connection", (socket) => {
@@ -29,7 +26,12 @@ io.on("connection", (socket) => {
 
   socket.on("new message", ({ projectId, sender, message }) => {
     if (!projectId || !sender || !message)
-      return console.error("Missing data for new message", projectId, sender, message);
+      return console.error(
+        "Missing data for new message",
+        projectId,
+        sender,
+        message
+      );
 
     console.log("New message:", projectId, sender, message);
 
@@ -44,5 +46,4 @@ io.on("connection", (socket) => {
   });
 });
 
-
-export {app, server, io}
+export { app, server, io };

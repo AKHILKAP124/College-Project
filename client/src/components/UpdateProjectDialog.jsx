@@ -5,7 +5,12 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 
-export default function UpdateProjectDialog({ onClose, isOpen, project }) {
+export default function UpdateProjectDialog({
+  onClose,
+  isOpen,
+  project,
+  getProjects,
+}) {
   const projectMembers = project?.members;
   const user = useSelector((state) => state.user);
   const userMembers = useSelector((state) => state.userMember?.members);
@@ -47,9 +52,9 @@ export default function UpdateProjectDialog({ onClose, isOpen, project }) {
             toast.success(res?.data?.message);
             setTimeout(() => {
               onClose();
-              window.location.reload();
+              getProjects();
               setLoading(false);
-            }, 2000);
+            }, 1000);
             return;
           }
         })

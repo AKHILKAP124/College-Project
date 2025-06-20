@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-export default function AddProjectDialog({ onClose, isOpen }) {
+export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
   const user = useSelector((state) => state.user);
   const userMembers = useSelector((state) => state.userMember?.members);
 
@@ -54,9 +54,8 @@ export default function AddProjectDialog({ onClose, isOpen }) {
           toast.success(res?.data?.message);
           setTimeout(() => {
             handleCancel();
-            window.location.href = "/dashboard/tasks-All-Activities&";
-            window.location.reload();
-          }, 2000);
+            getProjects();
+          }, 1000);
         }
       })
       .catch((err) => {

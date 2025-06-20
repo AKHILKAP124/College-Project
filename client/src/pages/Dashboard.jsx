@@ -30,17 +30,23 @@ const Dashboard = () => {
   }, 900000);
 
   if (user?.name === "") {
+    const token = localStorage.getItem("token");
+    console.log(token);
     axios
-      .get(`https://infra-backend-one.vercel.app/api/user/getUser`, {
-        token: localStorage.getItem("token"),
-      }, {
-        withCredentials: true,
-      })
+      .post(
+        `https://infra-backend-one.vercel.app/api/user/getUser`,
+        {
+          token: token,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           dispatch(setUser(res.data.user));
           localStorage.setItem("user", JSON.stringify(res.data.user));
-          localStorage.setItem("token", res.data.Token);
+          localStorage.setItem("token", res.data.user.accessToken);
           return;
         }
       })
@@ -57,8 +63,8 @@ const Dashboard = () => {
       });
   }
 
-  useEffect(() => {
-    axios
+  const getTasks = async () => {
+    await axios
       .post(
         `https://infra-backend-one.vercel.app/api/task/get`,
         { owner: user?._id },
@@ -68,7 +74,6 @@ const Dashboard = () => {
       )
       .then((res) => {
         if (res.status === 200) {
-          toast.success("Tasks fetched successfully");
           setTask(res.data.tasks, "task data");
           return;
         }
@@ -80,6 +85,10 @@ const Dashboard = () => {
         }
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    getTasks();
   }, [user?._id]);
 
   const handleLogout = async () => {
@@ -122,9 +131,7 @@ const Dashboard = () => {
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          getTasks();
         }
       })
       .catch((err) => {
@@ -317,6 +324,7 @@ const Dashboard = () => {
         isOpen={isTaskOpen}
         onClose={handleClose}
         owner={user._id}
+        getTasksfxn={getTasks}
       />
       <SideDialog
         isOpen={isTaskDataOpen}

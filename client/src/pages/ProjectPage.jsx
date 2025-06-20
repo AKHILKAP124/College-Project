@@ -29,6 +29,40 @@ const ProjectPage = () => {
 
   const [isTaskDataOpen, setIsTaskDataOpen] = useState(false);
 
+  if (user?.name === "") {
+    const token = localStorage.getItem("token");
+    console.log(token);
+    axios
+      .post(
+        `https://infra-backend-one.vercel.app/api/user/getUser`,
+        {
+          token: token,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(setUser(res.data.user));
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem("token", res.data.user.accessToken);
+          return;
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          toast.error("Session expired, please login again");
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setTimeout(() => {
+            window.location.href = "/signin";
+          }, 2000);
+        }
+        console.log(err);
+      });
+  }
+
   const handleCloseTask = () => {
     setIsTaskDataOpen(false);
   };
@@ -62,10 +96,8 @@ const ProjectPage = () => {
       });
   }
 
-  useEffect(() => {
-    setTask([]);
-
-    axios
+  const getProjectTasks = async () => {
+    await axios
       .post(
         `https://infra-backend-one.vercel.app/api/projecttask/get`,
         { projectId: id },
@@ -85,6 +117,12 @@ const ProjectPage = () => {
         }
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    setTask([]);
+
+    getProjectTasks();
 
     axios
       .post(
@@ -104,21 +142,6 @@ const ProjectPage = () => {
       .catch((err) => {
         console.log(err);
       });
-    // axios
-    //   .post(
-    //     "https://infra-backend-one.vercel.app/api/message/get",
-    //     { projectId: project?._id },
-    //     { withCredentials: true }
-    //   )
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       setMessages(res?.data?.messages);
-    //     }
-    //   });
-
-    // if (socket.current) {
-    //   socket.current.emit("join", project?._id);
-    // }
   }, [id]);
 
   const handleLogout = async () => {
@@ -144,9 +167,6 @@ const ProjectPage = () => {
   };
 
   const handleDelete = async (taskId) => {
-    if (project?.owner !== user?._id) {
-      return;
-    }
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this task? This action cannot be undone."
     );
@@ -164,9 +184,7 @@ const ProjectPage = () => {
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          getProjectTasks();
         }
       })
       .catch((err) => {
@@ -368,16 +386,21 @@ const ProjectPage = () => {
                       className="text-red-500 cursor-pointer"
                       onClick={() => handleDelete(task._id)}
                     /> */}
-                      <button
-                        className="text-[12px] text-red-500 hover:text-red-600 cursor-pointer"
-                        onClick={() => handleDelete(task._id)}
-                      >
-                        {project?.owner?._id === user?._id ? (
-                          <span className="text-xs">delete</span>
-                        ) : (
-                          ""
-                        )}
-                      </button>
+
+                      {project?.owner?._id === user?._id ? (
+                        <button
+                          className="text-[12px] text-red-500 hover:text-red-600 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleDelete(task?._id);
+                          }}
+                        >
+                          delete
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 ))
@@ -391,6 +414,7 @@ const ProjectPage = () => {
         onClose={handleClose}
         owner={user?._id}
         project={id}
+        getProjectTasks={getProjectTasks}
       />
       <ProjectTaskDialog
         isOpen={isTaskDataOpen}
@@ -399,7 +423,7 @@ const ProjectPage = () => {
       />
 
       {/* Chat */}
-      <div className="fixed bottom-32 right-0 " onClick={handleChatOpen}>
+      <div className="fixed bottom-1/2 right-0 " onClick={handleChatOpen}>
         <div className="flex items-center gap-1 bg-[#048bec] hover:bg-[#0576c7] hover:scale-105 group py-4 pl-6 pr-2 cursor-pointer rounded-l-full transition-all duration-300 ease-in-out">
           <BsChatText className="text-xl text-white group-hover:text-2xl group-hover:font-semibold" />
           {/* <p className="text-sm text-gray-500 font-medium group-hover:text-gray-800 ">

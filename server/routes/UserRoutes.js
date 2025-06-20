@@ -8,7 +8,7 @@ userRouter.post("/signin", LoginUser);
 userRouter.post("/change-password", changePassword);
 userRouter.post("/reset-password", resetPassword);
 userRouter.get("/logout", logoutUser);  
-userRouter.get("/getUser", getUser);
+userRouter.post("/getUser", getUser);
 userRouter.put("/update", updateProfile);
 userRouter.get("/getallusers", getAllUsers);
 userRouter.post("/getbyid", getUserById);

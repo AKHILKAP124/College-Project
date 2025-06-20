@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 
-export default function AddTaskDialog({ onClose, isOpen, owner }) {
+export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -42,11 +42,9 @@ export default function AddTaskDialog({ onClose, isOpen, owner }) {
         if (res.status === 201) {
           setData({ name: "", description: "" });
           toast.success(res.data.message);
-          setTimeout(() => {
-            window.location.reload();
-            onClose();
-            setLoading(false);
-          }, 2000);
+          getTasksfxn();
+          onClose();
+          setLoading(false);
         }
       })
       .catch((err) => {

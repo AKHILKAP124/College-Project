@@ -38,8 +38,8 @@ const Sidebar = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    axios
+  const getMembers = async () => {
+    await axios
       .post(
         `https://infra-backend-one.vercel.app/api/member/get`,
         { userId: user._id },
@@ -56,8 +56,10 @@ const Sidebar = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
 
-    axios
+  const getProjects = async () => {
+    await axios
       .post(
         `https://infra-backend-one.vercel.app/api/project/getuserallprojects`,
         { id: user?._id },
@@ -73,7 +75,6 @@ const Sidebar = () => {
           response.map((item) => {
             if (item?.owner?._id === user?._id) {
               setProjectData((prev) => [...prev, item]);
-              console.log(item);
             } else {
               setSharedProject((prev) => [...prev, item]);
             }
@@ -83,6 +84,11 @@ const Sidebar = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    getMembers();
+    getProjects();
   }, [user]);
 
   use;
@@ -156,40 +162,46 @@ const Sidebar = () => {
               isTeamOpen ? "" : "hidden"
             }`}
           >
-            {members.map((member, index) => (
-              <NavLink
-                className={({ isActive }) =>
-                  `${
-                    isActive ? "bg-[#2d4071]" : ""
-                  } flex items-center  w-full gap-2 cursor-pointer grouphover:border px-4 py-1.5 rounded-md border-slate-700 hover:bg-[#2d4071] transition-all duration-200`
-                }
-                to={`/members/profile/${
-                  member?.memberId._id === user._id
-                    ? member?.userId._id
-                    : member?.memberId._id
-                }`}
-                key={index}
-              >
-                <Avatar
-                  alt={
-                    member?.memberId._id === user?._id
+            {members.length > 0 ? (
+              members.map((member, index) => (
+                <NavLink
+                  className={({ isActive }) =>
+                    `${
+                      isActive ? "bg-[#2d4071]" : ""
+                    } flex items-center  w-full gap-2 cursor-pointer grouphover:border px-4 py-1.5 rounded-md border-slate-700 hover:bg-[#2d4071] transition-all duration-200`
+                  }
+                  to={`/members/profile/${
+                    member?.memberId._id === user._id
+                      ? member?.userId._id
+                      : member?.memberId._id
+                  }`}
+                  key={index}
+                >
+                  <Avatar
+                    alt={
+                      member?.memberId._id === user?._id
+                        ? member?.userId.name
+                        : member?.memberId.name
+                    }
+                    src={
+                      member?.memberId._id === user?._id
+                        ? member?.userId.avatar
+                        : member?.memberId.avatar
+                    }
+                    sx={{ width: 24, height: 24 }}
+                  />
+                  <p className=" text-sm font-[400] text-white text-nowrap h-5">
+                    {member?.memberId._id === user?._id
                       ? member?.userId.name
-                      : member?.memberId.name
-                  }
-                  src={
-                    member?.memberId._id === user?._id
-                      ? member?.userId.avatar
-                      : member?.memberId.avatar
-                  }
-                  sx={{ width: 24, height: 24 }}
-                />
-                <p className=" text-sm font-[400] text-white text-nowrap h-5">
-                  {member?.memberId._id === user?._id
-                    ? member?.userId.name
-                    : member?.memberId.name}
-                </p>
-              </NavLink>
-            ))}
+                      : member?.memberId.name}
+                  </p>
+                </NavLink>
+              ))
+            ) : (
+              <div className="flex items-center justify-center w-full ">
+                <p className=" text-xs font-[400] text-gray-500 ">No Members</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -226,30 +238,38 @@ const Sidebar = () => {
               isProjectOpen ? "" : "hidden"
             }`}
           >
-            {projectData?.map((item, index) => (
-              <NavLink
-                key={index}
-                className={({ isActive }) =>
-                  `${
-                    isActive ? "bg-[#2d4071]" : ""
-                  } flex items-center justify-between w-full gap-1 cursor-pointer grouphover:border px-4 py-1.5 rounded-md border-slate-700 hover:bg-[#2d4071] transition-all duration-200`
-                }
-                to={`/dashboard/Projects-&/${item?._id}`}
-              >
-                <p className=" text-sm font-[400] text-white ">{item.name}</p>
-                <PiDotsThreeOutlineVerticalThin
-                  className="text-white text-lg"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    console.log(item);
-                    // Open the update project dialog and send the project data
-                    setSendProject(item);
-                    setIsUpdateProjectDialogOpen(true);
-                  }}
-                />
-              </NavLink>
-            ))}
+            {projectData.length > 0 ? (
+              projectData?.map((item, index) => (
+                <NavLink
+                  key={index}
+                  className={({ isActive }) =>
+                    `${
+                      isActive ? "bg-[#2d4071]" : ""
+                    } flex items-center justify-between w-full gap-1 cursor-pointer grouphover:border px-4 py-1.5 rounded-md border-slate-700 hover:bg-[#2d4071] transition-all duration-200`
+                  }
+                  to={`/dashboard/Projects-&/${item?._id}`}
+                >
+                  <p className=" text-sm font-[400] text-white ">{item.name}</p>
+                  <PiDotsThreeOutlineVerticalThin
+                    className="text-white text-lg"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      console.log(item);
+                      // Open the update project dialog and send the project data
+                      setSendProject(item);
+                      setIsUpdateProjectDialogOpen(true);
+                    }}
+                  />
+                </NavLink>
+              ))
+            ) : (
+              <div className="flex items-center justify-center w-full ">
+                <p className=" text-xs font-[400] text-gray-500 ">
+                  No Projects
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -346,17 +366,20 @@ const Sidebar = () => {
           setIsProjectDialogOpen(false);
         }}
         isOpen={isProjectDialogOpen}
+        getProjects={getProjects}
       />
       {/* Members Dialog */}
       <SearchMember
         isOpen={teamDialogOpen}
         onClose={() => setTeamDialogOpen(false)}
+        getMembers={getMembers}
       />
       {/* UpdateProjectDialog */}
       <UpdateProjectDialog
         isOpen={isUpdateProjectDialogOpen}
         onClose={() => setIsUpdateProjectDialogOpen(false)}
         project={sendProject}
+        getProjects={getProjects}
       />
     </>
   );

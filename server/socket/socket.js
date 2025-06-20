@@ -6,13 +6,13 @@
 // const server = http.createServer(app);
 // const io = new Server(server, {
 //   cors: {
-//     origin: "http://localhost:5173",
+//     origin: "https://college-project-neon.vercel.app",
 //     credentials: true,
 //   },
 // });
 
 // // server.listen(3001, () => {
-// //   console.log("Socket server is running on port 3001"); http://localhost:5173
+// //   console.log("Socket server is running on port 3001"); https://college-project-neon.vercel.app
 // // });
 
 // io.on("connection", (socket) => {

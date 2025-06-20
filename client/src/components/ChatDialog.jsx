@@ -4,9 +4,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BsChatText } from "react-icons/bs";
-import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import { TbMessages } from "react-icons/tb";
+import socket from "../utils/socket";
 
 const ChatDialog = ({ isOpen, onClose }) => {
   const { id } = useParams();
@@ -22,15 +22,6 @@ const ChatDialog = ({ isOpen, onClose }) => {
   const [members, setMembers] = useState(false);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
-  var socket;
-
-  useEffect(() => {
-    // Initialize socket connection
-    socket= io("https://infra-backend-one.vercel.app", {
-      withCredentials: true,
-    });
-    
-  }, []);
 
   // Fetch project details when dialog opens or id changes
   const fetchProjectDetails = () => {
@@ -116,7 +107,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
       })
       .then((res) => {
         if (res.status === 200) {
-          socket.current.emit("new message", {
+          socket.emit("new message", {
             projectId: project?._id,
             sender: user?._id,
             message: input,

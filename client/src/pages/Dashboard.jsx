@@ -34,7 +34,7 @@ const Dashboard = () => {
     console.log(token);
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/user/getUser`,
+        `https://infra-backend-lx4a.onrender.com/api/user/getUser`,
         {
           token: token,
         },
@@ -66,7 +66,7 @@ const Dashboard = () => {
   const getTasks = async () => {
     await axios
       .post(
-        `https://infra-backend-one.vercel.app/api/task/get`,
+        `https://infra-backend-lx4a.onrender.com/api/task/get`,
         { owner: user?._id },
         {
           withCredentials: true,
@@ -93,7 +93,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`https://infra-backend-one.vercel.app/api/user/logout`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -122,7 +122,7 @@ const Dashboard = () => {
     }
     await axios
       .post(
-        `https://infra-backend-one.vercel.app/api/task/delete`,
+        `https://infra-backend-lx4a.onrender.com/api/task/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -156,7 +156,7 @@ const Dashboard = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `https://infra-backend-one.vercel.app/api/task/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/task/getbyid`,
         { taskId },
         {
           withCredentials: true,

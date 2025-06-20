@@ -25,7 +25,7 @@ const MemberProfile = () => {
     console.log(token);
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/user/getUser`,
+        `https://infra-backend-lx4a.onrender.com/api/user/getUser`,
         {
           token: token,
         },
@@ -58,7 +58,7 @@ const MemberProfile = () => {
     setUserloading(true);
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/user/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/user/getbyid`,
         { userId: id },
         {
           withCredentials: true,
@@ -87,14 +87,14 @@ const MemberProfile = () => {
     };
 
     axios
-      .post(`https://infra-backend-one.vercel.app/api/member/delete`, data, {
+      .post(`https://infra-backend-lx4a.onrender.com/api/member/delete`, data, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.status === 200) {
           axios
             .post(
-              `https://infra-backend-one.vercel.app/api/project/deletememberfromallprojectsofspecificuser`,
+              `https://infra-backend-lx4a.onrender.com/api/project/deletememberfromallprojectsofspecificuser`,
               { userId: user, memberId: id },
               {
                 withCredentials: true,

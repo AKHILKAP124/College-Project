@@ -24,7 +24,7 @@ const ResetPassword = () => {
     setLoading(true);
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/user/reset-password`,
+        `https://infra-backend-lx4a.onrender.com/api/user/reset-password`,
         data,
         {
           withCredentials: true,

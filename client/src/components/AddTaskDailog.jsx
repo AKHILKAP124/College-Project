@@ -35,9 +35,13 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
     // You can add your save logic here
     console.log("Task saved:", taskData);
     await axios
-      .post(`https://infra-backend-one.vercel.app/api/task/create`, taskData, {
-        withCredentials: true,
-      })
+      .post(
+        `https://infra-backend-lx4a.onrender.com/api/task/create`,
+        taskData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 201) {
           setData({ name: "", description: "" });

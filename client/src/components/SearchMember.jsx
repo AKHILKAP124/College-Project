@@ -16,7 +16,7 @@ const SearchMember = ({
 
   const handleGetAllUsers = async () => {
     await axios
-      .get(`https://infra-backend-one.vercel.app/api/user/getallusers`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/getallusers`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -55,7 +55,7 @@ const SearchMember = ({
     console.log(data, "add member");
 
     axios
-      .post(`https://infra-backend-one.vercel.app/api/member/add`, data, {
+      .post(`https://infra-backend-lx4a.onrender.com/api/member/add`, data, {
         withCredentials: true,
       })
       .then((res) => {

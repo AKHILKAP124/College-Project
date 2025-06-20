@@ -22,7 +22,7 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId }) => {
     // You can add your save logic here
     await axios
       .post(
-        `https://infra-backend-one.vercel.app/api/projecttask/update`,
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/update`,
         data,
         {
           withCredentials: true,

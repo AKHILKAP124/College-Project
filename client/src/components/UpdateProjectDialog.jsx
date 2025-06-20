@@ -41,7 +41,7 @@ export default function UpdateProjectDialog({
     if (projectData.name) {
       axios
         .put(
-          `https://infra-backend-one.vercel.app/api/project/update`,
+          `https://infra-backend-lx4a.onrender.com/api/project/update`,
           projectData,
           {
             withCredentials: true,
@@ -67,7 +67,7 @@ export default function UpdateProjectDialog({
     } else {
       axios
         .post(
-          `https://infra-backend-one.vercel.app/api/project/addmember`,
+          `https://infra-backend-lx4a.onrender.com/api/project/addmember`,
           {
             projectId: project?._id,
             members: selectedMembers,
@@ -99,7 +99,7 @@ export default function UpdateProjectDialog({
 
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/project/removemember`,
+        `https://infra-backend-lx4a.onrender.com/api/project/removemember`,
         { projectId: project?._id, memberId },
         { withCredentials: true }
       )
@@ -128,7 +128,7 @@ export default function UpdateProjectDialog({
     if (result === "DELETE") {
       axios
         .post(
-          `https://infra-backend-one.vercel.app/api/project/delete`,
+          `https://infra-backend-lx4a.onrender.com/api/project/delete`,
           { projectId: project?._id },
           {
             withCredentials: true,
@@ -174,7 +174,7 @@ export default function UpdateProjectDialog({
 
   //   axios
   //     .post(
-  //       `https://infra-backend-one.vercel.app/api/project/addmember`,
+  //       `https://infra-backend-lx4a.onrender.com/api/project/addmember`,
   //       { projectId: project?._id, memberId },
   //       { withCredentials: true }
   //     )

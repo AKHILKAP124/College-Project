@@ -28,7 +28,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
     // Fetch project details by ID
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/project/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -66,7 +66,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
         console.log("Received message:", sender, message);
         axios
           .post(
-            "https://infra-backend-one.vercel.app/api/user/getbyid",
+            "https://infra-backend-lx4a.onrender.com/api/user/getbyid",
             { userId: sender },
             {
               withCredentials: true,
@@ -102,9 +102,13 @@ const ChatDialog = ({ isOpen, onClose }) => {
     };
 
     axios
-      .post("https://infra-backend-one.vercel.app/api/message/new", chatData, {
-        withCredentials: true,
-      })
+      .post(
+        "https://infra-backend-lx4a.onrender.com/api/message/new",
+        chatData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           socket.emit("new message", {
@@ -122,7 +126,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
     setMessageLoading(true);
     axios
       .post(
-        "https://infra-backend-one.vercel.app/api/message/get",
+        "https://infra-backend-lx4a.onrender.com/api/message/get",
         { projectId: project?._id },
         { withCredentials: true }
       )

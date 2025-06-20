@@ -34,7 +34,7 @@ const ProjectPage = () => {
     console.log(token);
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/user/getUser`,
+        `https://infra-backend-lx4a.onrender.com/api/user/getUser`,
         {
           token: token,
         },
@@ -68,7 +68,7 @@ const ProjectPage = () => {
   };
   if (user.name === "") {
     axios
-      .get(`https://infra-backend-one.vercel.app/api/user/getUser`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -94,7 +94,7 @@ const ProjectPage = () => {
   const getProjectTasks = async () => {
     await axios
       .post(
-        `https://infra-backend-one.vercel.app/api/projecttask/get`,
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/get`,
         { projectId: id },
         {
           withCredentials: true,
@@ -121,7 +121,7 @@ const ProjectPage = () => {
 
     axios
       .post(
-        `https://infra-backend-one.vercel.app/api/project/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -141,7 +141,7 @@ const ProjectPage = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`https://infra-backend-one.vercel.app/api/user/logout`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -170,7 +170,7 @@ const ProjectPage = () => {
     }
     await axios
       .post(
-        `https://infra-backend-one.vercel.app/api/projecttask/delete`,
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -214,7 +214,7 @@ const ProjectPage = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `https://infra-backend-one.vercel.app/api/projecttask/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/getbyid`,
         { taskId },
         {
           withCredentials: true,

@@ -34,7 +34,7 @@ const SignUp = () => {
     setLoading(true);
     e.preventDefault();
     axios
-      .post(`https://infra-backend-one.vercel.app/api/user/signup`, data, {
+      .post(`https://infra-backend-lx4a.onrender.com/api/user/signup`, data, {
         withCredentials: true,
       })
       .then((res) => {

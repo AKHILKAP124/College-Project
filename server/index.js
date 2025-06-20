@@ -24,10 +24,10 @@ const io = new Server(
   {
     cors: {
       origin: "https://college-project-neon.vercel.app",
+      methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,
     },
-  },
-  { path: "/api/socket", addTrailingSlash: false }
+  }
 );
 
 // server.listen(3001, () => {

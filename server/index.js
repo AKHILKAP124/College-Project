@@ -4,6 +4,8 @@ import connectDB from './db.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { Server } from "socket.io";
+import http from "http";
 
 dotenv.config();
 const corsOptions = {
@@ -13,8 +15,7 @@ const corsOptions = {
 };
 
 // Socket io integration
-import { Server } from "socket.io";
-import http from "http";
+
 
 const app = express();
 const server = http.createServer(app);

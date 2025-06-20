@@ -1,49 +1,49 @@
-import express from "express";
-import { Server } from "socket.io";
-import http from "http";
+// import express from "express";
+// import { Server } from "socket.io";
+// import http from "http";
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173",
-    credentials: true,
-  },
-});
-
-// server.listen(3001, () => {
-//   console.log("Socket server is running on port 3001"); http://localhost:5173
+// const app = express();
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: {
+//     origin: "http://localhost:5173",
+//     credentials: true,
+//   },
 // });
 
-io.on("connection", (socket) => {
-  console.log("A user connected:", socket.id);
+// // server.listen(3001, () => {
+// //   console.log("Socket server is running on port 3001"); http://localhost:5173
+// // });
 
-  socket.on("join project", (projectId) => {
-    if (!projectId) return console.error("Invalid projectId");
-    socket.join(projectId);
-    console.log(`User ${socket.id} joined project: ${projectId}`);
-  });
+// io.on("connection", (socket) => {
+//   console.log("A user connected:", socket.id);
 
-  socket.on("new message", ({ projectId, sender, message }) => {
-    if (!projectId || !sender || !message)
-      return console.error(
-        "Missing data for new message",
-        projectId,
-        sender,
-        message
-      );
+//   socket.on("join project", (projectId) => {
+//     if (!projectId) return console.error("Invalid projectId");
+//     socket.join(projectId);
+//     console.log(`User ${socket.id} joined project: ${projectId}`);
+//   });
 
-    console.log("New message:", projectId, sender, message);
+//   socket.on("new message", ({ projectId, sender, message }) => {
+//     if (!projectId || !sender || !message)
+//       return console.error(
+//         "Missing data for new message",
+//         projectId,
+//         sender,
+//         message
+//       );
 
-    io.in(projectId).emit("received message", {
-      sender: sender,
-      message: message,
-    });
-  });
+//     console.log("New message:", projectId, sender, message);
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
+//     io.in(projectId).emit("received message", {
+//       sender: sender,
+//       message: message,
+//     });
+//   });
 
-export { app, server, io };
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected:", socket.id);
+//   });
+// });
+
+// export { app, server, io };

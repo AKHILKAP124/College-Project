@@ -20,7 +20,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://college-project-neon.vercel.app/",
+    origin: "https://college-project-neon.vercel.app",
     credentials: true,
   },
 });

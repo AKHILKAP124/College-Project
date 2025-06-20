@@ -61,8 +61,6 @@ io.on("connection", (socket) => {
   });
 });
 
-export { app, server, io };
-
 // Socket io integration
 
 

@@ -113,7 +113,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
       })
       .then((res) => {
         if (res.status === 200) {
-          socket.current.emit("new message", {
+          socket.emit("new message", {
             projectId: project?._id,
             sender: user?._id,
             message: input,

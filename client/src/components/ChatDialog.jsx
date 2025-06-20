@@ -26,10 +26,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
   const socket = useRef(null);
   useEffect(() => {
     // Initialize socket connection
-    socket.current = io("https://infra-backend-one.vercel.app", {
-      withCredentials: true,
-      transports: ["websocket"],
-    });
+    socket.current = io("https://infra-backend-one.vercel.app",{ path: '/api/socket',addTrailingSlash: false });
   }, []);
 
   // Fetch project details when dialog opens or id changes

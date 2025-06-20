@@ -19,12 +19,16 @@ const corsOptions = {
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "https://college-project-neon.vercel.app",
-    credentials: true,
+const io = new Server(
+  server,
+  {
+    cors: {
+      origin: "https://college-project-neon.vercel.app",
+      credentials: true,
+    },
   },
-});
+  { path: "/api/socket", addTrailingSlash: false }
+);
 
 // server.listen(3001, () => {
 //   console.log("Socket server is running on port 3001"); http://localhost:5173

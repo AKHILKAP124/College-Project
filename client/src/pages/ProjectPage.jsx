@@ -66,11 +66,6 @@ const ProjectPage = () => {
   const handleCloseTask = () => {
     setIsTaskDataOpen(false);
   };
-
-  setTimeout(() => {
-    window.location.reload();
-  }, 900000);
-
   if (user.name === "") {
     axios
       .get(`https://infra-backend-one.vercel.app/api/user/getUser`, {

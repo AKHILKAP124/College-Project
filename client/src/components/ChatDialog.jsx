@@ -22,11 +22,11 @@ const ChatDialog = ({ isOpen, onClose }) => {
   const [members, setMembers] = useState(false);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
+  var socket;
 
-  const socket = useRef(null);
   useEffect(() => {
     // Initialize socket connection
-    socket.current = io("https://infra-backend-one.vercel.app", {
+    socket= io("https://infra-backend-one.vercel.app", {
       withCredentials: true,
     });
     
@@ -70,8 +70,8 @@ const ChatDialog = ({ isOpen, onClose }) => {
   // Function to receive a message
   useEffect(() => {
     // Listen for incoming messages
-    if (socket.current) {
-      socket.current.on("received message", ({ sender, message }) => {
+    if (socket) {
+      socket.on("received message", ({ sender, message }) => {
         console.log("Received message:", sender, message);
         axios
           .post(
@@ -97,7 +97,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
       });
     }
     return () => {
-      socket.current.disconnect();
+      socket.disconnect();
     };
   }, []);
 
@@ -142,8 +142,8 @@ const ChatDialog = ({ isOpen, onClose }) => {
         }
       });
 
-    if (socket.current) {
-      socket.current.emit("join project", project?._id);
+    if (socket) {
+      socket.emit("join project", project?._id);
     }
   }, [project]);
 

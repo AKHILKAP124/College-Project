@@ -22,12 +22,13 @@ const ChatDialog = ({ isOpen, onClose }) => {
   const [members, setMembers] = useState(false);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
-
+  var socket;
+  useEffect(() => {
     // Initialize socket connection
    const socket= io("https://infra-backend-one.vercel.app", {
       withCredentials: true,
     });
-
+  }, [id])
   // Fetch project details when dialog opens or id changes
   const fetchProjectDetails = () => {
     // Fetch project details by ID

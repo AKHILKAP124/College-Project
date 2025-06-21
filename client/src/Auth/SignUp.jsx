@@ -70,10 +70,10 @@ const SignUp = () => {
   const generateOtp = () => {
     setGeneratedOtp(Math.floor(100000 + Math.random() * 900000));
   };
-  
+
   useEffect(() => {
-    generateOtp()
-  }, [])
+    generateOtp();
+  }, []);
 
   const handleOtpSubmit = (e) => {
     e.preventDefault();
@@ -82,7 +82,7 @@ const SignUp = () => {
       setOtpLoading(true);
       axios
         .post(
-          `http://localhost:3000/api/email/send-otp`,
+          `https://infra-backend-lx4a.onrender.com/api/email/send-otp`,
           { email: data.email, otp: generatedOtp },
           {
             withCredentials: true,
@@ -99,9 +99,8 @@ const SignUp = () => {
           console.log(err);
           toast.error(err.response.data.message);
         });
-    }
-    else {
-      toast.error("Enter Valid Email Address")
+    } else {
+      toast.error("Enter Valid Email Address");
     }
   };
 

@@ -5,9 +5,16 @@ import axios from "axios";
 import uploadImage from "../utils/cloudinaryUpload";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [verifyLoading, setVerifyLoading] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [enteredOtp, setEnteredOtp] = useState("");
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const navigate = useNavigate();
   const [data, setData] = useState({
     name: "",
@@ -54,6 +61,63 @@ const SignUp = () => {
       });
   };
 
+  const emailValidator = (email) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
+
+  const generateOtp = () => {
+    setGeneratedOtp(Math.floor(100000 + Math.random() * 900000));
+  };
+  
+  useEffect(() => {
+    generateOtp()
+  }, [])
+
+  const handleOtpSubmit = (e) => {
+    e.preventDefault();
+    const res = emailValidator(data.email);
+    if (res) {
+      setOtpLoading(true);
+      axios
+        .post(
+          `http://localhost:3000/api/email/send-otp`,
+          { email: data.email, otp: generatedOtp },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            toast.success(res.data.message);
+            setOtpLoading(false);
+            setShowOtpInput(true);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(err.response.data.message);
+        });
+    }
+    else {
+      toast.error("Enter Valid Email Address")
+    }
+  };
+
+  const handleVerifyOtp = (e) => {
+    e.preventDefault();
+    setVerifyLoading(true);
+
+    if (generatedOtp == enteredOtp) {
+      setEmailVerified(true);
+      setVerifyLoading(false);
+      setShowOtpInput(false);
+    } else {
+      toast.error("Invalid OTP");
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen">
@@ -92,14 +156,64 @@ const SignUp = () => {
                 >
                   Email
                 </label>
-                <input
-                  type="email"
-                  name="email"
-                  onChange={handleOnchange}
-                  placeholder="Email"
-                  className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:ring-blue-400"
-                />
+                <div className="flex items-center gap-2 w-full">
+                  <input
+                    type="email"
+                    name="email"
+                    onChange={handleOnchange}
+                    readOnly={showOtpInput || otpLoading || emailVerified}
+                    placeholder="Email"
+                    className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:ring-blue-400"
+                  />
+                  <button
+                    disabled={emailVerified || otpLoading || showOtpInput}
+                    className={`${data.email === "" ? "hidden" : ""} ${
+                      emailVerified
+                        ? "bg-green-100 text-green-600"
+                        : "bg-[var(--primary)] text-white"
+                    } px-2 py-2  w-28 text-sm  rounded cursor-pointer`}
+                    onClick={handleOtpSubmit}
+                  >
+                    {otpLoading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="w-6 h-6 border-2 border-white border-t-[var(--primary)] rounded-full animate-spin"></div>
+                      </div>
+                    ) : emailVerified ? (
+                      "Verified"
+                    ) : (
+                      "Send Otp"
+                    )}
+                  </button>
+                </div>
               </div>
+              {showOtpInput && (
+                <div className={`mb-4 flex items-center justify-self-start `}>
+                  <input
+                    type="text"
+                    name="otp"
+                    maxLength={6}
+                    onChange={(e) => {
+                      setEnteredOtp(e.target.value);
+                    }}
+                    placeholder="------"
+                    className="border border-gray-300 rounded-lg text py-2 px-4 tracking-[18px] w-46 focus:outline-none focus:ring focus:ring-blue-400"
+                  />
+                  {enteredOtp && (
+                    <button
+                      className={`px-2 py-2 bg-[var(--primary)] w-24 text-sm text-white rounded cursor-pointer ml-2`}
+                      onClick={handleVerifyOtp}
+                    >
+                      {verifyLoading ? (
+                        <div className="flex items-center justify-center">
+                          <div className="w-6 h-6 border-2 border-white border-t-[var(--primary)] rounded-full animate-spin"></div>
+                        </div>
+                      ) : (
+                        "Verify"
+                      )}
+                    </button>
+                  )}
+                </div>
+              )}
 
               <div className="w-full mb-4 flex flex-col items-start">
                 <label
@@ -111,6 +225,7 @@ const SignUp = () => {
                 <input
                   type="password"
                   name="password"
+                  readOnly={!emailVerified}
                   onChange={handleOnchange}
                   placeholder="Password"
                   className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:ring-blue-400"
@@ -127,6 +242,7 @@ const SignUp = () => {
                 <input
                   type="file"
                   name="avatar"
+                  disabled={!emailVerified}
                   onChange={handleImageChange}
                   placeholder="Avatar URL"
                   className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:ring-blue-400"
@@ -135,7 +251,12 @@ const SignUp = () => {
 
               <button
                 type="submit"
-                className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] cursor-pointer text-white font-semibold py-2 px-4 mb-4 mt-2 rounded w-full"
+                disabled={!emailVerified}
+                className={`${
+                  emailVerified
+                    ? "cursor-pointer hover:bg-[var(--primary-dark)]"
+                    : "cursor-not-allowed"
+                } bg-[var(--primary)]   text-white font-semibold py-2 px-4 mb-4 mt-2 rounded w-full`}
               >
                 {loading ? (
                   <span className="flex items-center justify-center">

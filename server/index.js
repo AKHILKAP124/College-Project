@@ -9,7 +9,7 @@ import http from "http";
 
 dotenv.config();
 const corsOptions = {
-  origin: "https://college-project-neon.vercel.app",
+  origin: "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
@@ -90,6 +90,7 @@ import memberRoutes from "./routes/MemberRoute.js";
 import projectRouter from "./routes/ProjectRoutes.js";
 import projectTaskRouter from "./routes/ProjectTaskRoutes.js";
 import messageRouter from "./routes/MessageRoute.js";
+import emailRouter from "./routes/EmailRoute.js";
 
 app.use("/api/user", userRoutes);
 app.use("/api/task", taskRoutes);
@@ -97,3 +98,4 @@ app.use("/api/member", memberRoutes);
 app.use("/api/project", projectRouter);
 app.use("/api/projecttask", projectTaskRouter);
 app.use("/api/message", messageRouter);
+app.use("/api/email", emailRouter);

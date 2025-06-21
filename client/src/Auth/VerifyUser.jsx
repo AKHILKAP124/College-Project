@@ -10,6 +10,10 @@ const VerifyUser = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+
+  if (user.name === " ") {
+    navigate("/signin");
+  }
   const handleOnClick = () => {
     setLoading(true);
     setTimeout(() => {

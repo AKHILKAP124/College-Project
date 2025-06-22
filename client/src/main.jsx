@@ -45,20 +45,21 @@ const AppRoutes = createBrowserRouter([
       }
 ]
   },
+  // auth routes
   {
-    path: "/signin",
+    path: "/auth/signin",
     element: <SignIn />,
   },
   {
-    path: "/signin/verify-user",
+    path: "/auth/signin/verify-user",
     element: <VerifyUser />,
   },
   {
-    path: "/forget/reset-password",
+    path: "/auth/forget/reset-password",
     element: <ResetPassword />,
   },
   {
-    path: "/signup",
+    path: "/auth/signup",
     element: <SignUp />,
   },
 ]);

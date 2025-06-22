@@ -48,7 +48,6 @@ const RegisterUser = async (req, res) => {
 };
 
 const LoginUser = async (req, res) => {
-  console.log("LoginUser called");
   const { email, password } = req.body;
   try {
     // Validate input
@@ -196,7 +195,6 @@ const getUser = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { userId } = req.body;
-    console.log(userId);
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }

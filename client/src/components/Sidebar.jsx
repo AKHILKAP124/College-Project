@@ -144,7 +144,7 @@ const Sidebar = () => {
               <MdOutlineKeyboardArrowUp
                 className={isTeamOpen ? "" : "hidden"}
               />
-              <p className="text-sm font-[400] ">Team Member's</p>
+              <p className="text-sm font-normal ">Team Member's</p>
             </div>
             <div className="flex items-center justify-center group transition-all duration-200 cursor-pointer px-2 py-1.5">
               <HiOutlinePlusSmall
@@ -220,7 +220,7 @@ const Sidebar = () => {
               <MdOutlineKeyboardArrowUp
                 className={isProjectOpen ? "" : "hidden"}
               />
-              <p className="text-sm font-[400] ">Projects</p>
+              <p className="text-sm font-normal ">Projects</p>
             </div>
             <div className="flex items-center justify-center group transition-all duration-200 cursor-pointer px-2 py-1.5">
               <HiOutlinePlusSmall

@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 
 const SendEmail = async (req, res) => {
-  console.log(req.body);
     try {
       const { email, otp } = req.body;
     const transporter = nodemailer.createTransport({
@@ -66,7 +65,7 @@ const SendEmail = async (req, res) => {
     // send mail with defined transport object
     const info = await transporter.sendMail(sender);
       if (info) {
-        console.log("Email sent successfully");
+        
         res.status(200).json({ message: "Email sent successfully" });
     }
   } catch (error) {

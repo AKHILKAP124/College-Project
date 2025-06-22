@@ -10,6 +10,7 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
   const userMembers = useSelector((state) => state.userMember?.members);
 
   const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false)
   var [members, setMembers] = useState([]);
 
   if (!isOpen) return null;
@@ -17,6 +18,7 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
   const handleCancel = () => {
     setInputValue("");
     setMembers("");
+    setLoading(false)
     onClose();
   };
 
@@ -35,6 +37,7 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
   };
 
   const handleSave = () => {
+    setLoading(true)
     const projectData = {
       name: inputValue,
       owner: user?._id,
@@ -55,6 +58,7 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
           setTimeout(() => {
             handleCancel();
             getProjects();
+            setLoading(false)
           }, 1000);
         }
       })
@@ -76,11 +80,7 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
             <p>Add Project</p>
             <RxCross2
               className="text-2xl hover:text-red-600 text-gray-600 "
-              onClick={() => {
-                setInputValue("");
-                setMembers("");
-                onClose();
-              }}
+              onClick={handleCancel}
             />
           </div>
           <div className="mb-4">
@@ -163,14 +163,14 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
             </button>
             <button
               onClick={handleSave}
-              disabled={!inputValue || !members}
+              disabled={!inputValue || !members || loading}
               className={`px-4 py-2 rounded-md text-white transition cursor-pointer ${
                 !inputValue || !members
                   ? "bg-blue-300 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"
               }`}
             >
-              Save
+              {loading ? "Creating..." : "Create"}
             </button>
           </div>
         </div>

@@ -166,11 +166,17 @@ const SignUp = () => {
                   />
                   <button
                     disabled={emailVerified || otpLoading || showOtpInput}
-                    className={`${data.email === "" ? "hidden" : ""} ${
-                      emailVerified
+                    className={`${data.email === "" ? "hidden" : ""}
+                      
+                      ${
+                      showOtpInput
+                        ? "bg-[var(--primary-light)] text-[var(--primary-dark)]"
+                        : emailVerified
                         ? "bg-green-100 text-green-600"
                         : "bg-[var(--primary)] text-white"
-                    } px-2 py-2  w-28 text-sm  rounded cursor-pointer`}
+                      }
+                    
+                     px-2 py-2 font-medium w-28 text-sm  rounded cursor-pointer`}
                     onClick={handleOtpSubmit}
                   >
                     {otpLoading ? (
@@ -179,9 +185,7 @@ const SignUp = () => {
                       </div>
                     ) : emailVerified ? (
                       "Verified"
-                    ) : (
-                      "Send Otp"
-                    )}
+                    ) : showOtpInput ? "Sent " : "Send otp"}
                   </button>
                 </div>
               </div>

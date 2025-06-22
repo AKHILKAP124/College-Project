@@ -5,7 +5,6 @@ const addProjectTask = async (req, res) => {
     try {
 
         const { ownerId, projectId, name, description, status } = req.body;
-        console.log("Received data:", req.body);
 
         if (!ownerId || !projectId || !name || !description || !status) {
             return res.status(400).json({ message: "All fields are required" });
@@ -43,7 +42,7 @@ const updateProjectTask = async (req, res) => {
         if (name==="") { name = await ProjectTask.findById(id ).then((task) => task.name); }
         if (description === "") { description = await ProjectTask.findById(id).then((task) => task.description); }
         if (status === "") { status = await ProjectTask.findById(id).then((task) => task.status); }
-        console.log(name, description, status);
+        
         const task = await ProjectTask.findByIdAndUpdate(id, { name, description, status }, { new: true });
         if (!task) {
             return res.status(404).json({ message: "Task not found" });

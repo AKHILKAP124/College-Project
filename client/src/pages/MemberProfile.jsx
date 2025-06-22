@@ -22,7 +22,6 @@ const MemberProfile = () => {
 
   if (user === "") {
     const token = localStorage.getItem("token");
-    console.log(token);
     axios
       .post(
         `https://infra-backend-lx4a.onrender.com/api/user/getUser`,
@@ -67,7 +66,6 @@ const MemberProfile = () => {
       .then((res) => {
         if (res.status === 200) {
           setMember(res?.data?.user);
-          console.log(res?.data?.user, "member");
           setUserloading(false);
           return;
         }

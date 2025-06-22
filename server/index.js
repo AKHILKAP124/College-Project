@@ -48,8 +48,6 @@ io.on("connection", (socket) => {
         message
       );
 
-    console.log("New message:", projectId, sender, message);
-
     io.in(projectId).emit("received message", {
       sender: sender,
       message: message,

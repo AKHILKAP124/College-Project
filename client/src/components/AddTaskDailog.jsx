@@ -33,7 +33,6 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
       status: "New task",
     };
     // You can add your save logic here
-    console.log("Task saved:", taskData);
     await axios
       .post(
         `https://infra-backend-lx4a.onrender.com/api/task/create`,

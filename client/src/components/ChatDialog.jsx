@@ -37,7 +37,6 @@ const ChatDialog = ({ isOpen, onClose }) => {
       .then((res) => {
         if (res.status === 200) {
           setProject(res?.data?.project);
-          console.log("setproject", project);
           setMessageLoading(false);
           return;
         }
@@ -63,7 +62,6 @@ const ChatDialog = ({ isOpen, onClose }) => {
     // Listen for incoming messages
     if (socket) {
       socket.on("received message", ({ sender, message }) => {
-        console.log("Received message:", sender, message);
         axios
           .post(
             "https://infra-backend-lx4a.onrender.com/api/user/getbyid",
@@ -74,8 +72,6 @@ const ChatDialog = ({ isOpen, onClose }) => {
           )
           .then((res) => {
             if (res.status === 200) {
-              console.log("Sender Data:", sender);
-              console.log("Received message:", res?.data?.user, message);
               setMessages((prevMessages) => [
                 ...prevMessages,
                 { sender: res?.data?.user, content: message },

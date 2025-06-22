@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import toast from "react-hot-toast";
 
-const SideDialog = ({ isOpen, onClose, taskId }) => {
+const SideDialog = ({ isOpen, onClose, taskId}) => {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState({
     id: "",
@@ -17,10 +17,8 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
   };
   const handleSave = async () => {
     setLoading(true);
-    console.log(taskId);
     data.id = taskId?._id;
     // You can add your save logic here
-    console.log("Task saved:", data);
     await axios
       .post(`https://infra-backend-lx4a.onrender.com/api/task/update`, data, {
         withCredentials: true,
@@ -28,9 +26,8 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
-          onClose();
-          window.location.reload();
           setData({ name: "", description: "", status: "" });
+          onClose();
           setLoading(false);
         }
       })

@@ -10,10 +10,6 @@ const uploadImage = async (filePath) => {
       method: "POST",
       body: formData,
     });
-
-    console.log(response, "response");
-    
-
     const data = await response.json();
       return { data: data.secure_url, success: true, message: "Profile Pic Updated" }
   } catch (error) {

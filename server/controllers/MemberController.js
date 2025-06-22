@@ -74,8 +74,6 @@ const deleteMember = async (req, res) => {
     try {
         const { userId, memberId } = req.body;
 
-        console.log("Received data:", req.body);
-
         if (!userId || !memberId) {
           return res
             .status(400)

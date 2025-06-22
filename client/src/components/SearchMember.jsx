@@ -37,7 +37,6 @@ const SearchMember = ({
   useEffect(() => {
     if (searchTerm.trim() === "") {
       setFilteredResults([]);
-      allUsers.filter((item) => console.log(item.name));
     } else {
       const filtered = allUsers.filter((item) =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -51,8 +50,6 @@ const SearchMember = ({
       userId: user?._id,
       memberId: item?._id,
     };
-
-    console.log(data, "add member");
 
     axios
       .post(`https://infra-backend-lx4a.onrender.com/api/member/add`, data, {

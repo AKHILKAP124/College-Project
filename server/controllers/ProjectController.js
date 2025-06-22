@@ -51,8 +51,6 @@ const addProject = async (req, res) => {
 const addMemberToProject = async (req, res) => {
     try {
         const { projectId, members } = req.body;
-
-        console.log(projectId, members);
         if (!projectId || !members || members.length === 0) {
             return res.status(400).json({ message: "Project ID and members are required" });
         }
@@ -86,8 +84,6 @@ const addMemberToProject = async (req, res) => {
 const removeMemberFromProject = async (req, res) => {
     try {
         const { projectId, memberId } = req.body;
-
-        console.log(projectId, memberId);
 
         if (!projectId || !memberId) {
             return res.status(400).json({ message: "Project ID and Member ID are required" });

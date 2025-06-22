@@ -72,7 +72,11 @@ const VerifyUser = () => {
                 )}
               </button>
               <button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  localStorage.clear("token")
+                  localStorage.clear("user")
                   navigate("/signin");
                 }}
                 className=" border border-[var(--primary)] hover:b-[var(--primary-dark)] cursor-pointer text-[#212121] font-semibold py-2 px-4 rounded w-full"

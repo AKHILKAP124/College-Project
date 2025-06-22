@@ -25,8 +25,6 @@ const Profile = () => {
     avatar: "",
   });
   const [loading, setLoading] = React.useState(false);
-
-  console.log(data);
   const handleOnchange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -34,7 +32,6 @@ const Profile = () => {
 
   const handleImageChange = async (e) => {
     setLoading(true);
-    console.log(data);
     const file = e.target.files[0];
     const res = await uploadImage(file);
     if (res.success) {

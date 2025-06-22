@@ -31,7 +31,6 @@ const ProjectPage = () => {
 
   if (user?.name === "") {
     const token = localStorage.getItem("token");
-    console.log(token);
     axios
       .post(
         `https://infra-backend-lx4a.onrender.com/api/user/getUser`,

@@ -61,14 +61,13 @@ const getTaskById = async (req, res) => {
 const updateTask = async (req, res) => {
     try {
         var { id, name, description, status } = req.body;
-        console.log("Received data:", req.body);
         if (!id ) {
             return res.status(400).json({ message: "Task ID is required" });
         }
         if (name==="") { name = await Task.findById(id ).then((task) => task.name); }
         if (description === "") { description = await Task.findById(id).then((task) => task.description); }
         if (status === "") { status = await Task.findById(id).then((task) => task.status); }
-        console.log(name, description, status);
+        
         const task = await Task.findByIdAndUpdate(id, { name, description, status }, { new: true });
         if (!task) {
             return res.status(404).json({ message: "Task not found" });
@@ -83,7 +82,6 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
     try {
         const { taskId } = req.body;
-        console.log("Received data:", req.body);
         if (!taskId) {
             return res.status(400).json({ message: "Task ID is required" });
         }

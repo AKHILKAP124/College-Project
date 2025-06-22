@@ -55,7 +55,7 @@ const ProjectPage = () => {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           setTimeout(() => {
-            window.location.href = "/signin";
+            window.location.href = "/auth/signin";
           }, 2000);
         }
         console.log(err);
@@ -83,7 +83,7 @@ const ProjectPage = () => {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           setTimeout(() => {
-            window.location.href = "/signin";
+            window.location.href = "/auth/signin";
           }, 2000);
         }
         console.log(err);
@@ -151,7 +151,7 @@ const ProjectPage = () => {
           toast.success(res.data.message);
           // Redirect to sign-in page
           setTimeout(() => {
-            window.location.href = "/signin";
+            window.location.href = "/auth/signin";
           }, 2000);
         }
       })

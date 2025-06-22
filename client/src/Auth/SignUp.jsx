@@ -48,7 +48,7 @@ const SignUp = () => {
         if (res.status === 201) {
           toast.success(res.data.message);
           setTimeout(() => {
-            navigate("/signin");
+            navigate("/auth/signin");
           }, 2000);
           setTimeout(() => {
             setLoading(false);
@@ -292,7 +292,7 @@ const SignUp = () => {
           <p className="text-gray-600 mb-6">
             Always have an account ?
             <a
-              href="/signin"
+              href="/auth/signin"
               className="text-[var(--primary)] hover:text-[var(--primary-dark)] ml-2"
             >
               Sign In

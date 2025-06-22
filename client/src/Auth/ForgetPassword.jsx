@@ -34,7 +34,7 @@ const ResetPassword = () => {
         if (res.status === 200) {
           toast.success(res.data.message);
           setTimeout(() => {
-            navigate("/signin");
+            navigate("/auth/signin");
           }, 2000);
           setTimeout(() => {
             setLoading(false);
@@ -124,7 +124,7 @@ const ResetPassword = () => {
           <p className="text-gray-600 mb-6">
             Remebered your password?{" "}
             <a
-              href="/signin"
+              href="/auth/signin"
               className="text-[var(--primary)] hover:text-[var(--primary-dark)] ml-2"
             >
               SignIn Now

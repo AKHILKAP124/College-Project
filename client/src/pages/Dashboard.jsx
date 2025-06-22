@@ -56,7 +56,7 @@ const Dashboard = () => {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           setTimeout(() => {
-            window.location.href = "/signin";
+            window.location.href = "/auth/signin";
           }, 2000);
         }
         console.log(err);
@@ -104,7 +104,7 @@ const Dashboard = () => {
           toast.success(res.data.message);
           // Redirect to sign-in page
           setTimeout(() => {
-            window.location.href = "/signin";
+            window.location.href = "/auth/signin";
           }, 2000);
         }
       })

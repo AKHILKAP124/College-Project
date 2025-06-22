@@ -12,7 +12,7 @@ const VerifyUser = () => {
 
 
   if (user.name === " ") {
-    navigate("/signin");
+    navigate("/auth/signin");
   }
   const handleOnClick = () => {
     setLoading(true);
@@ -77,7 +77,7 @@ const VerifyUser = () => {
                   e.preventDefault();
                   localStorage.clear("token")
                   localStorage.clear("user")
-                  navigate("/signin");
+                  navigate("/auth/signin");
                 }}
                 className=" border border-[var(--primary)] hover:b-[var(--primary-dark)] cursor-pointer text-[#212121] font-semibold py-2 px-4 rounded w-full"
               >

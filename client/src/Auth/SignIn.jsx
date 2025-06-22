@@ -36,7 +36,7 @@ const SignIn = () => {
           localStorage.setItem("token", res.data.Token);
           dispatch(setUser(res?.data?.user));
           setTimeout(() => {
-            navigate("/signin/verify-user");
+            navigate("/auth/signin/verify-user");
           }, 2000);
           setTimeout(() => {
             setLoading(false);
@@ -136,7 +136,7 @@ const SignIn = () => {
           <p className="text-gray-600 mb-6">
             Don't have an account ?
             <a
-              href="/signup"
+              href="/auth/signup"
               className="text-[var(--primary)] hover:text-[var(--primary-dark)] ml-2"
             >
               SignUp now

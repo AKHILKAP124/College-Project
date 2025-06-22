@@ -12,7 +12,7 @@ const ProtectedRoutes = (props) => {
   const { component: Component } = props
   const message = () => {
     alert('Please login to access this page')
-    window.location.href = '/signin'
+    window.location.href = '/auth/signin'
   }
 
   return token ? <Component /> : message()

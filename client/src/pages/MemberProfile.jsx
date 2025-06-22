@@ -46,7 +46,7 @@ const MemberProfile = () => {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           setTimeout(() => {
-            window.location.href = "/signin";
+            window.location.href = "/auth/signin";
           }, 2000);
         }
         console.log(err);

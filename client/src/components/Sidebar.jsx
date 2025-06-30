@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { setUserMember } from "../redux/memberSlice";
 import { use } from "react";
+import { FcFolder } from "react-icons/fc";
 import { PiDotsThreeOutlineVerticalThin } from "react-icons/pi";
 import UpdateProjectDialog from "./UpdateProjectDialog";
 
@@ -249,7 +250,9 @@ const Sidebar = () => {
                   }
                   to={`/dashboard/Projects-&/${item?._id}`}
                 >
-                  <p className=" text-sm font-[400] text-white ">{item.name}</p>
+                  <p className=" text-sm font-[400] text-white flex gap-2 ">
+                    <FcFolder className="text-lg" />
+                    {item.name}</p>
                   <PiDotsThreeOutlineVerticalThin
                     className="text-white text-lg"
                     onClick={(e) => {

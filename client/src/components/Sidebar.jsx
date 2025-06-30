@@ -250,7 +250,7 @@ const Sidebar = () => {
                   }
                   to={`/dashboard/Projects-&/${item?._id}`}
                 >
-                  <p className=" text-sm font-[400] text-white flex gap-2 ">
+                  <p className=" text-sm font-[400] text-white flex gap-2 items-center ">
                     <FcFolder className="text-2xl" />
                     {item.name}
                   </p>
@@ -311,7 +311,7 @@ const Sidebar = () => {
                   }
                   to={`/dashboard/Projects-&/${item?._id}`}
                 >
-                  <p className=" text-sm font-[400] text-white flex gap-2 ">
+                  <p className=" text-sm font-[400] text-white flex gap-2 items-center ">
                     <FcFolder className="text-2xl" />
                     {item.name}
                   </p>

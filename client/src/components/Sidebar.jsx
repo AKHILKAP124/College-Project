@@ -251,8 +251,9 @@ const Sidebar = () => {
                   to={`/dashboard/Projects-&/${item?._id}`}
                 >
                   <p className=" text-sm font-[400] text-white flex gap-2 ">
-                    <FcFolder className="text-lg" />
-                    {item.name}</p>
+                    <FcFolder className="text-2xl" />
+                    {item.name}
+                  </p>
                   <PiDotsThreeOutlineVerticalThin
                     className="text-white text-lg"
                     onClick={(e) => {
@@ -310,7 +311,10 @@ const Sidebar = () => {
                   }
                   to={`/dashboard/Projects-&/${item?._id}`}
                 >
-                  <p className=" text-sm font-[400] text-white ">{item.name}</p>
+                  <p className=" text-sm font-[400] text-white flex gap-2 ">
+                    <FcFolder className="text-2xl" />
+                    {item.name}
+                  </p>
                   <PiDotsThreeOutlineVerticalThin
                     className="text-white text-lg"
                     onClick={(e) => {

@@ -4,6 +4,7 @@ import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { TiStar } from "react-icons/ti";
 
 export default function UpdateProjectDialog({
   onClose,
@@ -20,7 +21,9 @@ export default function UpdateProjectDialog({
   const [admin, setAdmin] = useState(true);
   const [selectedMembers, setSelectedMembers] = useState([]);
 
+
   if (!isOpen) return null;
+
 
   const handleReset = () => {
     document.getElementById("projectName").value = project?.name;
@@ -30,6 +33,15 @@ export default function UpdateProjectDialog({
     setOpenMembers(false);
     setAdmin(true);
   };
+  const handleClose = () => {
+    setInputValue("");
+    setLoading(false);
+    setOpenMembers(false);
+    setAdmin(true);
+    setSelectedMembers([]);
+    onClose();
+  };
+
 
   const handleSave = () => {
     setLoading(true);
@@ -40,18 +52,14 @@ export default function UpdateProjectDialog({
 
     if (projectData.name) {
       axios
-        .put(
-          `https://infra-backend-lx4a.onrender.com/api/project/update`,
-          projectData,
-          {
-            withCredentials: true,
-          }
-        )
+        .put(`http://localhost:3000/api/project/update`, projectData, {
+          withCredentials: true,
+        })
         .then((res) => {
           if (res.status === 200) {
             toast.success(res?.data?.message);
             setTimeout(() => {
-              onClose();
+              handleClose();
               getProjects();
               setLoading(false);
             }, 1000);
@@ -67,7 +75,7 @@ export default function UpdateProjectDialog({
     } else {
       axios
         .post(
-          `https://infra-backend-lx4a.onrender.com/api/project/addmember`,
+          `http://localhost:3000/api/project/addmember`,
           {
             projectId: project?._id,
             members: selectedMembers,
@@ -77,11 +85,9 @@ export default function UpdateProjectDialog({
         .then((res) => {
           if (res.status === 200) {
             toast.success(res?.data?.message);
-            setTimeout(() => {
-              onClose();
-              window.location.reload();
-              setLoading(false);
-            }, 2000);
+            getProjects();
+            handleClose();
+            setLoading(false);
             return;
           }
         })
@@ -99,16 +105,16 @@ export default function UpdateProjectDialog({
 
     axios
       .post(
-        `https://infra-backend-lx4a.onrender.com/api/project/removemember`,
+        `http://localhost:3000/api/project/removemember`,
         { projectId: project?._id, memberId },
         { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res?.data?.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          getProjects();
+          handleClose();
+          return;
         }
       })
       .catch((err) => {
@@ -128,7 +134,7 @@ export default function UpdateProjectDialog({
     if (result === "DELETE") {
       axios
         .post(
-          `https://infra-backend-lx4a.onrender.com/api/project/delete`,
+          `http://localhost:3000/api/project/delete`,
           { projectId: project?._id },
           {
             withCredentials: true,
@@ -137,11 +143,8 @@ export default function UpdateProjectDialog({
         .then((res) => {
           if (res.status === 200) {
             toast.success(res?.data?.message);
-            setTimeout(() => {
-              onClose();
-              window.location.href = "/dashboard/Tasks-All-Activities&";
-              window.location.reload();
-            }, 2000);
+            handleClose();
+            getProjects();
             return;
           }
         })
@@ -155,42 +158,9 @@ export default function UpdateProjectDialog({
     }
   };
 
-  const handleClose = () => {
-    setInputValue("");
-    setLoading(false);
-    setOpenMembers(false);
-    setAdmin(true);
-    setSelectedMembers([]);
-    onClose();
-  };
+ 
 
-  // const handleAddMember = (member) => {
-  //   const memberId = member?._id;
-
-  //   if (!memberId) {
-  //     toast.error("Member ID is required.");
-  //     return;
-  //   }
-
-  //   axios
-  //     .post(
-  //       `https://infra-backend-lx4a.onrender.com/api/project/addmember`,
-  //       { projectId: project?._id, memberId },
-  //       { withCredentials: true }
-  //     )
-  //     .then((res) => {
-  //       if (res.status === 201) {
-  //         toast.success(res?.data?.message);
-  //         setTimeout(() => {
-  //           window.location.reload();
-  //         }, 2000);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       toast.error(err.response.data.message);
-  //     });
-  // };
+  
 
   return (
     <>
@@ -199,7 +169,7 @@ export default function UpdateProjectDialog({
         onClick={handleClose}
       ></div>
       <div className=" flex items-center justify-center ">
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
           <div className="text-xl font-semibold mb-4 text-gray-800 flex justify-between items-center">
             {user?._id === project?.owner?._id ? (
               <span>Update Project</span>
@@ -222,6 +192,7 @@ export default function UpdateProjectDialog({
               id="projectName"
               type="text"
               disabled={user?._id === project?.owner?._id ? false : true}
+              autoFocus={user?._id === project?.owner?._id ? true : false}
               defaultValue={project?.name}
               onChange={(e) => {
                 e.preventDefault();
@@ -233,27 +204,29 @@ export default function UpdateProjectDialog({
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="inputField"
-              className="block text-gray-700 font-medium mb-1"
-            >
-              Project Admin
-            </label>
+            <p className="block text-gray-700 font-medium mb-1">
+              Project Manager
+            </p>
             <div className="flex items-center px-3 py-1 ">
-              ⭐
-              <input
-                id="inputField"
-                type="text"
-                defaultValue={project?.owner?.name}
-                className="w-full px-3 py-2 text-sky-400 appearance-none focus:outline-none"
-                readOnly
-              />
+              <div className="flex items-center  px-0 py-2 relative">
+                <p className="text-xs text-blue-500 absolute top-0.5 -left-1.5">
+                  <TiStar />
+                </p>
+                <Avatar
+                  src={user?.avatar}
+                  alt={user?.name}
+                  sx={{ width: 28, height: 28 }}
+                />
+                <p className="ml-2 text-sm">{user?.name}</p>
+              </div>
             </div>
           </div>
           <div className="mb-4">
-            Project Member's
+            <p className="block text-gray-700 font-medium mb-1">
+              Project Member's
+            </p>
             <ul className=" text-gray-700 font-medium mt-3 flex flex-col gap-1">
-              {projectMembers?.map((member, index) => (
+              {projectMembers?.length > 0 ? projectMembers?.map((member, index) => (
                 <li key={index} className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 px-3 py-1 ">
                     <Avatar
@@ -276,7 +249,10 @@ export default function UpdateProjectDialog({
                     </button>
                   )}
                 </li>
-              ))}
+              )
+              ) : (
+                <p className="text-sm text-gray-500 w-full text-center">No Members</p>
+              )}
               {user?._id === project?.owner?._id && (
                 <li
                   className={`flex flex-col mt-2  rounded-sm border-slate-300 px-2 ${
@@ -370,26 +346,46 @@ export default function UpdateProjectDialog({
 
                               if (
                                 projectMembers.length === 1 &&
-                                selectedMembers.length === 2
+                                selectedMembers.length === 4
                               ) {
                                 toast.error(
-                                  "You can only add 3 members in a project"
+                                  "You can only add 5 members in a project"
                                 );
                                 return;
                               }
 
                               if (
                                 projectMembers.length === 2 &&
-                                selectedMembers.length === 1
+                                selectedMembers.length === 3
                               ) {
                                 toast.error(
-                                  "You can only add 3 members in a project"
+                                  "You can only add 5 members in a project"
                                 );
                                 return;
                               }
 
-                              if (selectedMembers.length === 3) {
-                                toast.error("You have already added 3 members");
+                              if (
+                                projectMembers.length === 3 &&
+                                selectedMembers.length === 2
+                              ) {
+                                toast.error(
+                                  "You can only add 5 members in a project"
+                                );
+                                return;
+                              }
+
+                              if (
+                                projectMembers.length === 4 &&
+                                selectedMembers.length === 1
+                              ) {
+                                toast.error(
+                                  "You can only add 5 members in a project"
+                                );
+                                return;
+                              }
+
+                              if (selectedMembers.length === 5) {
+                                toast.error("You have already added 5 members");
                                 return;
                               }
 

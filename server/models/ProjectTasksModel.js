@@ -17,11 +17,29 @@ const projectTaskSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true,
     },
     status: {
         type: String,
         default: "New task",
+    },
+    type: {
+        type: String,
+        default: "Operational",
+    },
+    priority: {
+        type: String,
+        default: "Low",
+    },
+    dueDate: {
+        type: String,
+    },
+    estimatedTime: {
+        type: String,
+        default: "0s",
+    },
+    assignedTo: {
+        type: Object,
+        default: {},
     },
 },
 {

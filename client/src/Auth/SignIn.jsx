@@ -11,8 +11,8 @@ import { setToken, setUser } from "../redux/userSlice";
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
-    email: "demo@gmail.com",
-    password: "Demo123",
+    username_or_email: "",
+    password: "",
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const SignIn = () => {
     e.preventDefault();
     setLoading(true);
     axios
-      .post(`https://infra-backend-lx4a.onrender.com/api/user/signin`, data, {
+      .post(`http://localhost:3000/api/user/signin`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -74,11 +74,11 @@ const SignIn = () => {
                   Username / Email
                 </label>
                 <input
-                  type="email"
-                  name="email"
-                  defaultValue={data.email}
+                  type="text"
+                  name="username_or_email"
+                  defaultValue={data.username_or_email}
                   onChange={handleOnchange}
-                  placeholder="Email"
+                  placeholder="username or example@gamil.com"
                   className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:ring-blue-400"
                 />
               </div>
@@ -95,7 +95,7 @@ const SignIn = () => {
                   defaultValue={data.password}
                   onChange={handleOnchange}
                   placeholder="Password"
-                  className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:ring-blue-400"
+                  className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:ring-blue-400 "
                 />
               </div>
               <div className="flex items-center justify-between mb-4">
@@ -105,7 +105,10 @@ const SignIn = () => {
                     Remember me
                   </label>
                 </div>
-                <a href="#" className=" text-slate-500 hover:text-slate-700">
+                <a
+                  href="/auth/forget/reset-password"
+                  className=" text-slate-500 hover:text-slate-700"
+                >
                   Forgot password?
                 </a>
               </div>

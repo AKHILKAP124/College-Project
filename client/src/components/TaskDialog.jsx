@@ -1,16 +1,40 @@
 import axios from "axios";
 import React from "react";
 import toast from "react-hot-toast";
+import {
+  TypeOptions,
+  StatusOptions,
+  PriorityOptions,
+  EstimateOptions,
+} from "../utils/index ";
+import { useSelector } from "react-redux";
+import {
+  Label,
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from "@headlessui/react";
+import { DatePicker, Space } from "antd";
+import { CheckIcon } from "@heroicons/react/20/solid";
+import Avatar from "@mui/material/Avatar";
+import { Editor } from "primereact/editor";
 
-const SideDialog = ({ isOpen, onClose, taskId}) => {
+const SideDialog = ({ isOpen, onClose, taskId }) => {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState({
     id: "",
     name: "",
     status: "",
     description: "",
+    type: "",
+    priority: "",
+    dueDate: "",
+    estimatedTime: "",
   });
 
+  const user = useSelector((state) => state?.user);
+  
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -20,7 +44,7 @@ const SideDialog = ({ isOpen, onClose, taskId}) => {
     data.id = taskId?._id;
     // You can add your save logic here
     await axios
-      .post(`https://infra-backend-lx4a.onrender.com/api/task/update`, data, {
+      .post(`http://localhost:3000/api/task/update`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -51,14 +75,14 @@ const SideDialog = ({ isOpen, onClose, taskId}) => {
 
       {/* Side Dialog */}
       <aside
-        className={`fixed top-28 right-0 h-screen max-w-2xl w-full bg-white shadow-2xl rounded-tl-md rounded-bl-md transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-16 right-0 h-screen max-w-2xl w-full bg-white shadow-2xl rounded-tl-md rounded-bl-md transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         } flex flex-col`}
-        style={{ maxHeight: "660px" }} // max height for mobile requirement
+        style={{ maxHeight: "820px" }} // max height for mobile requirement
       >
         {/* Header */}
         <header className="flex items-center justify-between p-4 ">
-          <h2 className="text-lg font-semibold text-gray-900">Task</h2>
+          <h2 className="font-medium text-gray-500">Task Details</h2>
           <button
             onClick={onClose}
             className="text-gray-600 hover:text-red-700 focus:outline-none"
@@ -83,16 +107,16 @@ const SideDialog = ({ isOpen, onClose, taskId}) => {
 
         {/* Content */}
         <div className="p-4 overflow-y-auto flex-1">
-          <p className="text-sm text-gray-500">Name</p>
           <input
             type="text"
             name="name"
             id="name"
+            autoFocus={true}
             onChange={handleOnChange}
             defaultValue={taskId.name}
-            className=" text-2xl font-medium px-3 py-2 focus:outline-none"
+            className=" text-2xl font-medium px-3 py-2 w-full focus:outline-none"
           />
-          <div className="mt-6 flex items-center gap-38 border-t border-gray-200">
+          {/* <div className="mt-6 flex items-center gap-38 border-t border-gray-200">
             <p className="text-sm text-gray-500">Status</p>
             <select
               className=" rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-200 focus:bg-gray-100 cursor-pointer appearance-none"
@@ -109,17 +133,264 @@ const SideDialog = ({ isOpen, onClose, taskId}) => {
           <div className="mt-1 flex items-center gap-38">
             <p className="text-sm text-gray-500">Created</p>
             <p className="text-normal">{taskId.createdAt}</p>
+          </div> */}
+
+          <div className=" w-full px-4 py-6 border-t border-sky-100">
+            {/* Type */}
+            <div className="mb-4 flex gap-28 items-center">
+              <Listbox
+                value={data.type}
+                onChange={(e) => setData({ ...data, type: e?.value })}
+              >
+                <Label className="block text-sm text-gray-400 pl-2">Type</Label>
+                <div className="relative mt-">
+                  <ListboxButton className="grid w-full  grid-cols-1 rounded-md  py-1.5 pr-2 pl-3 text-left text-gray-800 outline-none hover:bg-sky-100 cursor-pointer appearance-none ">
+                    <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
+                      <span className="block truncate">{taskId.type}</span>
+                    </span>
+                    {/* <ChevronUpDownIcon
+                                aria-hidden="true"
+                                className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                              /> */}
+                  </ListboxButton>
+
+                  <ListboxOptions
+                    transition
+                    className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+                  >
+                    {TypeOptions.map((person, i) => (
+                      <ListboxOption
+                        key={i}
+                        value={person}
+                        className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
+                      >
+                        <div className="flex items-center">
+                          <span className="ml-3 block truncate font-normal group-data-selected:font-semibold">
+                            {person.name}
+                          </span>
+                        </div>
+
+                        <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white">
+                          <CheckIcon aria-hidden="true" className="size-5" />
+                        </span>
+                      </ListboxOption>
+                    ))}
+                  </ListboxOptions>
+                </div>
+              </Listbox>
+            </div>
+
+            {/* Status */}
+            <div className="mb-4 flex gap-26 items-center">
+              <Listbox
+                value={data.status}
+                onChange={(e) => setData({ ...data, status: e?.value })}
+              >
+                <Label className="block text-sm text-gray-400 pl-2">
+                  Status
+                </Label>
+                <div className="relative">
+                  <ListboxButton className="grid w-full  grid-cols-1 rounded-md  py-1.5 pr-2 pl-3 text-left text-gray-800 outline-none hover:bg-sky-100 cursor-pointer appearance-none ">
+                    <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
+                      <span className="block truncate">{taskId.status}</span>
+                    </span>
+                    {/* <ChevronUpDownIcon
+                                aria-hidden="true"
+                                className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                              /> */}
+                  </ListboxButton>
+
+                  <ListboxOptions
+                    transition
+                    className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+                  >
+                    {StatusOptions.map((person, i) => (
+                      <ListboxOption
+                        key={i}
+                        value={person}
+                        className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
+                      >
+                        <div className="flex items-center">
+                          <span className="ml-3 block truncate font-normal group-data-selected:font-semibold">
+                            {person.name}
+                          </span>
+                        </div>
+
+                        <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white">
+                          <CheckIcon aria-hidden="true" className="size-5" />
+                        </span>
+                      </ListboxOption>
+                    ))}
+                  </ListboxOptions>
+                </div>
+              </Listbox>
+            </div>
+
+            {/* Assignee */}
+            <div className="mb-4 flex gap-22 items-center">
+              <label
+                htmlFor="assignee"
+                className="block text-sm text-gray-400 pl-2"
+              >
+                Assignee
+              </label>
+              <Avatar
+                src={user.avatar}
+                alt={user.name}
+                sx={{ width: 32, height: 32 }}
+                className="rounded-full ml-2"
+              />
+            </div>
+
+            {/* Estimated Time */}
+            <div className="mb-4 flex gap-10 items-center ">
+              <Listbox
+                value={data.estimatedTime}
+                onChange={(e) => setData({ ...data, estimatedTime: e?.value })}
+              >
+                <Label className="block text-sm text-gray-400 pl-2">
+                  Estimated Time
+                </Label>
+                <div className="relative flex">
+                  <ListboxButton className=" w-full rounded-md  py-1.5 pr-2 pl-3 text-left text-gray-800 outline-none hover:bg-sky-100 cursor-pointer appearance-none flex gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#99a1af"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                    <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
+                      <span className="block truncate text-sm">
+                        {taskId.estimatedTime}
+                      </span>
+                    </span>
+                    {/* <ChevronUpDownIcon
+                                aria-hidden="true"
+                                className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                              /> */}
+                  </ListboxButton>
+
+                  <ListboxOptions
+                    transition
+                    className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+                  >
+                    {EstimateOptions.map((person, i) => (
+                      <ListboxOption
+                        key={i}
+                        value={person}
+                        className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
+                      >
+                        <div className="flex items-center">
+                          <span className="ml-3 block truncate font-normal group-data-selected:font-semibold">
+                            {person.name}
+                          </span>
+                        </div>
+
+                        <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white">
+                          <CheckIcon aria-hidden="true" className="size-5" />
+                        </span>
+                      </ListboxOption>
+                    ))}
+                  </ListboxOptions>
+                </div>
+              </Listbox>
+            </div>
+
+            {/* Due Date */}
+            <div className="mb-4 flex gap-21 items-center">
+              <label
+                htmlFor="dueDate"
+                className="block text-sm w-26 text-gray-400 pl-2"
+              >
+                Due Date
+              </label>
+              <Space direction="vertical" style={{ width: "100%" }}>
+                
+                <DatePicker
+                  id="dueDate"
+                  style={{
+                    width: "30%",
+                    border: "none",
+                    background: "none",
+                    color: "black",
+                  }}
+                  placeholder="No due date"
+                  format="DD/MM/YYYY"
+                  onChange={(date, dateString) =>
+                    setData({ ...data, dueDate: dateString })
+                  }
+                />
+              </Space>
+            </div>
+
+            {/* Priority */}
+            <div className="mb-4 flex gap-27 items-center">
+              <Listbox
+                value={data.priority}
+                onChange={(e) => setData({ ...data, priority: e?.value })}
+              >
+                <Label className="block text-sm text-gray-400 pl-2">
+                  Priority
+                </Label>
+                <div className="relative">
+                  <ListboxButton className="grid w-full  grid-cols-1 rounded-md  py-1.5 pr-2 pl-3 text-left text-gray-800 outline-none hover:bg-sky-100 cursor-pointer appearance-none ">
+                    <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
+                      <span className="block truncate text-sm">
+                        {taskId.priority}
+                      </span>
+                    </span>
+                    {/* <ChevronUpDownIcon
+                                aria-hidden="true"
+                                className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                              /> */}
+                  </ListboxButton>
+
+                  <ListboxOptions
+                    transition
+                    className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+                  >
+                    {PriorityOptions.map((person, i) => (
+                      <ListboxOption
+                        key={i}
+                        value={person}
+                        className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
+                      >
+                        <div className="flex items-center">
+                          <span className="ml-3 block truncate font-normal group-data-selected:font-semibold">
+                            {person.name}
+                          </span>
+                        </div>
+
+                        <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white">
+                          <CheckIcon aria-hidden="true" className="size-5" />
+                        </span>
+                      </ListboxOption>
+                    ))}
+                  </ListboxOptions>
+                </div>
+              </Listbox>
+            </div>
           </div>
-          <div className="mt-3 pt-2  border-t border-gray-200">
-            <p className="text-sm text-gray-500">Description</p>
-            <textarea
-              type="text"
-              name="description"
-              id="description"
-              onChange={handleOnChange}
-              placeholder="Enter description here..."
-              defaultValue={taskId.description}
-              className="w-120 h-40 border border-gray-400 rounded-md text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-200 focus:bg-gray-100"
+
+          {/* Description */}
+          <div className="mt-3 pt-2  border-t border-sky-100">
+            <p className="text-sm text-gray-400">Description</p>
+            <Editor
+              value={taskId.description}
+              onTextChange={(e) =>
+                setData({ ...data, description: e.htmlValue })
+              }
+              // dangerouslySetInnerHTML={{ __html: taskId?.description }}
+              placeholder="Task description"
+              className="w-full h-52 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>

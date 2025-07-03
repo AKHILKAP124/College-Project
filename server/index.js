@@ -9,7 +9,7 @@ import http from "http";
 
 dotenv.config();
 const corsOptions = {
-  origin: "https://college-project-neon.vercel.app",
+  origin: "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
@@ -20,15 +20,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://college-project-neon.vercel.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
 });
-
-// server.listen(3001, () => {
-//   console.log("Socket server is running on port 3001"); https://college-project-neon.vercel.app
-// });
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -42,10 +38,7 @@ io.on("connection", (socket) => {
   socket.on("new message", ({ projectId, sender, message }) => {
     if (!projectId || !sender || !message)
       return console.error(
-        "Missing data for new message",
-        projectId,
-        sender,
-        message
+        "Missing data for new message"
       );
 
     io.in(projectId).emit("received message", {
@@ -53,6 +46,17 @@ io.on("connection", (socket) => {
       message: message,
     });
   });
+
+  socket.on("typing", ({ projectId, sender }) => {
+    if (!projectId || !sender) return console.error("Missing data for typing");
+    socket.broadcast.in(projectId).emit("typing", { sender: sender, projectId: projectId });
+  });
+
+  socket.on("stop typing", ({ projectId}) => {
+    if (!projectId ) return console.error("Missing data for typing");
+    socket.broadcast.in(projectId).emit("stop typing");
+  });
+  
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
@@ -89,6 +93,8 @@ import projectRouter from "./routes/ProjectRoutes.js";
 import projectTaskRouter from "./routes/ProjectTaskRoutes.js";
 import messageRouter from "./routes/MessageRoute.js";
 import emailRouter from "./routes/EmailRoute.js";
+import notificationRouter from "./routes/NotificationRoute.js";
+import noteRouter from "./routes/NoteRoute.js";
 
 app.use("/api/user", userRoutes);
 app.use("/api/task", taskRoutes);
@@ -97,3 +103,5 @@ app.use("/api/project", projectRouter);
 app.use("/api/projecttask", projectTaskRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/email", emailRouter);
+app.use("/api/notification", notificationRouter);
+app.use("/api/note", noteRouter);

@@ -1,20 +1,21 @@
 import { Avatar } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import axios from "axios";
-import { BsChatText } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { TbMessages } from "react-icons/tb";
 import socket from "../utils/socket";
+import Typing from "./TypingEffect";
 
 const ChatDialog = ({ isOpen, onClose }) => {
   const { id } = useParams();
   var [project, setProject] = useState([]);
   const [messages, setMessages] = useState([]);
-  // const [messageReceived, setMessageReceived] = useState("");
   const [messageLoading, setMessageLoading] = useState(false);
   const [sending, setSending] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [typingUser, setTypingUser] = useState([]);
 
   const user = useSelector((state) => state?.user);
 
@@ -28,7 +29,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
     // Fetch project details by ID
     axios
       .post(
-        `https://infra-backend-lx4a.onrender.com/api/project/getbyid`,
+        `http://localhost:3000/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -61,10 +62,20 @@ const ChatDialog = ({ isOpen, onClose }) => {
   useEffect(() => {
     // Listen for incoming messages
     if (socket) {
-      socket.on("received message", ({ sender, message }) => {
+      socket.on("typing", ({ sender}) => {
+        if (sender?._id === user?._id) return;
+          setTyping(true);
+          setTypingUser(sender);
+      });
+
+      socket.on("stop typing", () => {
+          setTyping(false);
+      });
+
+      socket.on("received message", ({ sender, message}) => {
         axios
           .post(
-            "https://infra-backend-lx4a.onrender.com/api/user/getbyid",
+            "http://localhost:3000/api/user/getbyid",
             { userId: sender },
             {
               withCredentials: true,
@@ -88,8 +99,30 @@ const ChatDialog = ({ isOpen, onClose }) => {
     };
   }, []);
 
+  const clearChat = () => {
+    axios
+      .post(
+        "http://localhost:3000/api/message/clear",
+        { projectId: project?._id },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setMessages([]);
+        }
+      });
+  };
+
   const sendMessage = () => {
     if (!input.trim()) return; // Prevent sending empty messages
+
+    if (input.toLocaleLowerCase() === "@chat clear") {
+      if (user?._id === project?.owner?._id) {
+        clearChat();
+        setInput("");
+        return;
+      }
+    }
     setSending(true);
     const chatData = {
       content: input,
@@ -98,13 +131,9 @@ const ChatDialog = ({ isOpen, onClose }) => {
     };
 
     axios
-      .post(
-        "https://infra-backend-lx4a.onrender.com/api/message/new",
-        chatData,
-        {
-          withCredentials: true,
-        }
-      )
+      .post("http://localhost:3000/api/message/new", chatData, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           socket.emit("new message", {
@@ -122,7 +151,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
     setMessageLoading(true);
     axios
       .post(
-        "https://infra-backend-lx4a.onrender.com/api/message/get",
+        "http://localhost:3000/api/message/get",
         { projectId: project?._id },
         { withCredentials: true }
       )
@@ -157,6 +186,19 @@ const ChatDialog = ({ isOpen, onClose }) => {
     adjustHeight();
   }, [input]);
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      socket.emit("stop typing", { projectId: project?._id});
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [input]);
+
+  const handleClose = () => {
+    setInput("");
+    onClose();
+  };
+
   return (
     <>
       {/* Overlay */}
@@ -166,7 +208,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         }`}
-        onClick={onClose}
+        onClick={handleClose}
       ></div>
 
       {/* Side Dialog */}
@@ -353,7 +395,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
 
             {/* Inputs */}
             <div
-              className=" p-4 "
+              className=" p-4 relative "
               style={{
                 backgroundImage:
                   "url('https://i.ibb.co/hJwZCLBV/Pretty-Wallpapers.jpg')",
@@ -363,6 +405,14 @@ const ChatDialog = ({ isOpen, onClose }) => {
                 backgroundBlendMode: "mix",
               }}
             >
+              {/* typing */}
+
+              {typing && (
+                <div className="flex items-center absolute -top-3">
+                  <Avatar alt={typingUser?.name} src={typingUser?.avatar} sx={{ width: 22, height: 22 }} /> <Typing />
+                </div>
+              )}
+
               {/* Person input */}
               <div
                 className="flex bg-[#212121e8] py-3 px-4 rounded-2xl
@@ -372,7 +422,13 @@ const ChatDialog = ({ isOpen, onClose }) => {
                   rows={1}
                   ref={textareaRef}
                   value={input}
-                  onChange={(e) => setInput(e?.target?.value)}
+                  onChange={(e) => {
+                    setInput(e?.target?.value);
+                    socket?.emit("typing", {
+                      projectId: project?._id,
+                      sender: user,
+                    });
+                  }}
                   onKeyDown={(e) => handleKeyDown(e)}
                   placeholder="Type a message..."
                   className="w-full text-sm max-h-32 resize-none placeholder:text-gray-400  text-white focus:outline-none "

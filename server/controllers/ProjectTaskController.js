@@ -4,9 +4,9 @@ const addProjectTask = async (req, res) => {
 
     try {
 
-        const { ownerId, projectId, name, description, status } = req.body;
+        const { ownerId, projectId, name, description, status, type, priority, dueDate, estimatedTime, assignedTo } = req.body;
 
-        if (!ownerId || !projectId || !name || !description || !status) {
+        if (!ownerId || !projectId || !name ) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -21,6 +21,11 @@ const addProjectTask = async (req, res) => {
             name,
             description,
             status,
+            type, 
+            priority,
+            dueDate,
+            estimatedTime,
+            assignedTo
         });
         await task.save();
         res.status(200).json({ message: "Task added successfully", task });
@@ -34,7 +39,7 @@ const addProjectTask = async (req, res) => {
 
 const updateProjectTask = async (req, res) => {
     try {
-        var { id, name, description, status } = req.body;
+        var { id, name, description, status, type, priority, dueDate, estimatedTime } = req.body;
 
         if (!id ) {
             return res.status(400).json({ message: "Task ID is required" });
@@ -42,8 +47,13 @@ const updateProjectTask = async (req, res) => {
         if (name==="") { name = await ProjectTask.findById(id ).then((task) => task.name); }
         if (description === "") { description = await ProjectTask.findById(id).then((task) => task.description); }
         if (status === "") { status = await ProjectTask.findById(id).then((task) => task.status); }
+        if (type === "") { type = await ProjectTask.findById(id).then((task) => task.type); }
+        if (priority === "") { priority = await ProjectTask.findById(id).then((task) => task.priority); }
+        if (dueDate === "") { dueDate = await ProjectTask.findById(id).then((task) => task.dueDate); }
+        if (estimatedTime === "") { estimatedTime = await ProjectTask.findById(id).then((task) => task.estimatedTime); }    
+
         
-        const task = await ProjectTask.findByIdAndUpdate(id, { name, description, status }, { new: true });
+        const task = await ProjectTask.findByIdAndUpdate(id, { name, description, status, type, priority, dueDate, estimatedTime }, { new: true });
         if (!task) {
             return res.status(404).json({ message: "Task not found" });
         }
@@ -74,7 +84,7 @@ const getProjectTasks = async (req, res) => {
         if (!projectId) {
             return res.status(400).json({ message: "Project ID is required" });
         }
-        const tasks = await ProjectTask.find({  projectId }).populate('ownerId', 'name');
+        const tasks = await ProjectTask.find({  projectId }).populate('ownerId');
         if (!tasks || tasks.length === 0) {
             return res.status(404).json({ message: "No tasks found" });
         }

@@ -50,7 +50,7 @@ const Profile = () => {
     data.owner = user._id;
 
     axios
-      .put(`https://infra-backend-lx4a.onrender.com/api/user/update`, data, {
+      .put(`http://localhost:3000/api/user/update`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -145,7 +145,7 @@ const Profile = () => {
                   type="password"
                   name="password"
                   disabled
-                  className="appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
+                  className="appearance-none border border-gray-300  rounded-md w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
                   value="********"
                 />
               </label>

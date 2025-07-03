@@ -169,11 +169,11 @@ const SignUp = () => {
                     className={`${data.email === "" ? "hidden" : ""}
                       
                       ${
-                      showOtpInput
-                        ? "bg-[var(--primary-light)] text-[var(--primary-dark)]"
-                        : emailVerified
-                        ? "bg-green-100 text-green-600"
-                        : "bg-[var(--primary)] text-white"
+                        showOtpInput
+                          ? "bg-[var(--primary-light)] text-[var(--primary-dark)]"
+                          : emailVerified
+                          ? "bg-green-100 text-green-600"
+                          : "bg-[var(--primary)] text-white"
                       }
                     
                      px-2 py-2 font-medium w-28 text-sm  rounded cursor-pointer`}
@@ -185,7 +185,11 @@ const SignUp = () => {
                       </div>
                     ) : emailVerified ? (
                       "Verified"
-                    ) : showOtpInput ? "Sent " : "Send otp"}
+                    ) : showOtpInput ? (
+                      "Sent "
+                    ) : (
+                      "Send otp"
+                    )}
                   </button>
                 </div>
               </div>
@@ -279,13 +283,25 @@ const SignUp = () => {
                   "Register"
                 )}
               </button>
-              <div className="flex items-center space-x-1 mb-4">
+              <div className="mb-4">
                 <p className="text-gray-600">
                   By registering you agree to the INFRA.{" "}
                 </p>
-                <a href="#" className=" text-blue-500 hover:text-blue-700">
-                  Terms of Use
-                </a>
+                <div className="flex items-center justify-center gap-2">
+                  <a
+                    href="/legal/terms-of-use"
+                    className=" text-blue-500 hover:text-blue-700"
+                  >
+                    Terms of Use
+                  </a>
+                  <p className="text-gray-600">and</p>
+                  <a
+                    href="/legal/privacy-policy"
+                    className=" text-blue-500 hover:text-blue-700"
+                  >
+                    Privacy Policy
+                  </a>
+                </div>
               </div>
             </form>
           </div>

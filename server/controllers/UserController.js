@@ -4,12 +4,12 @@ import bcrypt from "bcryptjs";
 
 const generateAccessToken = (user) => {
   return jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "30m",
+    expiresIn: "7d",
   });
 };
 const generateRefreshToken = (user) => {
   return jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: "7d",
+    expiresIn: "30d",
   });
 };
 
@@ -48,15 +48,21 @@ const RegisterUser = async (req, res) => {
 };
 
 const LoginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { username_or_email, password } = req.body;
+  console.log(username_or_email, password);
   try {
     // Validate input
-    if (!email || !password) {
+    if (!username_or_email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     // Check if user exists
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      $or: [
+        { email: username_or_email },
+        { name: username_or_email },
+      ],
+    });
     if (!user) {
       return res.status(400).json({ message: "No user found" });
     }
@@ -64,7 +70,7 @@ const LoginUser = async (req, res) => {
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Wrong password" });
     }
     // Generate tokens
     const accessToken = generateAccessToken(user._id);

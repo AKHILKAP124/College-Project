@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Member from "../models/MembersModel.js";
+import User from "../models/UserModel.js";
 
 
 
@@ -28,8 +29,11 @@ const addMember = async (req, res) => {
             return res.status(400).json({ message: "Alerdy invited" });
         }
 
+        const user = await User.findOne({ _id: userId });
+        const membr = await User.findOne({ _id: memberId });
+
         const member = new Member({
-            name: "member" + userId + memberId,
+            name: "membership between" +" "+ (user.name) + " and " + (membr.name),
             userId,
             memberId
         })

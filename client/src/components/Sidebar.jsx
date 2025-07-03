@@ -1,5 +1,6 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
+import { SiInfracost } from "react-icons/si";
 import Dialog from "./Dialog";
 import { useState } from "react";
 import { Navigate, NavLink } from "react-router-dom";
@@ -20,9 +21,6 @@ import { PiDotsThreeOutlineVerticalThin } from "react-icons/pi";
 import UpdateProjectDialog from "./UpdateProjectDialog";
 
 const Sidebar = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [workspaceName, setWorkspaceName] = useState("My Workspace");
-  const [changedName, setChangedName] = useState("My Workspace");
   const [isTeamOpen, setIsTeamOpen] = useState(false);
   const [teamDialogOpen, setTeamDialogOpen] = useState(false);
   const [isProjectOpen, setIsProjectOpen] = useState(false);
@@ -34,6 +32,7 @@ const Sidebar = () => {
   const [projectData, setProjectData] = useState([]);
   const [sharedProject, setSharedProject] = useState([]);
   const [members, setMembers] = useState([]);
+  const [memberHeight, setMemberHeight] = useState(false);
 
   const user = useSelector((state) => state?.user);
 
@@ -42,7 +41,7 @@ const Sidebar = () => {
   const getMembers = async () => {
     await axios
       .post(
-        `https://infra-backend-lx4a.onrender.com/api/member/get`,
+        `http://localhost:3000/api/member/get`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -62,7 +61,7 @@ const Sidebar = () => {
   const getProjects = async () => {
     await axios
       .post(
-        `https://infra-backend-lx4a.onrender.com/api/project/getuserallprojects`,
+        `http://localhost:3000/api/project/getuserallprojects`,
         { id: user?._id },
         {
           withCredentials: true,
@@ -97,18 +96,9 @@ const Sidebar = () => {
     <>
       <div className="h-screen w-64 dark:bg-[var(--sidebar-bg)] bg-[#0f1d40]  flex flex-col justify-start">
         <div className=" w-full h-14 border-b border-b-slate-700 flex items-center">
-          <div className="flex items-center justify-center w-fit gap-1.5 cursor-pointer group ml-4">
-            <Avatar
-              alt={user.name}
-              src={user.avatar}
-              sx={{ width: 26, height: 26 }}
-            />
-            <p
-              className=" text-sm font-[400] text-white group-hover:text-blue-500 group-hover:font-normal transition-all duration-200"
-              onClick={() => setIsDialogOpen(true)}
-            >
-              {workspaceName}
-            </p>
+          <div className="flex items-center justify-center ml-4">
+            <SiInfracost className="text-2xl text-[var(--primary-light)]" />
+            <h1 className="text-2xl font-semibold text-gray-300 ml-2">INFRA</h1>
           </div>
         </div>
 
@@ -132,7 +122,7 @@ const Sidebar = () => {
 
         {/* Team Section */}
         <div
-          className="w-full px-2 my-4"
+          className="w-full px-2 mt-4 mb-2"
           onClick={() => {
             setIsTeamOpen((prev) => !prev);
           }}
@@ -159,9 +149,15 @@ const Sidebar = () => {
             </div>
           </div>
           <div
-            className={`flex flex-col items-start justify-center w-full gap-1.5 mt-2 ${
-              isTeamOpen ? "" : "hidden"
-            }`}
+            className={` w-full ${
+              members.length < 5
+                ? "h-fit"
+                : memberHeight
+                ? "h-fit"
+                : "h-42 overflow-hidden"
+            }
+              
+             space-y-1.5 mt-2 ${isTeamOpen ? "" : "hidden"}`}
           >
             {members.length > 0 ? (
               members.map((member, index) => (
@@ -204,6 +200,20 @@ const Sidebar = () => {
               </div>
             )}
           </div>
+          {isTeamOpen && (
+            <button
+              className={`${
+                members.length > 4 ? "block" : "hidden"
+              } text-xs font-[300] w-full  text-gray-400 cursor-pointer `}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setMemberHeight(!memberHeight);
+              }}
+            >
+              {memberHeight ? "Show less" : "Show more"}
+            </button>
+          )}
         </div>
 
         {/* Projects Section */}
@@ -251,7 +261,7 @@ const Sidebar = () => {
                   to={`/dashboard/Projects-&/${item?._id}`}
                 >
                   <p className=" text-sm font-[400] text-white flex gap-2 items-center ">
-                    <FcFolder className="text-2xl" />
+                    <FcFolder className="text-xl " />
                     {item.name}
                   </p>
                   <PiDotsThreeOutlineVerticalThin
@@ -293,7 +303,7 @@ const Sidebar = () => {
                 <MdOutlineKeyboardArrowUp
                   className={isSharedProjectOpen ? "" : "hidden"}
                 />
-                <p className="text-sm font-[400] ">Shares Projects</p>
+                <p className="text-sm font-[400] ">Shared with me</p>
               </div>
             </div>
             <div
@@ -333,39 +343,6 @@ const Sidebar = () => {
       </div>
 
       {/* Dialog Section */}
-
-      {/* Workspace Dialog  */}
-      <Dialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        title="Workspace Settings"
-      >
-        <div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="workspace-name" className="text-sm text-gray-700">
-              Workspace Name
-            </label>
-            <input
-              type="text"
-              id="workspace-name"
-              defaultValue={workspaceName}
-              maxLength={16}
-              onChange={(e) => setChangedName(e.target.value)}
-              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <button
-            onClick={() => {
-              setWorkspaceName(changedName);
-              setChangedName("");
-              setIsDialogOpen(false);
-            }}
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all duration-200"
-          >
-            Save
-          </button>
-        </div>
-      </Dialog>
 
       {/*AddProjectDialog */}
       <AddProjectDialog

@@ -3,7 +3,7 @@ import Task from "../models/TaskModel.js";
 
 const createTask = async (req, res) => {
     try {
-        const { owner, name, description, status } = req.body;
+        const { owner, name, description, status, type, priority, dueDate, estimatedTime } = req.body;
         
         if (!owner || !name ) {
             return res.status(400).json({ message: "name is required" });
@@ -13,6 +13,10 @@ const createTask = async (req, res) => {
             name,
             description,
             status,
+            type,
+            priority,
+            dueDate,
+            estimatedTime
         });
         await task.save();
         
@@ -60,15 +64,19 @@ const getTaskById = async (req, res) => {
 
 const updateTask = async (req, res) => {
     try {
-        var { id, name, description, status } = req.body;
+        var { id, name, description, status, type, priority, dueDate, estimatedTime } = req.body;
         if (!id ) {
             return res.status(400).json({ message: "Task ID is required" });
         }
         if (name==="") { name = await Task.findById(id ).then((task) => task.name); }
         if (description === "") { description = await Task.findById(id).then((task) => task.description); }
         if (status === "") { status = await Task.findById(id).then((task) => task.status); }
+        if (type === "") { type = await Task.findById(id).then((task) => task.type); }
+        if (priority === "") { priority = await Task.findById(id).then((task) => task.priority); }
+        if (dueDate === "") { dueDate = await Task.findById(id).then((task) => task.dueDate); }
+        if (estimatedTime === "") { estimatedTime = await Task.findById(id).then((task) => task.estimatedTime); }
         
-        const task = await Task.findByIdAndUpdate(id, { name, description, status }, { new: true });
+        const task = await Task.findByIdAndUpdate(id, { name, description, status, type, priority, dueDate, estimatedTime }, { new: true });
         if (!task) {
             return res.status(404).json({ message: "Task not found" });
         }

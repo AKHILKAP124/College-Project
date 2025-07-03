@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setToken, setUser } from "../redux/userSlice";
+import { useEffect } from "react";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +15,20 @@ const SignIn = () => {
     username_or_email: "",
     password: "",
   });
+  const [remember, setRemember] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard/tasks-All-Activities&");
+    }
+    const saveData = localStorage.getItem("rememberMe");
+    if (saveData) {
+      setData(JSON.parse(saveData));
+      setRemember(true);
+    }
+  }, []);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -34,6 +49,9 @@ const SignIn = () => {
           toast.success(res.data.message);
           dispatch(setToken(res.data.Token));
           localStorage.setItem("token", res.data.Token);
+          if (remember) {
+            localStorage.setItem("rememberMe", JSON.stringify(data));
+          }
           dispatch(setUser(res?.data?.user));
           setTimeout(() => {
             navigate("/auth/signin/verify-user");
@@ -100,7 +118,7 @@ const SignIn = () => {
               </div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <input type="checkbox" id="remember" className="mr-2" />
+                  <input type="checkbox" id="remember" className="mr-2" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
                   <label htmlFor="remember" className="text-gray-600">
                     Remember me
                   </label>

@@ -34,7 +34,7 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
   });
 
   const user = useSelector((state) => state?.user);
-  
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -44,7 +44,7 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
     data.id = taskId?._id;
     // You can add your save logic here
     await axios
-      .post(`http://localhost:3000/api/task/update`, data, {
+      .post(`https://infra-backend-lx4a.onrender.com/api/task/update`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -313,7 +313,6 @@ const SideDialog = ({ isOpen, onClose, taskId }) => {
                 Due Date
               </label>
               <Space direction="vertical" style={{ width: "100%" }}>
-                
                 <DatePicker
                   id="dueDate"
                   style={{

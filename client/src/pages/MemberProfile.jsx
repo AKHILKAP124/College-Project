@@ -24,7 +24,7 @@ const MemberProfile = () => {
     const token = localStorage.getItem("token");
     axios
       .post(
-        `http://localhost:3000/api/user/getUser`,
+        `https://infra-backend-lx4a.onrender.com/api/user/getUser`,
         {
           token: token,
         },
@@ -52,13 +52,12 @@ const MemberProfile = () => {
         console.log(err);
       });
   }
-  
 
   useEffect(() => {
     setUserloading(true);
     axios
       .post(
-        `http://localhost:3000/api/user/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/user/getbyid`,
         { userId: id },
         {
           withCredentials: true,
@@ -86,14 +85,14 @@ const MemberProfile = () => {
     };
 
     axios
-      .post(`http://localhost:3000/api/member/delete`, data, {
+      .post(`https://infra-backend-lx4a.onrender.com/api/member/delete`, data, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.status === 200) {
           axios
             .post(
-              `http://localhost:3000/api/project/deletememberfromallprojectsofspecificuser`,
+              `https://infra-backend-lx4a.onrender.com/api/project/deletememberfromallprojectsofspecificuser`,
               { userId: user, memberId: id },
               {
                 withCredentials: true,

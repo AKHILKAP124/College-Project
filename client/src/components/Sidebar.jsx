@@ -41,7 +41,7 @@ const Sidebar = () => {
   const getMembers = async () => {
     await axios
       .post(
-        `http://localhost:3000/api/member/get`,
+        `https://infra-backend-lx4a.onrender.com/api/member/get`,
         { userId: user._id },
         {
           withCredentials: true,
@@ -61,7 +61,7 @@ const Sidebar = () => {
   const getProjects = async () => {
     await axios
       .post(
-        `http://localhost:3000/api/project/getuserallprojects`,
+        `https://infra-backend-lx4a.onrender.com/api/project/getuserallprojects`,
         { id: user?._id },
         {
           withCredentials: true,

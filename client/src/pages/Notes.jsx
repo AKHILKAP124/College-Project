@@ -33,7 +33,7 @@ const Notes = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/logout`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -60,7 +60,7 @@ const Notes = () => {
   const getNotes = async () => {
     await axios
       .post(
-        `http://localhost:3000/api/note/get`,
+        `https://infra-backend-lx4a.onrender.com/api/note/get`,
         { owner: user?._id },
         {
           withCredentials: true,
@@ -83,7 +83,7 @@ const Notes = () => {
   const handleCreateNote = async () => {
     await axios
       .post(
-        `http://localhost:3000/api/note/create`,
+        `https://infra-backend-lx4a.onrender.com/api/note/create`,
         { owner: user?._id, title: "", content: "" },
         {
           withCredentials: true,
@@ -273,7 +273,7 @@ const Notes = () => {
                             try {
                               await axios
                                 .post(
-                                  `http://localhost:3000/api/note/delete`,
+                                  `https://infra-backend-lx4a.onrender.com/api/note/delete`,
                                   { id: note._id },
                                   {
                                     withCredentials: true,
@@ -306,8 +306,11 @@ const Notes = () => {
                           {note?.content === "no text yet"
                             ? "no text yet"
                             : note?.content === "" || note?.content === null
-                              ? "no text yet"
-                              : convert(note?.content, convertOptions).slice(0, 30)}
+                            ? "no text yet"
+                            : convert(note?.content, convertOptions).slice(
+                                0,
+                                30
+                              )}
                         </p>
                         <p className="text-xs text-gray-500 mt-2">
                           {note.updatedAt.slice(0, 10)}

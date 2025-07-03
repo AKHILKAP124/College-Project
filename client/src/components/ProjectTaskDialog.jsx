@@ -58,9 +58,13 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId, ProjectOwner }) => {
     data.id = taskId?._id;
     // You can add your save logic here
     await axios
-      .post(`http://localhost:3000/api/projecttask/update`, data, {
-        withCredentials: true,
-      })
+      .post(
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/update`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
@@ -77,7 +81,7 @@ const ProjectTaskDialog = ({ isOpen, onClose, taskId, ProjectOwner }) => {
   const handleDeleteTask = async () => {
     axios
       .post(
-        `http://localhost:3000/api/projecttask/delete`,
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/delete`,
         { taskId: taskId?._id },
         {
           withCredentials: true,

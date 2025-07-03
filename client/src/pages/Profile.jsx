@@ -50,7 +50,7 @@ const Profile = () => {
     data.owner = user._id;
 
     axios
-      .put(`http://localhost:3000/api/user/update`, data, {
+      .put(`https://infra-backend-lx4a.onrender.com/api/user/update`, data, {
         withCredentials: true,
       })
       .then((res) => {

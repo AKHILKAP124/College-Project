@@ -41,7 +41,7 @@ const SignIn = () => {
     e.preventDefault();
     setLoading(true);
     axios
-      .post(`http://localhost:3000/api/user/signin`, data, {
+      .post(`https://infra-backend-lx4a.onrender.com/api/user/signin`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -118,7 +118,13 @@ const SignIn = () => {
               </div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <input type="checkbox" id="remember" className="mr-2" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    className="mr-2"
+                    checked={remember}
+                    onChange={(e) => setRemember(e.target.checked)}
+                  />
                   <label htmlFor="remember" className="text-gray-600">
                     Remember me
                   </label>

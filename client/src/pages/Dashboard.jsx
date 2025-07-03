@@ -37,7 +37,7 @@ const Dashboard = () => {
     console.log(token);
     axios
       .post(
-        `http://localhost:3000/api/user/getUser`,
+        `https://infra-backend-lx4a.onrender.com/api/user/getUser`,
         {
           token: token,
         },
@@ -69,7 +69,7 @@ const Dashboard = () => {
   const getTasks = async () => {
     await axios
       .post(
-        `http://localhost:3000/api/task/get`,
+        `https://infra-backend-lx4a.onrender.com/api/task/get`,
         { owner: user?._id },
         {
           withCredentials: true,
@@ -103,7 +103,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/logout`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -132,7 +132,7 @@ const Dashboard = () => {
     }
     await axios
       .post(
-        `http://localhost:3000/api/task/delete`,
+        `https://infra-backend-lx4a.onrender.com/api/task/delete`,
         { taskId },
         {
           withCredentials: true,
@@ -169,7 +169,7 @@ const Dashboard = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `http://localhost:3000/api/task/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/task/getbyid`,
         { taskId },
         {
           withCredentials: true,
@@ -186,7 +186,6 @@ const Dashboard = () => {
       });
   };
 
-  
   return (
     <>
       <div className="w-full h-full flex items-center justify-center">

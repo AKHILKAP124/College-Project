@@ -9,7 +9,7 @@ import http from "http";
 
 dotenv.config();
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "https://college-project-neon.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
@@ -20,7 +20,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://college-project-neon.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
@@ -37,9 +37,7 @@ io.on("connection", (socket) => {
 
   socket.on("new message", ({ projectId, sender, message }) => {
     if (!projectId || !sender || !message)
-      return console.error(
-        "Missing data for new message"
-      );
+      return console.error("Missing data for new message");
 
     io.in(projectId).emit("received message", {
       sender: sender,
@@ -49,14 +47,15 @@ io.on("connection", (socket) => {
 
   socket.on("typing", ({ projectId, sender }) => {
     if (!projectId || !sender) return console.error("Missing data for typing");
-    socket.broadcast.in(projectId).emit("typing", { sender: sender, projectId: projectId });
+    socket.broadcast
+      .in(projectId)
+      .emit("typing", { sender: sender, projectId: projectId });
   });
 
-  socket.on("stop typing", ({ projectId}) => {
-    if (!projectId ) return console.error("Missing data for typing");
+  socket.on("stop typing", ({ projectId }) => {
+    if (!projectId) return console.error("Missing data for typing");
     socket.broadcast.in(projectId).emit("stop typing");
   });
-  
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);

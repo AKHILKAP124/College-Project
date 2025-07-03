@@ -23,9 +23,13 @@ const ResetPassword = () => {
     e.preventDefault();
     setLoading(true);
     axios
-      .post(`http://localhost:3000/api/user/reset-password`, data, {
-        withCredentials: true,
-      })
+      .post(
+        `https://infra-backend-lx4a.onrender.com/api/user/reset-password`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);

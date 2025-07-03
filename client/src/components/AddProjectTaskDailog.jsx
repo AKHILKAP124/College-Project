@@ -37,16 +37,15 @@ export default function AddProjectTaskDialog({
     priority: "None",
     estimatedTime: "0s",
     dueDate: "",
-    assignedTo:[],
+    assignedTo: [],
   });
   const [loading, setLoading] = useState(false);
   const [projectManager, setProjectManager] = useState("");
 
-
   useEffect(() => {
     axios
       .post(
-        `http://localhost:3000/api/project/getprojectmanager`,
+        `https://infra-backend-lx4a.onrender.com/api/project/getprojectmanager`,
         { projectId: project },
         { withCredentials: true }
       )
@@ -100,9 +99,13 @@ export default function AddProjectTaskDialog({
 
     // You can add your save logic here
     await axios
-      .post(`http://localhost:3000/api/projecttask/add`, taskData, {
-        withCredentials: true,
-      })
+      .post(
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/add`,
+        taskData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
@@ -391,7 +394,9 @@ export default function AddProjectTaskDialog({
                         sx={{ width: 24, height: 24 }}
                         className="flex-shrink-0 rounded-full"
                       />
-                      <span className="block truncate">{data.assignedTo?.name}</span>
+                      <span className="block truncate">
+                        {data.assignedTo?.name}
+                      </span>
                     </span>
                     {/* <ChevronUpDownIcon
                             aria-hidden="true"
@@ -564,8 +569,6 @@ export default function AddProjectTaskDialog({
                 </div>
               </Listbox>
             </div>
-
-
           </div>
         </div>
       </div>

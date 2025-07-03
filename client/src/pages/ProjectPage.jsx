@@ -30,10 +30,9 @@ const ProjectPage = () => {
   const [isTaskDataOpen, setIsTaskDataOpen] = useState(false);
   const [isTasksShown, setIsTasksShown] = useState(true);
 
-
   if (user.name === "") {
     axios
-      .get(`http://localhost:3000/api/user/getUser`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/getUser`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -59,7 +58,7 @@ const ProjectPage = () => {
   const getProjectTasks = async () => {
     await axios
       .post(
-        `http://localhost:3000/api/projecttask/get`,
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/get`,
         { projectId: id },
         {
           withCredentials: true,
@@ -77,16 +76,16 @@ const ProjectPage = () => {
         }
         console.log(err);
       });
-    };
-    
-    useEffect(() => {
+  };
+
+  useEffect(() => {
     setTasks([]);
 
     getProjectTasks();
 
     axios
       .post(
-        `http://localhost:3000/api/project/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -106,7 +105,7 @@ const ProjectPage = () => {
 
   const handleLogout = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/logout`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -124,9 +123,7 @@ const ProjectPage = () => {
       .catch((err) => {
         console.log(err);
       });
-    };
-    
-   
+  };
 
   const [isTaskOpen, setIsTaskOpen] = React.useState();
   const handleCloseTask = () => {
@@ -160,7 +157,7 @@ const ProjectPage = () => {
   const handleTaskgetbyId = async (taskId) => {
     await axios
       .post(
-        `http://localhost:3000/api/projecttask/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/projecttask/getbyid`,
         { taskId },
         {
           withCredentials: true,
@@ -511,8 +508,6 @@ const ProjectPage = () => {
                               ? "--"
                               : task.estimatedTime}
                           </div>
-
-                          
                         </div>
                       ))}
                   </div>

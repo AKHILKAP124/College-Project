@@ -16,7 +16,7 @@ const SearchMember = ({
 
   const handleGetAllUsers = async () => {
     await axios
-      .get(`http://localhost:3000/api/user/getallusers`, {
+      .get(`https://infra-backend-lx4a.onrender.com/api/user/getallusers`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -52,7 +52,7 @@ const SearchMember = ({
     };
 
     axios
-      .post(`http://localhost:3000/api/member/add`, data, {
+      .post(`https://infra-backend-lx4a.onrender.com/api/member/add`, data, {
         withCredentials: true,
       })
       .then((res) => {

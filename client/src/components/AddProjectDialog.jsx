@@ -32,20 +32,26 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
 
   const handleSave = () => {
     setLoading(true);
-    const members = []
+    const members = [];
 
     for (const member of selectedMembers) {
-      (member.memberId._id === user._id) ? members.push(member.userId._id) : members.push(member.memberId._id)
+      member.memberId._id === user._id
+        ? members.push(member.userId._id)
+        : members.push(member.memberId._id);
     }
     const projectData = {
       name: inputValue,
       owner: user?._id,
-      members
+      members,
     };
     axios
-      .post(`http://localhost:3000/api/project/add`, projectData, {
-        withCredentials: true,
-      })
+      .post(
+        `https://infra-backend-lx4a.onrender.com/api/project/add`,
+        projectData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           toast.success(res?.data?.message);
@@ -283,7 +289,11 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
                   setSelectedMembers(e.value);
                 }}
                 options={userMembers}
-                optionLabel={userMembers?.member?.memberId?._id === user?._id ? "userId.name" : "memberId.name" }
+                optionLabel={
+                  userMembers?.member?.memberId?._id === user?._id
+                    ? "userId.name"
+                    : "memberId.name"
+                }
                 placeholder="Select members"
                 maxSelectedLabels={3}
                 className="w-full md:w-20rem"
@@ -291,7 +301,7 @@ export default function AddProjectDialog({ onClose, isOpen, getProjects }) {
               />
             </div>
           </div>
-          
+
           <div className="flex justify-end space-x-3">
             <button
               onClick={handleReset}

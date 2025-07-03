@@ -8,20 +8,26 @@ const NotesEditor = ({ note, getNotes }) => {
   const [title, setTitle] = useState("");
 
   const updateNote = async () => {
-    await axios.post(`http://localhost:3000/api/note/update`, {
-      id: note?._id,
-      content: content, // Use existing content if not provided
-      title: title || note?.title, // Use existing title if not provided
-    }, {
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        getNotes(); // Refresh the notes list after updating
-      }
-    })
+    await axios
+      .post(
+        `https://infra-backend-lx4a.onrender.com/api/note/update`,
+        {
+          id: note?._id,
+          content: content, // Use existing content if not provided
+          title: title || note?.title, // Use existing title if not provided
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          getNotes(); // Refresh the notes list after updating
+        }
+      })
       .catch((error) => {
         console.error("Error updating note:", error);
-      })
+      });
   };
 
   useEffect(() => {

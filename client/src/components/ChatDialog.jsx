@@ -1,7 +1,7 @@
 import { Avatar } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { TbMessages } from "react-icons/tb";
@@ -29,7 +29,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
     // Fetch project details by ID
     axios
       .post(
-        `http://localhost:3000/api/project/getbyid`,
+        `https://infra-backend-lx4a.onrender.com/api/project/getbyid`,
         { projectId: id },
         {
           withCredentials: true,
@@ -62,20 +62,20 @@ const ChatDialog = ({ isOpen, onClose }) => {
   useEffect(() => {
     // Listen for incoming messages
     if (socket) {
-      socket.on("typing", ({ sender}) => {
+      socket.on("typing", ({ sender }) => {
         if (sender?._id === user?._id) return;
-          setTyping(true);
-          setTypingUser(sender);
+        setTyping(true);
+        setTypingUser(sender);
       });
 
       socket.on("stop typing", () => {
-          setTyping(false);
+        setTyping(false);
       });
 
-      socket.on("received message", ({ sender, message}) => {
+      socket.on("received message", ({ sender, message }) => {
         axios
           .post(
-            "http://localhost:3000/api/user/getbyid",
+            "https://infra-backend-lx4a.onrender.com/api/user/getbyid",
             { userId: sender },
             {
               withCredentials: true,
@@ -102,7 +102,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
   const clearChat = () => {
     axios
       .post(
-        "http://localhost:3000/api/message/clear",
+        "https://infra-backend-lx4a.onrender.com/api/message/clear",
         { projectId: project?._id },
         { withCredentials: true }
       )
@@ -131,9 +131,13 @@ const ChatDialog = ({ isOpen, onClose }) => {
     };
 
     axios
-      .post("http://localhost:3000/api/message/new", chatData, {
-        withCredentials: true,
-      })
+      .post(
+        "https://infra-backend-lx4a.onrender.com/api/message/new",
+        chatData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 200) {
           socket.emit("new message", {
@@ -151,7 +155,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
     setMessageLoading(true);
     axios
       .post(
-        "http://localhost:3000/api/message/get",
+        "https://infra-backend-lx4a.onrender.com/api/message/get",
         { projectId: project?._id },
         { withCredentials: true }
       )
@@ -188,7 +192,7 @@ const ChatDialog = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      socket.emit("stop typing", { projectId: project?._id});
+      socket.emit("stop typing", { projectId: project?._id });
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
@@ -409,7 +413,12 @@ const ChatDialog = ({ isOpen, onClose }) => {
 
               {typing && (
                 <div className="flex items-center absolute -top-3">
-                  <Avatar alt={typingUser?.name} src={typingUser?.avatar} sx={{ width: 22, height: 22 }} /> <Typing />
+                  <Avatar
+                    alt={typingUser?.name}
+                    src={typingUser?.avatar}
+                    sx={{ width: 22, height: 22 }}
+                  />{" "}
+                  <Typing />
                 </div>
               )}
 

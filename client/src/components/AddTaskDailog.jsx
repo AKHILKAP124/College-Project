@@ -15,7 +15,12 @@ import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
 import { Calendar } from "primereact/calendar";
 import { DatePicker, Space } from "antd";
-import { TypeOptions, StatusOptions, PriorityOptions, EstimateOptions } from "../utils/index ";
+import {
+  TypeOptions,
+  StatusOptions,
+  PriorityOptions,
+  EstimateOptions,
+} from "../utils/index ";
 
 export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
   const user = useSelector((state) => state?.user);
@@ -29,7 +34,6 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
     estimatedTime: "0s",
   });
   const [loading, setLoading] = useState(false);
-  
 
   if (!isOpen) return null;
 
@@ -65,11 +69,15 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
       dueDate: data.dueDate,
       estimatedTime: data.estimatedTime,
     };
-    
+
     await axios
-      .post(`http://localhost:3000/api/task/create`, taskData, {
-        withCredentials: true,
-      })
+      .post(
+        `https://infra-backend-lx4a.onrender.com/api/task/create`,
+        taskData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.status === 201) {
           toast.success(res.data.message);
@@ -356,7 +364,9 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
                 <div className="relative">
                   <ListboxButton className="grid w-full  grid-cols-1 rounded-md  py-1.5 pr-2 pl-3 text-left text-gray-800 outline-none hover:bg-sky-100 cursor-pointer appearance-none ">
                     <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
-                      <span className="block truncate text-sm">{data.priority}</span>
+                      <span className="block truncate text-sm">
+                        {data.priority}
+                      </span>
                     </span>
                     {/* <ChevronUpDownIcon
                       aria-hidden="true"
@@ -389,8 +399,6 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
                 </div>
               </Listbox>
             </div>
-
-            
           </div>
         </div>
       </div>

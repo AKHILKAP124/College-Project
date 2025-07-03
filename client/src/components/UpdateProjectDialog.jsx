@@ -21,9 +21,7 @@ export default function UpdateProjectDialog({
   const [admin, setAdmin] = useState(true);
   const [selectedMembers, setSelectedMembers] = useState([]);
 
-
   if (!isOpen) return null;
-
 
   const handleReset = () => {
     document.getElementById("projectName").value = project?.name;
@@ -42,7 +40,6 @@ export default function UpdateProjectDialog({
     onClose();
   };
 
-
   const handleSave = () => {
     setLoading(true);
     const projectData = {
@@ -52,9 +49,13 @@ export default function UpdateProjectDialog({
 
     if (projectData.name) {
       axios
-        .put(`http://localhost:3000/api/project/update`, projectData, {
-          withCredentials: true,
-        })
+        .put(
+          `https://infra-backend-lx4a.onrender.com/api/project/update`,
+          projectData,
+          {
+            withCredentials: true,
+          }
+        )
         .then((res) => {
           if (res.status === 200) {
             toast.success(res?.data?.message);
@@ -75,7 +76,7 @@ export default function UpdateProjectDialog({
     } else {
       axios
         .post(
-          `http://localhost:3000/api/project/addmember`,
+          `https://infra-backend-lx4a.onrender.com/api/project/addmember`,
           {
             projectId: project?._id,
             members: selectedMembers,
@@ -105,7 +106,7 @@ export default function UpdateProjectDialog({
 
     axios
       .post(
-        `http://localhost:3000/api/project/removemember`,
+        `https://infra-backend-lx4a.onrender.com/api/project/removemember`,
         { projectId: project?._id, memberId },
         { withCredentials: true }
       )
@@ -134,7 +135,7 @@ export default function UpdateProjectDialog({
     if (result === "DELETE") {
       axios
         .post(
-          `http://localhost:3000/api/project/delete`,
+          `https://infra-backend-lx4a.onrender.com/api/project/delete`,
           { projectId: project?._id },
           {
             withCredentials: true,
@@ -157,10 +158,6 @@ export default function UpdateProjectDialog({
       return;
     }
   };
-
- 
-
-  
 
   return (
     <>
@@ -226,32 +223,35 @@ export default function UpdateProjectDialog({
               Project Member's
             </p>
             <ul className=" text-gray-700 font-medium mt-3 flex flex-col gap-1">
-              {projectMembers?.length > 0 ? projectMembers?.map((member, index) => (
-                <li key={index} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 px-3 py-1 ">
-                    <Avatar
-                      sx={{ width: 32, height: 32 }}
-                      alt={member?.name}
-                      src={member?.avatar}
-                    />
-                    <span>{member?.name}</span>
-                  </div>
-                  {user?._id === project?.owner?._id && (
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleRemoveMember(member);
-                      }}
-                      className="text-red-400 hover:text-red-600 text-sm cursor-pointer"
-                    >
-                      remove
-                    </button>
-                  )}
-                </li>
-              )
+              {projectMembers?.length > 0 ? (
+                projectMembers?.map((member, index) => (
+                  <li key={index} className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2 px-3 py-1 ">
+                      <Avatar
+                        sx={{ width: 32, height: 32 }}
+                        alt={member?.name}
+                        src={member?.avatar}
+                      />
+                      <span>{member?.name}</span>
+                    </div>
+                    {user?._id === project?.owner?._id && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleRemoveMember(member);
+                        }}
+                        className="text-red-400 hover:text-red-600 text-sm cursor-pointer"
+                      >
+                        remove
+                      </button>
+                    )}
+                  </li>
+                ))
               ) : (
-                <p className="text-sm text-gray-500 w-full text-center">No Members</p>
+                <p className="text-sm text-gray-500 w-full text-center">
+                  No Members
+                </p>
               )}
               {user?._id === project?.owner?._id && (
                 <li

@@ -79,4 +79,15 @@ const clearProjectMessages = async (req, res) => {
     }
 };
 
-export { newMessage, getMessages, clearProjectMessages };
+
+const deleteAll = async (req, res) => {
+    try {
+        await Message.deleteMany({});
+        res.status(200).json({ message: "All messages deleted" });
+    } catch (error) {
+        console.error("Error deleting all messages:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+export { newMessage, getMessages, clearProjectMessages, deleteAll };

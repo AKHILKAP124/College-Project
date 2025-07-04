@@ -113,8 +113,6 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
                   type="text"
                   name="name"
                   required
-                  maxLength={20}
-                  minLength={6}
                   onChange={(e) => handleOnChange(e)}
                   value={data.name}
                   className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"

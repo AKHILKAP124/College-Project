@@ -29,7 +29,7 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
     description: "",
     status: "New task",
     type: "Operational",
-    priority: "",
+    priority: "None",
     dueDate: "",
     estimatedTime: "0s",
   });
@@ -50,7 +50,7 @@ export default function AddTaskDialog({ onClose, isOpen, owner, getTasksfxn }) {
       description: "",
       status: "New task",
       type: "Operational",
-      priority: "",
+      priority: "None",
       dueDate: "",
       estimatedTime: "0s",
     });

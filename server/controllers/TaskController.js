@@ -5,6 +5,7 @@ const createTask = async (req, res) => {
     try {
         const { owner, name, description, status, type, priority, dueDate, estimatedTime } = req.body;
         
+        console.log("Creating task with data:", req.body);
         if (!owner || !name ) {
             return res.status(400).json({ message: "name is required" });
         }

@@ -9,7 +9,7 @@ import http from "http";
 
 dotenv.config();
 const corsOptions = {
-  origin: "https://college-project-neon.vercel.app",
+  origin: "https://infraa.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
@@ -20,7 +20,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://college-project-neon.vercel.app",
+    origin: "https://infraa.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },

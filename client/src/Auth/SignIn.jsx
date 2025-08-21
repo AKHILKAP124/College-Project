@@ -12,8 +12,8 @@ import { useEffect } from "react";
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
-    username_or_email: "",
-    password: "",
+    username_or_email: "demo@gmail.com",
+    password: "Demo@123",
   });
   const [remember, setRemember] = useState(false);
 
